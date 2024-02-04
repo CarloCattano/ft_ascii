@@ -30,7 +30,7 @@ static void init_player(term_t *t)
 void init_term(term_t *t)
 {
     t->frame = 1;
-    t->clear = 1;
+    t->clear = 0;
     
     t->delay = 1e2;
 
