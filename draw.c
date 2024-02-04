@@ -1,6 +1,6 @@
 #include "ftascii.h"
 
-void draw_player(term_t *t, int i)
+static void draw_player(term_t *t, int i)
 {
     if (i > t->MAX_COL && i < (t->size - t->MAX_COL) && i % t->MAX_COL != 0 
             && i % t->MAX_COL != t->MAX_COL - 1) 

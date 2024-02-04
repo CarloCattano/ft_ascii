@@ -21,17 +21,6 @@
 #define   BLACK     "\033[30m"
 #define   RST       "\033[0m"
 
-enum colors
-{
-    RED_C,
-    GREEN_C,
-    YELLOW_C,
-    BLUE_C,
-    WHITE_C,
-    BLACK_C,
-    RST_C
-};
-
 typedef struct player_s
 {
     int             posx;
@@ -41,7 +30,7 @@ typedef struct player_s
     char*           brushes;
     char            curr_brush;
     int             brush_index;
-}   player_t;
+}                   player_t;
 
 typedef struct term_s
 {
@@ -59,13 +48,13 @@ typedef struct term_s
 
 void                init_term(term_t *t);
 
-void                draw(term_t *t);
-void                move_player(term_t *t);
-
 // hooks            
 void                handleKeyPress(char key, term_t *t);
 void                handlectrl_c(int sig);
 void                init_keyhook(term_t *t, fd_set *set, struct timeval *timeout);
+
+void                draw(term_t *t);
+void                move_player(term_t *t);
 
 int                 compare_val_in_buffers(term_t *t, int i);
 void                add_randomness_to_movement(term_t *t);
