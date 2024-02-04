@@ -14,7 +14,7 @@ void draw_player(term_t *t, int i)
         else
         {
             if (t->player.curr_brush == t->buffer[offset])
-                t->player.brush_index = (t->player.brush_index + 1) % 6;
+                t->player.brush_index = (t->player.brush_index + 1) % strlen(t->player.brushes);
             
             t->player.curr_brush = t->player.brushes[t->player.brush_index];
             t->buffer[offset] = t->player.curr_brush;

@@ -4,9 +4,16 @@
 
 static void init_player(term_t *t)
 {
-    t->player = (player_t){10, 10, 1, 1,{'*','-','+', '<', '>', '~'},'x', 0};
+    char* brushes = "<>()/ \\+-_|~";
+    t->player = (player_t){10, 10, 1, 1,NULL,'x', 0};
+    
+    t->player.brushes = calloc(strlen(brushes), sizeof(char));
+    if (!t->player.brushes) {
+        perror("calloc");
+        exit(1);
+    }
+    memcpy(t->player.brushes, brushes, strlen(brushes));
 }
-
 
 // initialize main term struct
 void init_term(term_t *t)

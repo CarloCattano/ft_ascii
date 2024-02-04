@@ -45,7 +45,7 @@ void handleKeyPress(char key, term_t *t) {
             t->clear = !t->clear;
             break;
         case 'p' :
-            t->player.brush_index = (t->player.brush_index + 1) % 6;
+            t->player.brush_index = (t->player.brush_index + 1) % strlen(t->player.brushes);
             break;
 
         case 'q':

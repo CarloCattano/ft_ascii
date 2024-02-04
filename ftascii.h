@@ -27,7 +27,7 @@ typedef struct player_s
     int             posy;
     int             dx;
     int             dy;
-    char            brushes[6];
+    char*           brushes;
     char            curr_brush;
     int             brush_index;
 }   player_t;
