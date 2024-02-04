@@ -8,7 +8,7 @@ int main(int ac, char *av[])
     }
 
     // keyhook variables
-    unsigned int delay = 5e2;
+    unsigned int delay = 2e3;
     struct timeval timeout;
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
@@ -23,7 +23,7 @@ int main(int ac, char *av[])
     // keyhook variables
     fd_set read_fds;
     timeout.tv_sec = 0;
-    timeout.tv_usec = delay;   
+    timeout.tv_usec = delay * 2;   
  
     term_t term = {w.ws_col, w.ws_row, w.ws_col * w.ws_row,
                                     NULL, NULL, 1, 1, {0}};
