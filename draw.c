@@ -7,9 +7,10 @@ void draw_player(term_t *t, int i)
     {
 	    int offset = (t->player.posy * t->MAX_COL) + t->player.posx;
         
-        if (!compare_val_in_buffers(t, offset))
+        if (compare_val_in_buffers(t, offset))
         {
             t->player.curr_brush = t->player.brushes[t->player.brush_index];
+            t->buffer[offset] = t->player.curr_brush;
         }
         else
         {

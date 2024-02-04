@@ -6,8 +6,8 @@
 int compare_val_in_buffers(term_t *t, int i)
 {
 	if (t->buffer[i] != t->buffer_copy[i])
-		return 0;
-	return 1;
+		return 1;
+	return 0;
 }
 
 void add_randomness_to_movement(term_t *t)
