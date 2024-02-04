@@ -13,7 +13,8 @@ int main(int ac, char *av[])
     
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	system("stty -echo -icanon -icrnl time 0 min 0"); // disable input buffering
-    
+    signal(SIGINT, handlectrl_c);
+
     write(1, NOMOUSE, 6);
     fd_set read_fds;
     timeout.tv_sec = 0;
@@ -37,6 +38,5 @@ int main(int ac, char *av[])
     FD_CLR(STDIN_FILENO, &read_fds);
     free(term.buffer);
     free(term.buffer_copy);
-    signal(SIGINT, handlectrl_c);
     return 0;
 }

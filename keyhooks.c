@@ -16,6 +16,7 @@ void init_keyhook(term_t *t, fd_set *read_fds, struct timeval *timeout)
 static void systemExit()
 {
     system("reset");
+    usleep(1e5); // wait for reset to finish 
     exit(1);
 }
 
