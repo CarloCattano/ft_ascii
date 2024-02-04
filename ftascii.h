@@ -21,6 +21,17 @@
 #define   BLACK     "\033[30m"
 #define   RST       "\033[0m"
 
+enum colors
+{
+    RED_C,
+    GREEN_C,
+    YELLOW_C,
+    BLUE_C,
+    WHITE_C,
+    BLACK_C,
+    RST_C
+};
+
 typedef struct player_s
 {
     int             posx;
@@ -41,7 +52,7 @@ typedef struct term_s
 	char* 		    buffer_copy;
 	unsigned int    frame;
     int 		    clear;
-
+    unsigned int    delay;
     player_t 	    player;
 
 }                   term_t;
