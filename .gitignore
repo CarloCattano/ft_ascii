@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+.DS_Store
+ft_ascii
+a.out
+*.o
+tags
+*.swp
+
+
