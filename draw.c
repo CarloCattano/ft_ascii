@@ -27,6 +27,6 @@ void draw(term_t *t)
     if (t->frame > 16384)
 		t->frame = 1;
     
-    write(1, t->buffer, t->size);
+    write(1, t->buffer, t->size);       // draw the whole buffer in one call  
 }
 

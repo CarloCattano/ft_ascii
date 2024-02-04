@@ -1,10 +1,14 @@
 #include "ftascii.h"
 
+// create a player at a specific position, with a char set to draw
+
 static void init_player(term_t *t)
 {
     t->player = (player_t){10, 10, 1, 1,{'*','-','+', '<', '>', '~'},'x'};
 }
 
+
+// initialize main term struct
 void init_term(term_t *t)
 {
     t->frame = 1;

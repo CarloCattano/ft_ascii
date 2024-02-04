@@ -1,5 +1,6 @@
 #include "ftascii.h"
 
+// start listening for keypresses
 void init_keyhook(term_t *t, fd_set *read_fds, struct timeval *timeout)
 {
         FD_ZERO(read_fds);

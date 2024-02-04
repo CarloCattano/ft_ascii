@@ -1,5 +1,6 @@
 #include "ftascii.h"
 
+// Apply movement to player
 void move_player(term_t *t)
 {
     player_t *p = &t->player;
