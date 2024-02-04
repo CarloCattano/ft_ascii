@@ -2,6 +2,7 @@
 
 // compare curr buffer with last buffer in order to implement
 // rendering only when necessary
+
 int compare_val_in_buffers(term_t *t, int i)
 {
 	if (t->buffer[i] != t->buffer_copy[i])

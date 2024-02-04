@@ -4,7 +4,7 @@
 
 static void init_player(term_t *t)
 {
-    t->player = (player_t){10, 10, 1, 1,{'*','-','+', '<', '>', '~'},'x'};
+    t->player = (player_t){10, 10, 1, 1,{'*','-','+', '<', '>', '~'},'x', 0};
 }
 
 

@@ -25,7 +25,6 @@ int main(int ac, char *av[])
     timeout.tv_sec = 0;
     timeout.tv_usec = delay;   
  
-
     term_t term = {w.ws_col, w.ws_row, w.ws_col * w.ws_row,
                                     NULL, NULL, 1, 1, {0}};
     init_term(&term);
@@ -33,10 +32,10 @@ int main(int ac, char *av[])
     while(1) 
     {
         init_keyhook(&term, &read_fds, &timeout);
-        copy_last_buffer(&term);
         term.clear ? memset(term.buffer, ' ', term.size) : 0;
         move_player(&term);
         draw(&term);
+        copy_last_buffer(&term);
         usleep(delay);
     }
 

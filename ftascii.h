@@ -29,7 +29,7 @@ typedef struct player_s
     int             dy;
     char            brushes[6];
     char            curr_brush;
-
+    int             brush_index;
 }   player_t;
 
 typedef struct term_s
