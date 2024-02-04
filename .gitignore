@@ -6,5 +6,6 @@ a.out
 *.o
 tags
 *.swp
-
+ctags
+tags*
 
