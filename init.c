@@ -12,7 +12,7 @@ static void init_player(term_t *t, char* brushes)
     int x = t->MAX_COL / 2;
     int y = t->MAX_ROW / 2;
 
-    t->player = (player_t){x, y, 1, 1,NULL,brushes[0], 0};
+    t->player = (player_t){x, y, 1, 1,NULL,brushes[0], 0, 0};
     t->player.brushes = calloc(strlen(brushes), sizeof(char));
 
     if (!t->player.brushes) {
@@ -28,7 +28,7 @@ void init_term(term_t *t)
 {
     t->frame = 1;
     t->clear = 0;
-    t->delay = 2e2;
+    t->delay = 1e1;
 
     t->buffer = (char *)calloc(t->size, sizeof(char));
     t->buffer_copy = (char *)calloc(t->size, sizeof(char));
@@ -38,6 +38,6 @@ void init_term(term_t *t)
         exit(1);
     }
     memset(t->buffer, ' ', t->size);
-    init_player(t, "<>()`'\"\\|/-_~.,:;^! ");
+    init_player(t, "_-{}~.,:;^'\" ");
 }
 

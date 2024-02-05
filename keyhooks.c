@@ -1,9 +1,7 @@
 #include "ftascii.h"
 
 /* start listening for keypresses */
-void ft_keyhook(term_t *t, fd_set *read_fds, struct timeval *timeout)
-{
-    /* if ( t->frame % 1024 == 0) { */
+void ft_keyhook(term_t *t, fd_set *read_fds, struct timeval *timeout) {
         FD_ZERO(read_fds);
         FD_SET(STDIN_FILENO, read_fds);
 
@@ -15,18 +13,14 @@ void ft_keyhook(term_t *t, fd_set *read_fds, struct timeval *timeout)
                 handleKeyPress(key, t);
             }
         }
-    /* } */
 }
 
-static void systemExit()
-{
+void systemExit() {
     system("reset");
-    usleep(1e4);        // wait for reset to finish 
     exit(1);
 }
 
-void handlectrl_c(int sig)
-{
+void handlectrl_c(int sig) {
     (void)sig;
     systemExit();
 }
@@ -45,8 +39,11 @@ static void handlePlayerKeys(term_t *t, char key) {
         case 'd':
             t->player.dx += 1;
             break;
-       case 'p' :
+        case 'p' :
             t->player.brush_index = (t->player.brush_index - 1) % strlen(t->player.brushes);
+            break;
+        case 'o' :
+            t->player.toggle = !t->player.toggle;
             break;
     }
 }

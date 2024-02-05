@@ -18,6 +18,8 @@ static void draw_player(term_t *t, int i)
             t->player.curr_brush = t->player.brushes[t->player.brush_index];
             t->buffer[offset] = t->player.curr_brush;
         }
+        t->player.toggle ? t->buffer[i] = ((t->buffer_copy[i] * t->buffer[i]) % 16) + 32  : t->buffer[i];
+        t->player.curr_brush = t->buffer[offset];
     }
 }
 
@@ -32,9 +34,8 @@ void draw(term_t *t)
             draw_player(t, i);
         }
     }
-
     t->frame++;
-    if (t->frame > 16384)
+    if (t->frame > 2048)
         t->frame = 1;
 
     write(1, t->buffer, t->size);       // draw the whole buffer in one call  

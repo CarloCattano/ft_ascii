@@ -30,7 +30,7 @@ typedef struct player_s
     char*           brushes;
     char            curr_brush;
     int             brush_index;
-
+    int             toggle;
 }                   player_t;
 
 typedef struct term_s
@@ -62,3 +62,6 @@ int                 compare_val_in_buffers(term_t *t, int i);
 void                add_randomness_to_movement(term_t *t);
 void                copy_last_buffer(term_t *t);
 void                free_buffer(term_t *t);
+void                systemExit();
+
+
