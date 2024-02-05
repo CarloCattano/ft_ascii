@@ -6,7 +6,6 @@ int main(int ac, char *av[])
         printf("Usage: %s\n", av[0]);
         return 1;
     }
- 
     /* keyhook variables */
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);

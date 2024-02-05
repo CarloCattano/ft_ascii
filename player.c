@@ -1,5 +1,7 @@
 #include "ftascii.h"
 
+#define accelMAX 3
+
 /* Apply movement to player */
 void move_player(term_t *t)
 {
@@ -19,8 +21,8 @@ void move_player(term_t *t)
         p->posy = new_posy;
     }
 
-    p->dx > 2 ? p->dx = 2 : p->dx;
-    p->dy > 2 ? p->dy = 2 : p->dy;
-    p->dx < -2 ? p->dx = -2 : p->dx;
-    p->dy < -2 ? p->dy = -2 : p->dy;
+    p->dx > accelMAX ? p->dx = accelMAX : p->dx;
+    p->dy > accelMAX ? p->dy = accelMAX : p->dy;
+    p->dx < -accelMAX ? p->dx = -accelMAX : p->dx;
+    p->dy < -accelMAX ? p->dy = -accelMAX : p->dy;
 }

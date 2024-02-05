@@ -1,5 +1,13 @@
 #include "ftascii.h"
 
+int random_minus_plus()
+{
+    int r = rand() % 2;
+    if (r == 0)
+        r = -1;
+    return 1;
+}
+
 static void draw_player(term_t *t, int i)
 {
     if (i > t->MAX_COL && i < (t->size - t->MAX_COL) && i % t->MAX_COL != 0 
@@ -13,13 +21,14 @@ static void draw_player(term_t *t, int i)
         }
         else {          /* replace the old brush with different one (swallow) */
             if (t->player.curr_brush == t->buffer[offset])
-                t->player.brush_index = (t->player.brush_index + 1) % strlen(t->player.brushes);
+                t->player.brush_index = (t->player.brush_index + random_minus_plus()) % strlen(t->player.brushes);
+
 
             t->player.curr_brush = t->player.brushes[t->player.brush_index];
-            t->buffer[offset] = t->player.curr_brush;
+            t->player.toggle ? t->player.curr_brush = t->player.brushes[((i + random_minus_plus()) % 4)] : 0;
+
+         t->buffer[offset] = t->player.curr_brush;              
         }
-        if (i < t->size - t->MAX_COL && t->player.posy < t->MAX_ROW - 1)
-            t->player.toggle ? t->player.curr_brush = t->buffer[i + 1] + 4 : 0;
     }
 }
 
