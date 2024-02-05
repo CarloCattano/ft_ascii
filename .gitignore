@@ -1,4 +1,4 @@
-.cache/
+.cache/*
 compile_commands.json
 .idea/
 .vscode/
