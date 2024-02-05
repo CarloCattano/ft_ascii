@@ -27,6 +27,8 @@ int main(int ac, char *av[])
         term.clear ? memset(term.buffer, ' ', term.size) : 0;
         move_player(&term, term.players[0]);
         move_player(&term, term.players[1]);
+        move_player(&term, term.players[2]);
+        move_player(&term, term.players[3]);
         draw(&term);
         copy_last_buffer(&term);
         usleep(term.delay);

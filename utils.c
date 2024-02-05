@@ -25,10 +25,10 @@ void free_all(term_t *t)
 {
     free(t->buffer);
     free(t->buffer_copy);
-    free(t->players[0]->brushes);
-    free(t->players[1]->brushes);
-    free(t->players[0]);
-    free(t->players[1]);
+    for (int i = 0; i < 4; i++) {
+        free(t->players[i]->brushes);
+        free(t->players[i]);
+    }
 }
 
 void save_last_frame_to_file(char* filename, char* buffer, int size)

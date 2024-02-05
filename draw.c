@@ -24,7 +24,7 @@ static void draw_player(term_t *t, int i, player_t *p)
                 p->brush_index = (p->brush_index + random_minus_plus()) % strlen(p->brushes);
             
             p->curr_brush = p->brushes[p->brush_index];
-            p->toggle ? p->curr_brush = p->brushes[((i + random_minus_plus()) % 4)] : 0;
+            p->toggle ? p->curr_brush = p->brushes[((i + random_minus_plus()) % 3)] : 0;
 
             t->buffer[offset] = p->curr_brush;
         }
@@ -39,9 +39,10 @@ void draw(term_t *t)
                 || i % t->MAX_COL == t->MAX_COL - 1) {
             t->buffer[i] !=  '|' ? t->buffer[i] = '|' : 0;
         } else {
-            t->frame % 128 ? add_randomness_to_movement(t->players[0]),add_randomness_to_movement(t->players[1]) : 0;
             draw_player(t, i, t->players[0]);
             draw_player(t, i, t->players[1]);
+            draw_player(t, i, t->players[2]);
+            draw_player(t, i, t->players[3]);
         }
     }
     t->frame++;

@@ -8,22 +8,19 @@ static void init_player(term_t *t, char* brushes)
         perror("no brushes found");
         exit(1);
     }
-
-    t->players[0] = (player_t *)calloc(1, sizeof(player_t));
-    t->players[1] = (player_t *)calloc(1, sizeof(player_t));
-
-
-    *t->players[0] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2, -1, -1, 0, 0, 0, 0};
-    *t->players[1] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2, 1, 1, 0, '@', 0, 0};
-
-    t->players[0]->brushes = calloc(strlen(brushes), sizeof(char));
-    t->players[1]->brushes = calloc(strlen(brushes), sizeof(char));
-    if (!t->players[0]->brushes) {
-        perror("brushes alloc failed");
-        exit(1);
+    for (int i = 0; i < 4; i++) {
+        t->players[i] = (player_t *)calloc(1, sizeof(player_t));
+        
+        if (!t->players[i]) {
+            perror("player alloc failed");
+            exit(1);
+        }
+        t->players[i]->brushes = calloc(strlen(brushes), sizeof(char));
     }
-    memcpy(t->players[0]->brushes, brushes, strlen(brushes));
-    memcpy(t->players[1]->brushes, brushes, strlen(brushes));
+    *t->players[0] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2, -1, -1, brushes, '$',  0, 0};
+    *t->players[1] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2,  1,  1, brushes, '@',  0, 0};
+    *t->players[2] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2,  1, -1, brushes, '*',  0, 0};
+    *t->players[3] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2, -1,  1, brushes, '#',  0, 0};
 }
 
 /* initialize main term struct */
