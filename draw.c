@@ -19,8 +19,7 @@ static void draw_player(term_t *t, int i)
             t->buffer[offset] = t->player.curr_brush;
         }
         if (i < t->size - t->MAX_COL && t->player.posy < t->MAX_ROW - 1)
-            t->player.toggle ? t->player.curr_brush = t->buffer[i + 1] : 0;
-        /* t->player.curr_brush = t->buffer[offset]; */
+            t->player.toggle ? t->player.curr_brush = t->buffer[i + 1] + 4 : 0;
     }
 }
 

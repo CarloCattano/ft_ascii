@@ -52,7 +52,7 @@ void                init_term(term_t *t);
 /*      hooks       */
 void                handleKeyPress(char key, term_t *t);
 void                handlectrl_c(int sig);
-void                ft_keyhook(term_t *t, fd_set *set, struct timeval *timeout);
+void                ft_keyhook(term_t *t);
 
 void                draw(term_t *t);
 void                move_player(term_t *t);
