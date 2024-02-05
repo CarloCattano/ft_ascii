@@ -17,6 +17,7 @@ static void init_player(term_t *t, char* brushes)
         }
         t->players[i]->brushes = calloc(strlen(brushes), sizeof(char));
     }
+ 
     *t->players[0] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2, -1, -1, brushes, '$',  0, 0};
     *t->players[1] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2,  1,  1, brushes, '@',  0, 0};
     *t->players[2] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2,  1, -1, brushes, '*',  0, 0};

@@ -25,3 +25,4 @@ void move_player(term_t *t, player_t *p)
     p->dx < -accelMAX ? p->dx = -accelMAX : p->dx;
     p->dy < -accelMAX ? p->dy = -accelMAX : p->dy;
 }
+

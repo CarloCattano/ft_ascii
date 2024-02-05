@@ -21,11 +21,10 @@ static void draw_player(term_t *t, int i, player_t *p)
         }
         else {          /* replace the old brush with different one (swallow) */
             if (p->curr_brush == t->buffer[offset])
-                p->brush_index = (p->brush_index + random_minus_plus()) % strlen(p->brushes);
+                p->brush_index = (p->brush_index + 1) % strlen(p->brushes);
             
-            p->curr_brush = p->brushes[p->brush_index];
-            p->toggle ? p->curr_brush = p->brushes[((i + random_minus_plus()) % 3)] : 0;
-
+            /* p->curr_brush = p->brushes[p->brush_index]; */
+            p->toggle ? p->curr_brush = p->brushes[(p->brush_index % 2)] : 0;
             t->buffer[offset] = p->curr_brush;
         }
     }
