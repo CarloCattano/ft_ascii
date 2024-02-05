@@ -23,7 +23,6 @@ static void init_player(term_t *t, char* brushes)
 }
 
 /* initialize main term struct */
-
 void init_term(term_t *t)
 {
     t->frame = 1;
@@ -38,8 +37,10 @@ void init_term(term_t *t)
         exit(1);
     }
     memset(t->buffer, ' ', t->size);
-    init_player(t, "|\\/|[]=~.");
-            //"_-<>^v\"'`,/\\|");
-            //"_-{}~.,:;^'\" ");
+    init_player(t, "|\\/|<~.");
 }
+
+//"_-<>^v\"'`,/\\|");
+            //"_-{}~.,:;^'\" ");
+
 

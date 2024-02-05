@@ -1,24 +1,5 @@
 #include "ftascii.h"
 
-/* start listening for keypresses */
-
-void ft_keyhook(term_t *term) {
-    char key;
-    if (read(STDIN_FILENO, &key, 1) == 1) {
-        handleKeyPress(key, term);
-    }
-}
-
-void systemExit() {
-    system("reset");
-    exit(1);
-}
-
-void handlectrl_c(int sig) {
-    (void)sig;
-    systemExit();
-}
-
 static void handlePlayerKeys(term_t *t, char key) {
     switch (key) {
         case 'w':
@@ -63,4 +44,22 @@ void handleKeyPress(char key, term_t *t) {
             free_buffer(t);
             systemExit();
     }
+}
+/* start listening for keypresses */
+
+void ft_keyhook(term_t *term) {
+    char key;
+    if (read(STDIN_FILENO, &key, 1) == 1) {
+        handleKeyPress(key, term);
+    }
+}
+
+void systemExit() {
+    system("reset");
+    exit(1);
+}
+
+void handlectrl_c(int sig) {
+    (void)sig;
+    systemExit();
 }
