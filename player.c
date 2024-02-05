@@ -1,6 +1,6 @@
 #include "ftascii.h"
 
-// Apply movement to player
+/* Apply movement to player */
 void move_player(term_t *t)
 {
     player_t *p = &t->player;
@@ -19,6 +19,4 @@ void move_player(term_t *t)
     } else {
         p->posy = new_posy;
     }
-    p->dx > 3 ? p->dx = 3 : 0;
-    p->dy > 3 ? p->dy = 3 : 0;
 }

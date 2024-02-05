@@ -2,10 +2,8 @@
 
 /* create a player at a specific position, with a char set to draw */
 
-static void init_player(term_t *t)
+static void init_player(term_t *t, char* brushes)
 {
-    char* brushes = "<>()\\|/-_~.,:;^! ";
-
     if (!brushes[0]) {
         perror("no brushes found");
         exit(1);
@@ -30,8 +28,7 @@ void init_term(term_t *t)
 {
     t->frame = 1;
     t->clear = 0;
-
-    t->delay = 1e2;
+    t->delay = 2e2;
 
     t->buffer = (char *)calloc(t->size, sizeof(char));
     t->buffer_copy = (char *)calloc(t->size, sizeof(char));
@@ -41,6 +38,6 @@ void init_term(term_t *t)
         exit(1);
     }
     memset(t->buffer, ' ', t->size);
-    init_player(t);
+    init_player(t, "<>()`'\"\\|/-_~.,:;^! ");
 }
 
