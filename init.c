@@ -1,11 +1,11 @@
 #include "ftascii.h"
 
-// create a player at a specific position, with a char set to draw
+/* create a player at a specific position, with a char set to draw */
 
 static void init_player(term_t *t)
 {
     char* brushes = "<>()\\|/-_~.,:;^! ";
- 
+
     if (!brushes[0]) {
         perror("no brushes found");
         exit(1);
@@ -16,7 +16,6 @@ static void init_player(term_t *t)
 
     t->player = (player_t){x, y, 1, 1,NULL,brushes[0], 0};
     t->player.brushes = calloc(strlen(brushes), sizeof(char));
-    
 
     if (!t->player.brushes) {
         perror("brushes alloc failed");
@@ -26,17 +25,17 @@ static void init_player(term_t *t)
 }
 
 
-// initialize main term struct
+/* initialize main term struct */
 void init_term(term_t *t)
 {
     t->frame = 1;
     t->clear = 0;
-    
+
     t->delay = 1e2;
 
     t->buffer = (char *)calloc(t->size, sizeof(char));
     t->buffer_copy = (char *)calloc(t->size, sizeof(char));
-    
+
     if (!t->buffer || !t->buffer_copy) {
         perror("terminal allocation failed");
         exit(1);

@@ -11,14 +11,14 @@ int main(int ac, char *av[])
        struct timeval timeout;
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-	
+
     // disable echo and buffering
     system("stty -echo -icanon -icrnl time 0 min 0"); 
-    
+
     signal(SIGINT, handlectrl_c);
 
     write(1, NOMOUSE, 6);   // hide cursor
-    
+                            //
     term_t term = {w.ws_col, w.ws_row, w.ws_col * w.ws_row,
                              NULL, NULL, 1, 1, 0, {0}};
     init_term(&term);
@@ -26,12 +26,11 @@ int main(int ac, char *av[])
     // keyhook variables
     fd_set read_fds;
     timeout.tv_sec = 0;
-    timeout.tv_usec = term.delay * 4;   
- 
-       
+    timeout.tv_usec = term.delay;
+
     while(1) 
     {
-        init_keyhook(&term, &read_fds, &timeout);
+        ft_keyhook(&term, &read_fds, &timeout);
         term.clear ? memset(term.buffer, ' ', term.size) : 0;
         move_player(&term);
         draw(&term);

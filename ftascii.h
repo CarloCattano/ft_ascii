@@ -30,6 +30,7 @@ typedef struct player_s
     char*           brushes;
     char            curr_brush;
     int             brush_index;
+
 }                   player_t;
 
 typedef struct term_s
@@ -48,16 +49,16 @@ typedef struct term_s
 
 void                init_term(term_t *t);
 
-// hooks            
+/*      hooks       */
 void                handleKeyPress(char key, term_t *t);
 void                handlectrl_c(int sig);
-void                init_keyhook(term_t *t, fd_set *set, struct timeval *timeout);
+void                ft_keyhook(term_t *t, fd_set *set, struct timeval *timeout);
 
 void                draw(term_t *t);
 void                move_player(term_t *t);
 
+/*     utils       */
 int                 compare_val_in_buffers(term_t *t, int i);
 void                add_randomness_to_movement(term_t *t);
-
 void                copy_last_buffer(term_t *t);
 void                free_buffer(term_t *t);
