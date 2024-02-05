@@ -18,7 +18,7 @@ static void draw_player(term_t *t, int i)
             t->player.curr_brush = t->player.brushes[t->player.brush_index];
             t->buffer[offset] = t->player.curr_brush;
         }
-        t->player.toggle ? t->buffer[i] = ((t->buffer_copy[i]) % 16) + 32  : t->buffer[i];
+        t->player.toggle ? t->buffer[i] = t->player.brushes[rand() % 4] : 0;
         t->player.curr_brush = t->buffer[offset];
     }
 }

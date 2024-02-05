@@ -63,5 +63,5 @@ void                add_randomness_to_movement(term_t *t);
 void                copy_last_buffer(term_t *t);
 void                free_buffer(term_t *t);
 void                systemExit();
-
+void                save_last_frame_to_file(char * filename, char * buffer, int size);
 

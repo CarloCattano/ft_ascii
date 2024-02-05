@@ -27,4 +27,14 @@ void free_buffer(term_t *t)
     free(t->buffer_copy);
 }
 
-
+void save_last_frame_to_file(char* filename, char* buffer, int size)
+{
+    FILE *f = fopen(filename, "w");
+    if (f == NULL)
+    {
+        printf("Error opening file!\n");
+        exit(1);
+    }
+    fwrite(buffer, 1, size, f);
+    fclose(f);
+}

@@ -40,18 +40,18 @@ static void handlePlayerKeys(term_t *t, char key) {
             t->player.dx += 1;
             break;
         case 'p' :
-            t->player.brush_index = (t->player.brush_index + 2) % strlen(t->player.brushes);
+            t->player.brush_index = (t->player.brush_index + 10) % strlen(t->player.brushes);
             break;
         case 'o' :
             t->player.toggle = !t->player.toggle;
             break;
         case '0':
             t->delay *= 0.5;
-            t->delay > 1e5 ? t->delay = 1e5 : t->delay;
+            t->delay > 1e3 ? t->delay = 1e3 : t->delay;
             break;
         case '9':
             t->delay *= 2;
-            t->delay < 1e2 ? t->delay = 1e2 : t->delay;
+            t->delay < 2e1 ? t->delay = 2e1 : t->delay;
             break;
     }
 }
