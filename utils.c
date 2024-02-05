@@ -10,10 +10,10 @@ int compare_val_in_buffers(term_t *t, int i)
     return 0;
 }
 
-void add_randomness_to_movement(term_t *t)
+void add_randomness_to_movement(player_t *p)
 {
-    t->player.dx = (rand() % 3) - 1;
-    t->player.dy = (rand() % 3) - 1;
+    p->dx = (rand() % 3) - 1;
+    p->dy = (rand() % 3) - 1;
 }
 
 void copy_last_buffer(term_t *t)
@@ -21,10 +21,14 @@ void copy_last_buffer(term_t *t)
 	t->buffer_copy = memcpy(t->buffer_copy, t->buffer, t->size);
 }
 
-void free_buffer(term_t *t)
+void free_all(term_t *t)
 {
     free(t->buffer);
     free(t->buffer_copy);
+    free(t->players[0]->brushes);
+    free(t->players[1]->brushes);
+    free(t->players[0]);
+    free(t->players[1]);
 }
 
 void save_last_frame_to_file(char* filename, char* buffer, int size)

@@ -8,26 +8,25 @@ int random_minus_plus()
     return 1;
 }
 
-static void draw_player(term_t *t, int i)
+static void draw_player(term_t *t, int i, player_t *p)
 {
     if (i > t->MAX_COL && i < (t->size - t->MAX_COL) && i % t->MAX_COL != 0 
             && i % t->MAX_COL != t->MAX_COL - 1) 
     {
-        int offset = (t->player.posy * t->MAX_COL) + t->player.posx;
+        int offset = (p->posy * t->MAX_COL) + p->posx;
 
         if (compare_val_in_buffers(t, offset))
         {
-            t->player.curr_brush = t->player.brushes[t->player.brush_index];
+            p->curr_brush = p->brushes[p->brush_index];
         }
         else {          /* replace the old brush with different one (swallow) */
-            if (t->player.curr_brush == t->buffer[offset])
-                t->player.brush_index = (t->player.brush_index + random_minus_plus()) % strlen(t->player.brushes);
+            if (p->curr_brush == t->buffer[offset])
+                p->brush_index = (p->brush_index + random_minus_plus()) % strlen(p->brushes);
+            
+            p->curr_brush = p->brushes[p->brush_index];
+            p->toggle ? p->curr_brush = p->brushes[((i + random_minus_plus()) % 4)] : 0;
 
-
-            t->player.curr_brush = t->player.brushes[t->player.brush_index];
-            t->player.toggle ? t->player.curr_brush = t->player.brushes[((i + random_minus_plus()) % 4)] : 0;
-
-         t->buffer[offset] = t->player.curr_brush;              
+            t->buffer[offset] = p->curr_brush;
         }
     }
 }
@@ -40,7 +39,9 @@ void draw(term_t *t)
                 || i % t->MAX_COL == t->MAX_COL - 1) {
             t->buffer[i] !=  '|' ? t->buffer[i] = '|' : 0;
         } else {
-            draw_player(t, i);
+            t->frame % 128 ? add_randomness_to_movement(t->players[0]),add_randomness_to_movement(t->players[1]) : 0;
+            draw_player(t, i, t->players[0]);
+            draw_player(t, i, t->players[1]);
         }
     }
     t->frame++;

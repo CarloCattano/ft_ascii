@@ -3,9 +3,8 @@
 #define accelMAX 3
 
 /* Apply movement to player */
-void move_player(term_t *t)
+void move_player(term_t *t, player_t *p)
 {
-    player_t *p = &t->player;
     int new_posx = p->posx + p->dx;
     int new_posy = p->posy + p->dy;
 

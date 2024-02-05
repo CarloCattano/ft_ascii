@@ -3,22 +3,27 @@
 static void handlePlayerKeys(term_t *t, char key) {
     switch (key) {
         case 'w':
-            t->player.dy += -1;
+            t->players[0]->dy += -1;
+            t->players[1]->dy += 1;
             break;
         case 'a':
-            t->player.dx += -1;
+            t->players[0]->dx += -1;
+            t->players[1]->dx += 1;
             break;
         case 's':
-            t->player.dy += 1;
+            t->players[0]->dy += 1;
+            t->players[1]->dy += -1;
             break;
         case 'd':
-            t->player.dx += 1;
+            t->players[0]->dx += 1;
+            t->players[1]->dx += -1;
             break;
         case 'p' :
-            t->player.brush_index = (t->player.brush_index + 10) % strlen(t->player.brushes);
+            t->players[0]->brush_index = (t->players[0]->brush_index + 10) % strlen(t->players[0]->brushes);
+            t->players[1]->brush_index = (t->players[1]->brush_index + 10) % strlen(t->players[1]->brushes);
             break;
         case 'o' :
-            t->player.toggle = !t->player.toggle;
+            t->players[0]->toggle = !t->players[0]->toggle;
             break;
         case '0':
             t->delay *= 0.5;
@@ -41,7 +46,7 @@ void handleKeyPress(char key, term_t *t) {
             write(1, GREEN, 5);
             break;
         case 'q':
-            free_buffer(t);
+            free_all(t);
             systemExit();
     }
 }

@@ -43,7 +43,7 @@ typedef struct term_s
 	unsigned int    frame;
     int 		    clear;
     unsigned int    delay;
-    player_t 	    player;
+    player_t* 	    players[4];
 
 }                   term_t;
 
@@ -55,13 +55,13 @@ void                handlectrl_c(int sig);
 void                ft_keyhook(term_t *t);
 
 void                draw(term_t *t);
-void                move_player(term_t *t);
+void                move_player(term_t *t, player_t *p);
 
 /*     utils       */
 int                 compare_val_in_buffers(term_t *t, int i);
-void                add_randomness_to_movement(term_t *t);
+void                add_randomness_to_movement(player_t *p);
 void                copy_last_buffer(term_t *t);
-void                free_buffer(term_t *t);
+void                free_all(term_t *t);
 void                systemExit();
 void                save_last_frame_to_file(char * filename, char * buffer, int size);
 
