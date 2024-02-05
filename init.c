@@ -22,8 +22,8 @@ static void init_player(term_t *t, char* brushes)
     memcpy(t->player.brushes, brushes, strlen(brushes));
 }
 
-
 /* initialize main term struct */
+
 void init_term(term_t *t)
 {
     t->frame = 1;

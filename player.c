@@ -18,4 +18,9 @@ void move_player(term_t *t)
     } else {
         p->posy = new_posy;
     }
+
+    p->dx > 2 ? p->dx = 2 : p->dx;
+    p->dy > 2 ? p->dy = 2 : p->dy;
+    p->dx < -2 ? p->dx = -2 : p->dx;
+    p->dy < -2 ? p->dy = -2 : p->dy;
 }
