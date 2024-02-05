@@ -6,6 +6,7 @@ int main(int ac, char *av[])
         printf("Usage: %s\n", av[0]);
         return 1;
     }
+ 
     /* keyhook variables */
     struct timeval timeout;
     struct winsize w;
