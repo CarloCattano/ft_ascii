@@ -1,4 +1,5 @@
 ### Preface
+
 Interested in rendering graphics to terminal using just *ASCII*
 The original idea was to replace mlx library with this, in order to run cub3d on the terminal ( 42 )
 
@@ -16,4 +17,5 @@ Controls:
     - p : change char set for drawing _player_ .
     - a/d/w/s : move the player cursor.
     - q : quit gracefully
-
+    - 9 : decrease speed
+    - 9 : increase speed 
