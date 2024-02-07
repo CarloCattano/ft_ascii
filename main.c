@@ -25,16 +25,16 @@ int main(int ac, char *av[])
     {
         ft_keyhook(&term);
         term.clear ? memset(term.buffer, ' ', term.size) : 0;
-        move_player(&term, term.players[0]);
-        move_player(&term, term.players[1]);
-        move_player(&term, term.players[2]);
-        move_player(&term, term.players[3]);
+        /* move_player(&term, term.players[0]); */
+        /* move_player(&term, term.players[1]); */
+        /* move_player(&term, term.players[2]); */
+        /* move_player(&term, term.players[3]); */
         draw(&term);
         copy_last_buffer(&term);
         usleep(term.delay);
     }
     
-    free_all(&term);
+    /* free_all(&term); */
     systemExit();
     return 0;
 }

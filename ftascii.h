@@ -21,6 +21,13 @@
 #define   BLACK     "\033[30m"
 #define   RST       "\033[0m"
 
+typedef struct s_pixel
+{
+    char    *c;
+    char    *color;
+
+}           Pixel;
+
 typedef struct player_s
 {
     int             posx;
@@ -38,8 +45,8 @@ typedef struct term_s
     int             MAX_COL;
     int             MAX_ROW;
     int             size;
-    char*           buffer;
-	char* 		    buffer_copy;
+    char**           buffer;
+	char** 		    buffer_copy;
 	unsigned int    frame;
     int 		    clear;
     unsigned int    delay;
@@ -65,3 +72,7 @@ void                free_all(term_t *t);
 void                systemExit();
 void                save_last_frame_to_file(char * filename, char * buffer, int size);
 
+
+Pixel               create_pixel(char* color, char* str);
+void                change_pixel(Pixel* p, char* c, char* color);
+char*               build_pixel(Pixel pixel);
