@@ -3,44 +3,44 @@
 static void handlePlayerKeys(term_t *t, char key) {
     switch (key) {
         case 'w':
-            t->players[0]->dy += -1;
-            t->players[1]->dy += 1;
-            t->players[2]->dy += -1;
-            t->players[3]->dy += 1;
+            /* t->players[0]->dy += -1; */
+            /* t->players[1]->dy += 1; */
+            /* t->players[2]->dy += -1; */
+            /* t->players[3]->dy += 1; */
             break;
         case 'a':
-            t->players[0]->dx += -1;
-            t->players[1]->dx += 1;
-            t->players[2]->dx += 1;
-            t->players[3]->dx += -1;
+            /* t->players[0]->dx += -1; */
+            /* t->players[1]->dx += 1; */
+            /* t->players[2]->dx += 1; */
+            /* t->players[3]->dx += -1; */
             break;
         case 's':
-            t->players[0]->dy += 1;
-            t->players[1]->dy += -1;
-            t->players[2]->dy += 1;
-            t->players[3]->dy += -1;
+            /* t->players[0]->dy += 1; */
+            /* t->players[1]->dy += -1; */
+            /* t->players[2]->dy += 1; */
+            /* t->players[3]->dy += -1; */
             break;
         case 'd':
-            t->players[0]->dx += 1;
-            t->players[1]->dx += -1;
-            t->players[2]->dx += -1;
-            t->players[3]->dx += 1;
+            /* t->players[0]->dx += 1; */
+            /* t->players[1]->dx += -1; */
+            /* t->players[2]->dx += -1; */
+            /* t->players[3]->dx += 1; */
             break;
         case 'p' :
-            for (int i = 0; i < 4; i++) {
-                t->players[i]->brush_index = (t->players[i]->brush_index + 2) % strlen(t->players[i]->brushes);
-            }
+            /* for (int i = 0; i < 4; i++) { */
+            /*     t->players[i]->brush_index = (t->players[i]->brush_index + 2) % strlen(t->players[i]->brushes); */
+            /* } */
             break;
         case 'o' :
-            for (int i = 1; i < 4; i++) {
-                t->players[i]->toggle = t->players[i]->toggle;
-            }
+            /* for (int i = 1; i < 4; i++) { */
+            /*     t->players[i]->toggle = t->players[i]->toggle; */
+            /* } */
             break;
         case 'r':
-            for (int i = 0; i < 4; i++) {
-                t->players[i]->posx = t->MAX_COL / 2;
-                t->players[i]->posy = t->MAX_ROW / 2;
-            }
+            /* for (int i = 0; i < 4; i++) { */
+            /*     t->players[i]->posx = t->MAX_COL / 2; */
+            /*     t->players[i]->posy = t->MAX_ROW / 2; */
+            /* } */
             break;
         case '0':
             t->delay *= 0.5;

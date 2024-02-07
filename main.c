@@ -18,7 +18,7 @@ int main(int ac, char *av[])
     write(1, NOMOUSE, 6);   // hide cursor
     
     term_t term = {w.ws_col, w.ws_row, w.ws_col * w.ws_row,
-                             NULL, NULL, 1, 1, 0, {0}};
+                             NULL, NULL, NULL, 1, 1, 0, {0}};
     init_term(&term);
 
     while(1) 
@@ -29,6 +29,7 @@ int main(int ac, char *av[])
         /* move_player(&term, term.players[1]); */
         /* move_player(&term, term.players[2]); */
         /* move_player(&term, term.players[3]); */
+        assign_pix_buff(term.buffer, term.pixels, term.size);
         draw(&term);
         copy_last_buffer(&term);
         usleep(term.delay);

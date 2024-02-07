@@ -24,7 +24,10 @@
 
 void draw(term_t *t)
 {
-    write(1, t->buffer, t->size);       // draw the whole buffer in one call
+    assign_pix_buff(t->buffer, t->pixels, t->size);
+    write(1, t->buffer, strlen(t->buffer)); // Draw the buffer
+    
+    t->frame++; if (t->frame > 2048) t->frame = 1; 
 }
 
 /* void draw(term_t *t) */

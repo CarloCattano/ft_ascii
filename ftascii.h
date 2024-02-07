@@ -45,8 +45,9 @@ typedef struct term_s
     int             MAX_COL;
     int             MAX_ROW;
     int             size;
-    char**           buffer;
-	char** 		    buffer_copy;
+    char*           buffer;
+	char* 		    buffer_copy;
+    Pixel*          pixels;
 	unsigned int    frame;
     int 		    clear;
     unsigned int    delay;
@@ -74,7 +75,7 @@ void                save_last_frame_to_file(char * filename, char * buffer, int 
 
 void                change_pixel(Pixel* p, char* c, char* color);
 char*               build_pixel(Pixel pixel);
-void                assign_pix_buff(char** buffer, Pixel* pixels,int size);
+void                assign_pix_buff(char* buffer, Pixel* pixels,int size);
 void                pixel_set(Pixel* pixels, int size);
 void                pix_set(Pixel* pixels,int size);
 
