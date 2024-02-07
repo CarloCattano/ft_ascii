@@ -16,48 +16,12 @@ void init_term(term_t *t)
         exit(1);
     }
 
-    // Create pixels
-    Pixel* pixels = malloc(sizeof(Pixel) * t->size);
-    if (!pixels) {
-        perror("Memory allocation failed");
-        exit(1);
-    }
+    
+    // Initialize pixels
+    Pixel* pixels = (Pixel *)calloc(t->size, sizeof(Pixel));
+    if (!pixels) perror("Pixel allocation failed"),exit(1);
+    
+    pix_set(pixels, t->size);
 
-    for (int i = 0; i < t->size; i++) {
-        pixels[i] = create_pixel(RED, "z");
-    }
 
-    // Put pixels in buffer
-    for (int i = 0; i < t->size; i++) {
-        t->buffer[i] = build_pixel(pixels[i]);
-    }
-
-    // Calculate total size and copy buffer to out
-    size_t total_size = 0;
-    for (int i = 0; i < t->size; i++) {
-        total_size += strlen(t->buffer[i]);
-    }
-
-    char *out = malloc(total_size + 1); // Include space for null terminator
-    if (!out) {
-        perror("Memory allocation failed");
-        exit(1);
-    }
-
-    int offset = 0;
-    for (int i = 0; i < t->size; i++) {
-       size_t len = strlen(t->buffer[i]);
-       memcpy(out + offset, t->buffer[i], len);
-       offset += len;
-    }
-
-    // Null-terminate out
-    out[offset] = '\0';
-
-    // Assign out to buffer
-    for (int i = 0; i < t->size; i++) {
-        t->buffer[i] = out;
-    }
-
-    free(pixels); // Free pixels array
 }

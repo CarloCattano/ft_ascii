@@ -2,101 +2,84 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <math.h>
 
 #define   CLEAR     "\033[H"
 #define   NOMOUSE   "\033[?25l"
 
 #define COL "\033[0;"
 #define RESET "\033[0m"
-#define RED "31m"
-#define GREEN "32m"
-#define YELLOW "33m"
-#define BLUE "34m"
-#define MAGENTA "35m"
-#define CYAN "36m"
-#define WHITE "37m"
+#define GREEN "\033[032m"
+#define YELLOW "\033[33m"
+#define RED "\033[31m"
 
-#define UNICODE "▲○●♥♦▼◄►◊▓▒░█"
-#define UNICODE2 "˹˼˽˾◢◣◤◥◠◡◜◝◞◟"
-#define UNICODE3 "▀▁▂▃▄▅▆▇█"
-#define UNICODE4 "▉▊▋▌▍▎▏▐"
-#define UNICODE5 "▔▕▖▗▘▙▚▛▜▝▞▟"
 
 typedef struct s_pixel
 {
     char    *c;
     char    *color;
+    size_t  len;
 
 }           t_pixel;
 
-t_pixel create_pixel(char* color, char* str)
-{
-    t_pixel     pixel;
-    
-    pixel.color = color;
-    pixel.c = str;
-    
-    return (pixel);
-}
-
-void change_pixel(t_pixel* p, char* c, char* color)
-{
+void change_pixel(t_pixel* p, char* c, char* color){
     p->color = color;
     p->c = c;
 }
 
-char* build_pixel(t_pixel pixel)
+// TODO make out a reference from the outside
+char* build_pixel(t_pixel pixel) 
 {
-    char* out = malloc(strlen(pixel.color) + strlen(pixel.c));
-
+    char* out = malloc(sizeof(pixel.color) + sizeof(pixel.c) + 1);
     strcpy(out, pixel.color);
     strcat(out, pixel.c);
-    return (out);
+    strcat(out, "\0");
+    return out;
+}
+
+void assign_pix_buff(char** buffer,t_pixel* pixels,int size) {
+    for (int i = 0; i < size - 1; i++) {        
+        buffer[i] = build_pixel(pixels[i]);
+    }
+}
+
+void pix_set(t_pixel* pixels,int size) {
+    for (int i = 0; i < size; i++) {        
+        pixels[i].c = "a";
+        pixels[i].color = GREEN;
+        pixels[i].len = strlen(pixels[i].color) + strlen(pixels[i].c);
+    }
+}
+
+void draw(char** buffer) {
+    
+    int i = 0;
+    while(buffer[i] != NULL) 
+    {
+        if(i % 8 == 0) write(1, "\n", 1);
+        write(1, buffer[i], strlen(buffer[i]));
+        i++;
+    }
 }
 
 int main()
 { 
-    int w = 32;
     int h = 8;
-    int size = w*h;
-    char** buffer = calloc(size, sizeof(t_pixel));
-    int i = 0;
+    int w = 8;
+    int size = w * h;
+    int i = -1;
     
-    t_pixel* pixels = malloc(sizeof(t_pixel) * size);
-    
-    for(int i = 0;i<size; i++)
-    {
-        pixels[i] = create_pixel(COL RED, "a");
-    }
-    
-    // change pixels
-    for (int i = 0; i < size; i++)
-    {
-        if (i % 3)
-            change_pixel(&pixels[i], "@", COL YELLOW);
-    }
-    
-    // asign pixels to buffer
-    for (int i = 0; i < size; i++)
-    {
-        buffer[i] = build_pixel(pixels[i]);
-    }
-    
-    while (buffer[i] != NULL) {
-        size += strlen(buffer[i]);
-        i++;
-    }
+    char**      buffer = calloc(size, sizeof(t_pixel));
+    t_pixel*    pixels = (t_pixel*)malloc(sizeof(t_pixel) * size);
 
-    char *out = malloc(size + i);
-    int offset = 0;
-    i = 0;
-    
-    while (buffer[i] != NULL) {
-       size_t len = strlen(buffer[i]); 
-       memcpy(out + offset, buffer[i], len);
-       offset += len;
-       i++;
+    pix_set(pixels, size);
+    while(++i < 4)
+    {
+        change_pixel(&pixels[i + rand() % size],"℺", YELLOW);
+        assign_pix_buff(buffer,pixels,size);
+        draw(buffer);
+        write(1, "\n----------", 10);
+        // usleep(1e2);
+        // write(1, CLEAR, strlen(CLEAR));
     }
-
- write(1, out, size + i - 1);
 }

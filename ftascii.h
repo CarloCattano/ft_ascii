@@ -25,7 +25,7 @@ typedef struct s_pixel
 {
     char    *c;
     char    *color;
-
+    size_t  len;
 }           Pixel;
 
 typedef struct player_s
@@ -72,7 +72,9 @@ void                free_all(term_t *t);
 void                systemExit();
 void                save_last_frame_to_file(char * filename, char * buffer, int size);
 
-
-Pixel               create_pixel(char* color, char* str);
 void                change_pixel(Pixel* p, char* c, char* color);
 char*               build_pixel(Pixel pixel);
+void                assign_pix_buff(char** buffer, Pixel* pixels,int size);
+void                pixel_set(Pixel* pixels, int size);
+void                pix_set(Pixel* pixels,int size);
+
