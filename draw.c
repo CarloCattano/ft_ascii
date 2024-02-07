@@ -24,7 +24,15 @@
 
 void draw(term_t *t)
 {
+    for (int i = 0; i < t->size; i++)
+    {
+        if (i < t->MAX_COL || i > (t->size - t->MAX_COL) || i % t->MAX_COL == 0 
+                || i % t->MAX_COL == t->MAX_COL - 1) {
+            change_pixel(&t->pixels[i], "|", GREEN);
+        } 
+    }
     assign_pix_buff(t->buffer, t->pixels, t->size);
+    
     write(1, t->buffer, strlen(t->buffer)); // Draw the buffer
     
     t->frame++; if (t->frame > 2048) t->frame = 1; 
