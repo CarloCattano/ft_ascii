@@ -30,11 +30,14 @@ void draw(term_t *t)
     {
         if (check_border(t, i)){
             change_pixel(&t->pixels[i], "•", GREEN);
-        } 
+        } else {
+            // draw inside
+        }
     }
+
     assign_pix_buff(t->buffer, t->pixels, t->size);
     
-    write(1, t->buffer, strlen(t->buffer)); // Draw the buffer
+    write(1, t->buffer, strlen(t->buffer));
     
     t->frame++; if (t->frame > 2048) t->frame = 1; 
 }
