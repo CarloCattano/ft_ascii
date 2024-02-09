@@ -2,9 +2,9 @@
 
 void change_pixel(Pixel* p, char* c, char* color)
 {
-    p->color = color;
     p->c = c;
-    /* p->len = strlen(p->color) + strlen(p->c); */
+    p->color = color;
+    p->len = strlen(p->color) + strlen(p->c);
 }
 
 // TODO make out a reference from the outside
@@ -26,7 +26,6 @@ void assign_pix_buff(char* buffer, Pixel* pixels, int size)
     for (int i = 0; i < size; i++) 
     {        
         char* pixel_output = build_pixel(pixels[i]);
-        /* strcat(buffer, pixel_output); */
         strncat(buffer, pixel_output, strlen(pixels[i].color) + strlen(pixels[i].c));
         free(pixel_output); 
     }

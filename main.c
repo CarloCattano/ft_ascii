@@ -1,4 +1,5 @@
 #include "ftascii.h"
+#include <locale.h>
 
 int main(int ac, char *av[])
 {
@@ -9,6 +10,8 @@ int main(int ac, char *av[])
     /* keyhook variables */
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+    setlocale(LC_ALL, "en_US.UTF-8");
 
     /* disable echo and buffering */
     system("stty -echo -icanon -icrnl time 0 min 0"); 

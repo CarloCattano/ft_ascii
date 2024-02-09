@@ -54,7 +54,6 @@ static void handlePlayerKeys(term_t *t, char key) {
 }
 
 void handleKeyPress(char key, term_t *t) {
-    handlePlayerKeys(t, key);
     switch (key) {
         case 'c':
             t->clear = !t->clear;
@@ -65,6 +64,9 @@ void handleKeyPress(char key, term_t *t) {
         case 'q':
             free_all(t);
             systemExit();
+        default:
+            handlePlayerKeys(t, key);
+            break;
     }
 }
 /* start listening for keypresses */
