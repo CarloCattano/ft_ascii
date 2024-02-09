@@ -48,6 +48,7 @@ void handleKeyPress(char key, term_t *t) {
         case 'q':
             free_all(t);
             systemExit();
+            break;
         default:
             handlePlayerKeys(t, key);
             break;
