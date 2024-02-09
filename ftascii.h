@@ -54,7 +54,7 @@ void                handleKeyPress(char key, term_t *t);
 void                handlectrl_c(int sig);
 void                ft_keyhook(term_t *t);
 
-void                draw(term_t *t);
+void                draw(term_t *t, float amp);
 void                move_player(term_t *t, player_t *p);
 
 /*     utils       */

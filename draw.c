@@ -30,7 +30,7 @@ static void draw_player(term_t *t, int i, player_t *p)
     }
 }
 
-void draw(term_t *t)
+void draw(term_t *t, float amplitude)
 {
     for (int i = 0; i < t->size; i++)
     {
@@ -38,10 +38,12 @@ void draw(term_t *t)
                 || i % t->MAX_COL == t->MAX_COL - 1) {
             t->buffer[i] !=  '|' ? t->buffer[i] = '|' : 0;
         } else {
-            draw_player(t, i, t->players[0]);
-            draw_player(t, i, t->players[1]);
-            draw_player(t, i, t->players[2]);
-            draw_player(t, i, t->players[3]);
+            if (amplitude > 0.4) {
+                draw_player(t, i, t->players[0]);
+                draw_player(t, i, t->players[1]);
+                draw_player(t, i, t->players[2]);
+                draw_player(t, i, t->players[3]);
+            }
         }
     }
     t->frame++;

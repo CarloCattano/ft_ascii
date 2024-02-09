@@ -29,7 +29,7 @@ void init_term(term_t *t)
 {
     t->frame = 1;
     t->clear = 0;
-    t->delay = 1e1;
+    t->delay = 1e3;
 
     t->buffer = (char *)calloc(t->size, sizeof(char));
     t->buffer_copy = (char *)calloc(t->size, sizeof(char));
