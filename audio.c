@@ -86,7 +86,7 @@ int main() {
     {
         ft_keyhook(&term);
         term.clear ? memset(term.buffer, ' ', term.size) : 0;
-        if (g_amplitude > 0.4) {
+        if (g_amplitude > 0.2) {
             move_player(&term, term.players[0]);
             move_player(&term, term.players[1]);
             move_player(&term, term.players[2]);
