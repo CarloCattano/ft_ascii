@@ -24,6 +24,12 @@ static int check_border(term_t *t, int i)
             || i % t->MAX_COL == t->MAX_COL - 1);
 }
 
+// unicode character array for drawing
+char unis[] = "◝◞◟◠◡";
+char ascis[] = " .:-=+*#%@";
+
+// draw the terminal
+
 void draw(term_t *t)
 {
     for (int i = 0; i < t->size; i++)
@@ -31,14 +37,13 @@ void draw(term_t *t)
         if (check_border(t, i)){
             change_pixel(&t->pixels[i], "•", GREEN);
         } else {
-            // draw inside
+            
+            t->frame > 1024 ? change_pixel(&t->pixels[i], "◡", RED) : change_pixel(&t->pixels[i], ";", GREEN);
         }
     }
-
     assign_pix_buff(t->buffer, t->pixels, t->size);
-    
     write(1, t->buffer, strlen(t->buffer));
     
-    t->frame++; if (t->frame > 2048) t->frame = 1; 
+    if (t->frame > 2048) t->frame = 1; else t->frame += 4;
 }
 

@@ -24,15 +24,15 @@ int main(int ac, char *av[])
     while(1) 
     {
         ft_keyhook(&term);
-        term.clear ? memset(term.buffer, ' ', term.size) : 0;
+        /* term.clear ? memset(term.buffer, ' ', term.size) : 0; */
         /* move_player(&term, term.players[0]); */
         /* move_player(&term, term.players[1]); */
         /* move_player(&term, term.players[2]); */
         /* move_player(&term, term.players[3]); */
-        assign_pix_buff(term.buffer, term.pixels, term.size);
         draw(&term);
-        copy_last_buffer(&term);
+        /* copy_last_buffer(&term); */
         usleep(term.delay);
+        memset(term.buffer, ' ', term.size);  
     }
     
     /* free_all(&term); */

@@ -5,11 +5,11 @@ void init_term(term_t *t)
     // Initialize frame, clear, delay
     t->frame = 1;
     t->clear = 0;
-    t->delay = 1e6;
+    t->delay = 1e4;
 
     // Allocate memory for buffer and buffer_copy
-    t->buffer = (char *)calloc(t->size * 4, sizeof(char*));
-    t->buffer_copy = (char *)calloc(t->size * 4, sizeof(char*));
+    t->buffer = (char *)calloc(t->size * sizeof(Pixel) , sizeof(char*));
+    t->buffer_copy = (char *)calloc(t->size * sizeof(Pixel), sizeof(char*));
     t->pixels = (Pixel *)calloc(t->size, sizeof(Pixel));
 
     if (!t->buffer || !t->buffer_copy || !t->pixels) {
