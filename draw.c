@@ -38,7 +38,7 @@ void draw(term_t *t, float amplitude)
                 || i % t->MAX_COL == t->MAX_COL - 1) {
             t->buffer[i] !=  '|' ? t->buffer[i] = '|' : 0;
         } else {
-            if (amplitude > 0.2) {
+            if (amplitude > 0.3) {
                 draw_player(t, i, t->players[0]);
                 draw_player(t, i, t->players[1]);
                 draw_player(t, i, t->players[2]);

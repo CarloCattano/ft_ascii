@@ -6,6 +6,10 @@ if [ $# -eq 0 ]; then
     cc -Wall -Wextra -Werror -lm main.c utils.c init.c draw.c keyhooks.c player.c -o ft_ascii
     echo "Built ft_ascii"
 
+elif [ $1 == "audio" ]; then
+    cc audio.c draw.c init.c keyhooks.c  player.c utils.c  libportaudio.a                -lrt -lm -lasound -pthread -o testaudio -Wall -Wextra 
+    ./testaudio
+
 elif [ $1 == "run" ]; then
     cc -Wall -Wextra -Werror -lm main.c utils.c init.c draw.c keyhooks.c player.c -o ft_ascii
     ./ft_ascii

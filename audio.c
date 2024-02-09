@@ -4,7 +4,9 @@
 #include "portaudio.h"
 #include <math.h>
 #include <locale.h>
+
 #define SAMPLE_RATE 44100
+/* #define SAMPLE_RATE 48000 */
 #define FRAMES_PER_BUFFER 512
 
 float g_amplitude = 0.0;
@@ -42,6 +44,9 @@ int main() {
 
     // Set input parameters
     inputParameters.device = Pa_GetDefaultInputDevice();
+    printf("Device: %d\n", inputParameters.device);
+    exit(1);
+    /* inputParameters.device = 11; */
     inputParameters.channelCount = 1;
     inputParameters.sampleFormat = paFloat32;
     inputParameters.suggestedLatency = Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency;
@@ -92,7 +97,7 @@ int main() {
             move_player(&term, term.players[2]);
             move_player(&term, term.players[3]);
         }
-        if (g_amplitude > 0.9) {
+        if (g_amplitude > 0.7) {
             memset(term.buffer, ' ', term.size);
         }
         draw(&term, g_amplitude);
