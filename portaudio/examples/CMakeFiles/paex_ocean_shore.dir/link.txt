@@ -1,0 +1,1 @@
+/sbin/cc -rdynamic CMakeFiles/paex_ocean_shore.dir/paex_ocean_shore.o -o paex_ocean_shore  -lportaudio_static 

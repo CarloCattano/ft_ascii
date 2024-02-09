@@ -2,6 +2,13 @@
 
 #define accelMAX 3
 
+// for player in playerNumber do function
+
+void apply_to_player(term_t *t, player_t *p, void (*f)(term_t *, player_t *))
+{
+    f(t, p);
+}
+
 /* Apply movement to player */
 void move_player(term_t *t, player_t *p)
 {

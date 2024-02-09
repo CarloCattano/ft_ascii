@@ -95,7 +95,7 @@ int main() {
             move_player(&term, term.players[2]);
             move_player(&term, term.players[3]);
         }
-        if (g_amplitude > 0.7) {
+        if (g_amplitude > 0.9) {
             memset(term.buffer, ' ', term.size);
         }
         draw(&term, g_amplitude);

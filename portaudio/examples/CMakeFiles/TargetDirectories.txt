@@ -1,0 +1,14 @@
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/pa_devs.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/pa_fuzz.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/paex_ocean_shore.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/paex_pink.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/paex_read_write_wire.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/paex_record.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/paex_record_file.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/paex_saw.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/paex_sine.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/paex_sine_c++.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/paex_write_sine.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/paex_write_sine_nonint.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/edit_cache.dir
+/home/carlo/dev/ft_ascii/portaudio/examples/CMakeFiles/rebuild_cache.dir
