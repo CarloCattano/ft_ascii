@@ -21,6 +21,8 @@
 #define   BLACK     "\033[30m"
 #define   RST       "\033[0m"
 
+#define unicodechars "▁▂▃▄▅▆▇█"
+
 typedef struct s_pixel
 {
     char    *c;
@@ -78,4 +80,4 @@ char*               build_pixel(Pixel pixel);
 void                assign_pix_buff(char* buffer, Pixel* pixels,int size);
 void                pixel_set(Pixel* pixels, int size);
 void                pix_set(Pixel* pixels,int size);
-
+void                flip_pixel(Pixel* p);

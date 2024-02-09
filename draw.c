@@ -16,7 +16,13 @@ void draw(term_t *t)
         if (check_border(t, i)){
             change_pixel(&t->pixels[i], "|",GREEN);
         } else {
-            change_pixel(&t->pixels[i],"◠", RED);
+            /* change_pixel(&t->pixels[i],"◠", RED); */
+            // compare the content of the current pixel
+            // with the content of the last pixel
+            if (t->buffer[i] != t->buffer_copy[i] && t->frame % 256 == 0)
+            {
+                flip_pixel(&t->pixels[i]);
+            }
         }
     }
     assign_pix_buff(t->buffer, t->pixels, t->size);

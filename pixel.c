@@ -15,6 +15,7 @@ char* build_pixel(Pixel pixel)
     if (!out) perror("Malloc failed"), exit(1);
 
     strncpy(out, pixel.color, strlen(pixel.color));
+
     strncat(out, pixel.c, strlen(pixel.c));
 
     return out;
@@ -40,4 +41,27 @@ void pix_set(Pixel* pixels,int size)
         pixels[i].len = strlen(pixels[i].color) + strlen(pixels[i].c);
     }
 }
+
+void flip_pixel(Pixel* p)
+{
+    if (strcmp(p->c, " ") == 0)
+        p->c = "▃";
+    else if (strcmp(p->c, "▃") == 0)
+        p->c = "◠";
+    else if (strcmp(p->c, "◠") == 0) 
+        p->c = "◡";
+    else
+        p->c = " ";
+
+    if (strcmp(p->color, GREEN) == 0)
+        p->color = RED;
+    else if (strcmp(p->color, RED) == 0)
+        p->color = YELLOW;
+    else if (strcmp(p->color, YELLOW) == 0)
+        p->color = BLUE;
+    else
+        p->color = GREEN;
+}
+
+
 
