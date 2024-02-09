@@ -17,14 +17,17 @@ static void draw_player(term_t *t, int i, player_t *p)
 
         if (compare_val_in_buffers(t, offset))
         {
-            p->curr_brush = p->brushes[p->brush_index];
+            if (p->toggle)
+                p->curr_brush = p->brushes[rand() % 2];
+            else
+               p->curr_brush = p->brushes[p->brush_index];
         }
         else {          /* replace the old brush with different one (swallow) */
             if (p->curr_brush == t->buffer[offset])
                 p->brush_index = (p->brush_index + 1) % strlen(p->brushes);
-            
             p->curr_brush = p->brushes[p->brush_index];
-            p->toggle ? p->curr_brush = p->brushes[(p->brush_index % 2)] : 0;
+            /* p->curr_brush = p->brushes[p->brush_index]; */
+            /* p->toggle ? p->curr_brush = p->brushes[(p->brush_index % 2)] : 0; */
             t->buffer[offset] = p->curr_brush;
         }
     }
@@ -38,7 +41,7 @@ void draw(term_t *t, float amplitude)
                 || i % t->MAX_COL == t->MAX_COL - 1) {
             t->buffer[i] !=  '|' ? t->buffer[i] = '|' : 0;
         } else {
-            if (amplitude > 0.3) {
+            if (amplitude > ((rand() % i / 200.0)) + 0.1f && t->frame % 2 == 0){
                 draw_player(t, i, t->players[0]);
                 draw_player(t, i, t->players[1]);
                 draw_player(t, i, t->players[2]);

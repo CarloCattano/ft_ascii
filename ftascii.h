@@ -8,7 +8,6 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <sys/select.h>
-#include <poll.h>
 
 #define   CLEAR     "\033[H"
 #define   NOMOUSE   "\033[?25l"
