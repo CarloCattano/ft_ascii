@@ -1,3 +1,6 @@
+### Audio version
+Portaudio implementation scketch - Amplitude mapped
+
 ### Preface
 
 Interested in rendering graphics to terminal using just *ASCII*
