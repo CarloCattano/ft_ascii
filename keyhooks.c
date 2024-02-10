@@ -11,21 +11,11 @@ static void handlePlayerKeys(term_t *t, char key) {
         case 'd':
             break;
         case 'p' :
-            /* for (int i = 0; i < 4; i++) { */
-            /*     t->players[i]->brush_index = (t->players[i]->brush_index + 2) % strlen(t->players[i]->brushes); */
-            /* } */
-            break;
+           break;
         case 'o' :
-            /* for (int i = 1; i < 4; i++) { */
-            /*     t->players[i]->toggle = t->players[i]->toggle; */
-            /* } */
-            break;
+           break;
         case 'r':
-            /* for (int i = 0; i < 4; i++) { */
-            /*     t->players[i]->posx = t->MAX_COL / 2; */
-            /*     t->players[i]->posy = t->MAX_ROW / 2; */
-            /* } */
-            break;
+           break;
         case '0':
             t->delay *= 0.5;
             t->delay < 1 ? t->delay = 1 : t->delay;

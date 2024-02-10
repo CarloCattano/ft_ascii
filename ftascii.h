@@ -8,7 +8,6 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <sys/select.h>
-#include <poll.h>
 
 #define   CLEAR     "\033[H"
 #define   NOMOUSE   "\033[?25l"
@@ -22,6 +21,15 @@
 #define   RST       "\033[0m"
 
 #define unicodechars "▁▂▃▄▅▆▇█"
+
+typedef struct s_unicode
+{
+    char     byte1;
+    char     byte2;
+    char     byte3;
+    char     byte4;
+
+}            Unicode;
 
 typedef struct s_pixel
 {
