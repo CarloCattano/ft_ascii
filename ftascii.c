@@ -19,19 +19,6 @@ void ft_ascii(float* fft_values) {
     {
         ft_keyhook(&term);
         term.clear ? memset(term.buffer, ' ', term.size) : 0;
-        if (fft_values[0] > 0.2f * term.sens) {
-            move_player(&term, term.players[0]);
-            move_player(&term, term.players[1]);
-            move_player(&term, term.players[2]);
-            move_player(&term, term.players[3]);
-        }
-        /* fft_values[3] > 0.3f ? term.delay *= 0.5 : 0; */
-        /* fft_values[1] > 1.2f ? term.delay *= 2 : 0; */
-        fft_values[3] > 1.7f ? memset(term.buffer, ' ', term.size) : 0;
-        fft_values[4] > 0.2f ? write(1, RED, 5) : 0;
-        fft_values[0] > 2.5f ? write(1, GREEN, 5) : 0;
-        
-        
         draw(&term, 0.9, fft_values, &term.sens);
         copy_last_buffer(&term);
         usleep(term.delay);

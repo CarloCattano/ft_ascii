@@ -10,8 +10,6 @@ static int check_border(term_t *t, int i)
 
 static void draw_player(term_t *t, int i, player_t *p)
 {
-    if (!check_border(t, i) && (i % t->MAX_COL) != 0 && (i % t->MAX_COL) != t->MAX_COL - 1)
-    {
         int offset = (p->posy * t->MAX_COL) + p->posx;
 
         if (compare_val_in_buffers(t, offset)) 
@@ -32,7 +30,8 @@ static void draw_player(term_t *t, int i, player_t *p)
             p->curr_brush = p->brushes[p->brush_index];
             t->buffer[offset] = p->curr_brush; 
         }
-    }
+        // calculate xy position to move to 
+
 }
 
 
@@ -43,19 +42,9 @@ void draw(term_t *t, float amplitude, float *fft_values, float* sens)
         if (check_border(t, i)){
             t->buffer[i] !=  '|' ? t->buffer[i] = '|' : 0;
         }
-        /* }else if ( i < 2 * t->MAX_COL + (t->MAX_ROW / t->MAX_COL) && i > t->MAX_COL - t->MAX_ROW / 2) { */
-        /*     char frame[8]; */
-        /*     sprintf(frame, "%d", t->frame); */
-        /*     t->buffer[i] = frame[i - (t->MAX_COL - t->MAX_ROW / 2)]; */
-        /* } */
         else {
-            int scale = ((rand() % 100) + 0.2f * *sens);
-            /* if (amplitude > scale && t->frame % 2 == 0){ */
-            if (fft_values[1] > 0.4f) {
-                draw_player(t, i, t->players[0]);
-                draw_player(t, i, t->players[1]);
-                draw_player(t, i, t->players[2]);
-                draw_player(t, i, t->players[3]);
+            for (int j = 0; j < 4; j++) {
+                draw_player(t, i, t->players[j]);
             }
         }
     }     
@@ -63,13 +52,15 @@ void draw(term_t *t, float amplitude, float *fft_values, float* sens)
     t->frame++;
     if (t->frame > 2048)
         t->frame = 1;
- 
+    
+    for (int i = 0; i < 4; i++)
+       move_player_to(t->players[i], t->MAX_COL, t->MAX_ROW, i, fft_values[i]);
+
     t->sens > 4.0f ? t->sens = 4.0f : 0;
     t->sens < 0.25f ? t->sens = 0.25f : 0;
 
     t->delay < 1 ? t->delay = 1 : 0;
     t->delay > 10000 ? t->delay = 10000 : 0;
-
 
     write(1, t->buffer, t->size);       // draw the whole buffer in one call  
 }

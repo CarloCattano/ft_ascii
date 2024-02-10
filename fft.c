@@ -7,7 +7,7 @@
 
 #define SAMPLE_RATE 44100
 #define FRAMES_PER_BUFFER 512
-#define FFT_SIZE 8
+#define FFT_SIZE 4
 
 typedef struct {
     float left_phase;
@@ -35,7 +35,6 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,
         in[i][1] = 0.0;
     }
 
-    // Execute the FFT
     fftw_execute(plan);
 
     // Output the magnitude spectrum
@@ -44,7 +43,6 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,
         fft_values[i] = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
     }
     /* printf("\n"); */
-
     return paContinue; // Continue streaming audio
 }
 
