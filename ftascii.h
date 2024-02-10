@@ -43,6 +43,7 @@ typedef struct term_s
     int 		    clear;
     unsigned int    delay;
     player_t* 	    players[4];
+    float            sens;
 
 }                   term_t;
 
@@ -53,7 +54,7 @@ void                handleKeyPress(char key, term_t *t);
 void                handlectrl_c(int sig);
 void                ft_keyhook(term_t *t);
 
-void                draw(term_t *t, float amp, float* fftvals);
+void                draw(term_t *t, float amp, float* fftvals, float* sens);
 void                move_player(term_t *t, player_t *p);
 
 /*     utils       */

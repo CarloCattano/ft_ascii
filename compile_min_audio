@@ -1,0 +1,1 @@
+cc fft.c ftascii.c draw.c init.c keyhooks.c  player.c utils.c  libportaudio.a -lrt -lm -lasound -ljack -O3 -pthread -lfftw3 -o testfft -Wall -Wextra

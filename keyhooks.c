@@ -3,28 +3,28 @@
 static void handlePlayerKeys(term_t *t, char key) {
     switch (key) {
         case 'w':
-            t->players[0]->dy += -2;
-            t->players[1]->dy += 2;
-            t->players[2]->dy += -2;
-            t->players[3]->dy += 2;
+            t->players[0]->dy += -(rand() % 2) + 1;
+            t->players[1]->dy +=  (rand() % 2) + 1;
+            t->players[2]->dy +=  -(rand() % 2) + 1;
+            t->players[3]->dy +=  (rand() % 2) + 1;
             break;
         case 'a':
-            t->players[0]->dx += -2;
-            t->players[1]->dx += 2;
-            t->players[2]->dx += 2;
-            t->players[3]->dx += -2;
+            t->players[0]->dx += -1;
+            t->players[1]->dx +=  1;
+            t->players[2]->dx +=  1;
+            t->players[3]->dx += -1;
             break;
         case 's':
-            t->players[0]->dy += 2;
-            t->players[1]->dy += -2;
-            t->players[2]->dy += 2;
-            t->players[3]->dy += -2;
+            t->players[0]->dy +=  (rand() % 2) + 1;
+            t->players[1]->dy += -1;
+            t->players[2]->dy +=  1;
+            t->players[3]->dy += -1;
             break;
         case 'd':
-            t->players[0]->dx += 2;
-            t->players[1]->dx += -2;
-            t->players[2]->dx += -2;
-            t->players[3]->dx += 2;
+            t->players[0]->dx +=  1;
+            t->players[1]->dx += -1;
+            t->players[2]->dx += -1;
+            t->players[3]->dx += (rand() % 2) + 1;
             break;
         case 'p' :
             for (int i = 0; i < 4; i++) {
@@ -55,7 +55,13 @@ static void handlePlayerKeys(term_t *t, char key) {
             break;
         case '9':
             t->delay *= 2;
-            t->delay > 2e4 ? t->delay = 2e4 : t->delay;
+            t->delay > 2e5 ? t->delay = 2e5 : t->delay;
+            break;
+        case '1':
+            t->sens *= 2;
+            break;
+        case '2':
+            t->sens *= 0.5;
             break;
     }
 }
