@@ -9,6 +9,15 @@ char unis[] = "◝◞◟◠◡";
 
 // draw the buffer
 
+static int ft_strlen(char *s)
+{
+    int i = 0;
+    while (s[i] && s[i + 1] != '\0')
+        i++;
+    s[i] = '\0';
+    return i;
+}
+
 void draw(term_t *t)
 {
     for (int i = 0; i < t->size; i++)
@@ -16,9 +25,6 @@ void draw(term_t *t)
         if (check_border(t, i)){
             change_pixel(&t->pixels[i], "|",GREEN);
         } else {
-            /* change_pixel(&t->pixels[i],"◠", RED); */
-            // compare the content of the current pixel
-            // with the content of the last pixel
             if (t->buffer[i] != t->buffer_copy[i] && t->frame % 256 == 0)
             {
                 flip_pixel(&t->pixels[i]);
@@ -27,7 +33,7 @@ void draw(term_t *t)
     }
     assign_pix_buff(t->buffer, t->pixels, t->size);
 
-    write(1, t->buffer, strlen(t->buffer));
+    write(1, t->buffer, ft_strlen(t->buffer));
     
     t->frame > 2048 ? t->frame = 1 : t->frame++;
 }

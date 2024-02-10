@@ -1,0 +1,483 @@
+PortAudio version: 0x00130700
+Version text: 'PortAudio V19.7.0-devel, revision 147dd722548358763a8b649b3e4b41dfffbcfbb6'
+Number of devices = 25
+--------------------------------------- device #0
+Name                        = sof-hda-dsp: - (hw:0,0)
+Host API                    = ALSA
+Max inputs = 2, Max outputs = 2
+Default low input latency   =   0.0080
+Default low output latency  =   0.0080
+Default high input latency  =   0.0320
+Default high output latency =   0.0320
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel input = 
+	48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+Supported standard sample rates
+ for full-duplex 16 bit 2 channel input, 2 channel output = 
+	48000.00
+--------------------------------------- device #1
+Name                        = sof-hda-dsp: - (hw:0,3)
+Host API                    = ALSA
+Max inputs = 0, Max outputs = 2
+Default low input latency   =  -1.0000
+Default low output latency  =   0.0080
+Default high input latency  =  -1.0000
+Default high output latency =   0.0320
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+--------------------------------------- device #2
+Name                        = sof-hda-dsp: - (hw:0,4)
+Host API                    = ALSA
+Max inputs = 0, Max outputs = 2
+Default low input latency   =  -1.0000
+Default low output latency  =   0.0080
+Default high input latency  =  -1.0000
+Default high output latency =   0.0320
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+--------------------------------------- device #3
+Name                        = sof-hda-dsp: - (hw:0,5)
+Host API                    = ALSA
+Max inputs = 0, Max outputs = 2
+Default low input latency   =  -1.0000
+Default low output latency  =   0.0080
+Default high input latency  =  -1.0000
+Default high output latency =   0.0320
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+--------------------------------------- device #4
+Name                        = sof-hda-dsp: - (hw:0,6)
+Host API                    = ALSA
+Max inputs = 2, Max outputs = 0
+Default low input latency   =   0.0080
+Default low output latency  =  -1.0000
+Default high input latency  =   0.0320
+Default high output latency =  -1.0000
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel input = 
+	48000.00
+--------------------------------------- device #5
+Name                        = sof-hda-dsp: - (hw:0,7)
+Host API                    = ALSA
+Max inputs = 2, Max outputs = 0
+Default low input latency   =   0.0240
+Default low output latency  =  -1.0000
+Default high input latency  =   0.0960
+Default high output latency =  -1.0000
+Default sample rate         = 16000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel input = 
+	16000.00
+--------------------------------------- device #6
+Name                        = sof-hda-dsp: - (hw:0,31)
+Host API                    = ALSA
+Max inputs = 0, Max outputs = 2
+Default low input latency   =  -1.0000
+Default low output latency  =   0.0080
+Default high input latency  =  -1.0000
+Default high output latency =   0.0320
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+--------------------------------------- device #7
+Name                        = sysdefault
+Host API                    = ALSA
+Max inputs = 128, Max outputs = 128
+Default low input latency   =   0.0080
+Default low output latency  =   0.0080
+Default high input latency  =   0.0320
+Default high output latency =   0.0320
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 128 channel input = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for half-duplex 16 bit 128 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for full-duplex 16 bit 128 channel input, 128 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+--------------------------------------- device #8
+Name                        = lavrate
+Host API                    = ALSA
+Max inputs = 128, Max outputs = 128
+Default low input latency   =   0.0078
+Default low output latency  =   0.0078
+Default high input latency  =   0.0232
+Default high output latency =   0.0232
+Default sample rate         = 44100.00
+Supported standard sample rates
+ for half-duplex 16 bit 128 channel input = 
+None
+Supported standard sample rates
+ for half-duplex 16 bit 128 channel output = 
+None
+Supported standard sample rates
+ for full-duplex 16 bit 128 channel input, 128 channel output = 
+None
+--------------------------------------- device #9
+Name                        = samplerate
+Host API                    = ALSA
+Max inputs = 128, Max outputs = 128
+Default low input latency   =   0.0078
+Default low output latency  =   0.0078
+Default high input latency  =   0.0232
+Default high output latency =   0.0232
+Default sample rate         = 44100.00
+Supported standard sample rates
+ for half-duplex 16 bit 128 channel input = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for half-duplex 16 bit 128 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for full-duplex 16 bit 128 channel input, 128 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+--------------------------------------- device #10
+Name                        = speexrate
+Host API                    = ALSA
+Max inputs = 128, Max outputs = 128
+Default low input latency   =   0.0078
+Default low output latency  =   0.0078
+Default high input latency  =   0.0232
+Default high output latency =   0.0232
+Default sample rate         = 44100.00
+Supported standard sample rates
+ for half-duplex 16 bit 128 channel input = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for half-duplex 16 bit 128 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for full-duplex 16 bit 128 channel input, 128 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+--------------------------------------- device #11
+Name                        = jack
+Host API                    = ALSA
+Max inputs = 2, Max outputs = 2
+Default low input latency   =   0.0080
+Default low output latency  =   0.0080
+Default high input latency  =   0.0320
+Default high output latency =   0.0320
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel input = 
+	48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+Supported standard sample rates
+ for full-duplex 16 bit 2 channel input, 2 channel output = 
+	48000.00
+--------------------------------------- device #12
+Name                        = pipewire
+Host API                    = ALSA
+Max inputs = 64, Max outputs = 64
+Default low input latency   =   0.0087
+Default low output latency  =   0.0087
+Default high input latency  =   0.0348
+Default high output latency =   0.0348
+Default sample rate         = 44100.00
+Supported standard sample rates
+ for half-duplex 16 bit 64 channel input = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for half-duplex 16 bit 64 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for full-duplex 16 bit 64 channel input, 64 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+--------------------------------------- device #13
+Name                        = pulse
+Host API                    = ALSA
+Max inputs = 32, Max outputs = 32
+Default low input latency   =   0.0087
+Default low output latency  =   0.0087
+Default high input latency  =   0.0348
+Default high output latency =   0.0348
+Default sample rate         = 44100.00
+Supported standard sample rates
+ for half-duplex 16 bit 32 channel input = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for half-duplex 16 bit 32 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for full-duplex 16 bit 32 channel input, 32 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+--------------------------------------- device #14
+Name                        = speex
+Host API                    = ALSA
+Max inputs = 1, Max outputs = 1
+Default low input latency   =   0.0080
+Default low output latency  =   0.0080
+Default high input latency  =   0.0320
+Default high output latency =   0.0320
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 1 channel input = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for half-duplex 16 bit 1 channel output = 
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for full-duplex 16 bit 1 channel input, 1 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+--------------------------------------- device #15
+Name                        = upmix
+Host API                    = ALSA
+Max inputs = 8, Max outputs = 8
+Default low input latency   =   0.0080
+Default low output latency  =   0.0080
+Default high input latency  =   0.0320
+Default high output latency =   0.0320
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 8 channel input = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for half-duplex 16 bit 8 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for full-duplex 16 bit 8 channel input, 8 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+--------------------------------------- device #16
+Name                        = vdownmix
+Host API                    = ALSA
+Max inputs = 6, Max outputs = 6
+Default low input latency   =   0.0080
+Default low output latency  =   0.0080
+Default high input latency  =   0.0320
+Default high output latency =   0.0320
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 6 channel input = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for half-duplex 16 bit 6 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for full-duplex 16 bit 6 channel input, 6 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+--------------------------------------- device #17
+Name                        = dmix
+Host API                    = ALSA
+Max inputs = 0, Max outputs = 2
+Default low input latency   =  -1.0000
+Default low output latency  =   0.0213
+Default high input latency  =  -1.0000
+Default high output latency =   0.0213
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+--------------------------------------- device #18
+[ Default Input, Default Output ]
+Name                        = default
+Host API                    = ALSA
+Max inputs = 64, Max outputs = 64
+Default low input latency   =   0.0087
+Default low output latency  =   0.0087
+Default high input latency  =   0.0348
+Default high output latency =   0.0348
+Default sample rate         = 44100.00
+Supported standard sample rates
+ for half-duplex 16 bit 64 channel input = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for half-duplex 16 bit 64 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+Supported standard sample rates
+ for full-duplex 16 bit 64 channel input, 64 channel output = 
+	 8000.00,  9600.00, 11025.00, 12000.00,
+	16000.00, 22050.00, 24000.00, 32000.00,
+	44100.00, 48000.00, 88200.00, 96000.00,
+	192000.00
+--------------------------------------- device #19
+[ Default JACK Audio Connection Kit Input ]
+Name                        = Alder Lake PCH-P High Definition Audio Controller Digital Microphone
+Host API                    = JACK Audio Connection Kit
+Max inputs = 2, Max outputs = 0
+Default low input latency   =   0.0033
+Default low output latency  =   0.0000
+Default high input latency  =   0.0033
+Default high output latency =   0.0000
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel input = 
+	48000.00
+--------------------------------------- device #20
+Name                        = Alder Lake PCH-P High Definition Audio Controller Headphones Stereo Microphone
+Host API                    = JACK Audio Connection Kit
+Max inputs = 2, Max outputs = 0
+Default low input latency   =   0.0027
+Default low output latency  =   0.0000
+Default high input latency  =   0.0027
+Default high output latency =   0.0000
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel input = 
+	48000.00
+--------------------------------------- device #21
+[ Default JACK Audio Connection Kit Output ]
+Name                        = Alder Lake PCH-P High Definition Audio Controller Speaker + Headphones
+Host API                    = JACK Audio Connection Kit
+Max inputs = 2, Max outputs = 2
+Default low input latency   =   0.0000
+Default low output latency  =   0.0027
+Default high input latency  =   0.0000
+Default high output latency =   0.0027
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel input = 
+	48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+Supported standard sample rates
+ for full-duplex 16 bit 2 channel input, 2 channel output = 
+	48000.00
+--------------------------------------- device #22
+Name                        = Alder Lake PCH-P High Definition Audio Controller HDMI / DisplayPort 1 Output
+Host API                    = JACK Audio Connection Kit
+Max inputs = 2, Max outputs = 2
+Default low input latency   =   0.0000
+Default low output latency  =   0.0027
+Default high input latency  =   0.0000
+Default high output latency =   0.0027
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel input = 
+	48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+Supported standard sample rates
+ for full-duplex 16 bit 2 channel input, 2 channel output = 
+	48000.00
+--------------------------------------- device #23
+Name                        = Alder Lake PCH-P High Definition Audio Controller HDMI / DisplayPort 2 Output
+Host API                    = JACK Audio Connection Kit
+Max inputs = 2, Max outputs = 2
+Default low input latency   =   0.0000
+Default low output latency  =   0.0027
+Default high input latency  =   0.0000
+Default high output latency =   0.0027
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel input = 
+	48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+Supported standard sample rates
+ for full-duplex 16 bit 2 channel input, 2 channel output = 
+	48000.00
+--------------------------------------- device #24
+Name                        = Alder Lake PCH-P High Definition Audio Controller HDMI / DisplayPort 3 Output
+Host API                    = JACK Audio Connection Kit
+Max inputs = 2, Max outputs = 2
+Default low input latency   =   0.0000
+Default low output latency  =   0.0027
+Default high input latency  =   0.0000
+Default high output latency =   0.0027
+Default sample rate         = 48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel input = 
+	48000.00
+Supported standard sample rates
+ for half-duplex 16 bit 2 channel output = 
+	48000.00
+Supported standard sample rates
+ for full-duplex 16 bit 2 channel input, 2 channel output = 
+	48000.00
+----------------------------------------------
