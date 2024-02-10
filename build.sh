@@ -7,7 +7,8 @@ if [ $# -eq 0 ]; then
     echo "Built ft_ascii"
 
 elif [ $1 == "audio" ]; then
-    cc audio.c draw.c init.c keyhooks.c  player.c utils.c  libportaudio.a                -lrt -lm -lasound -pthread -o testaudio -Wall -Wextra 
+    cc main.c draw.c init.c keyhooks.c  player.c utils.c  libportaudio.a \
+            -lrt -lm -lasound -pthread -o testaudio -Wall -Wextra ;
     ./testaudio
 
 elif [ $1 == "run" ]; then

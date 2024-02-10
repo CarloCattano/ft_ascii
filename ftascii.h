@@ -53,7 +53,7 @@ void                handleKeyPress(char key, term_t *t);
 void                handlectrl_c(int sig);
 void                ft_keyhook(term_t *t);
 
-void                draw(term_t *t, float amp);
+void                draw(term_t *t, float amp, float* fftvals);
 void                move_player(term_t *t, player_t *p);
 
 /*     utils       */
@@ -64,3 +64,5 @@ void                free_all(term_t *t);
 void                systemExit();
 void                save_last_frame_to_file(char * filename, char * buffer, int size);
 
+
+void                ft_ascii(float* fftvals);

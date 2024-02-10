@@ -39,7 +39,7 @@ void init_term(term_t *t)
         exit(1);
     }
     memset(t->buffer, ' ', t->size);
-    init_player(t, "|\\/|<>., &^'`[{_");
+    init_player(t, "|\\/|<>., &^'`[{_\"~*%");
 }
 
 //"_-<>^v\"'`,/\\|");
