@@ -9,19 +9,19 @@ static void draw_player(term_t *t, int i, player_t *p)
 
         if (compare_val_in_buffers(t, offset)) 
         {
-            if (p->toggle)
-                p->curr_brush = p->brushes[rand() % 3];
+            if (!p->toggle)
+                p->curr_brush = p->brushes[p->brush_index + 1 % strlen(p->brushes)];
             else
                p->curr_brush = p->brushes[p->brush_index];
         } else {          /* replace the old brush with different one (swallow) */
-            if (p->curr_brush == t->buffer[offset] && !p->toggle)
+            if (p->curr_brush == t->buffer[offset] && p->toggle)
             {
                 p->brush_index = (p->brush_index + 1) % strlen(p->brushes);
             }
-            if (p->toggle)
-           {
-                p->brush_index = (p->brush_index++ % strlen(p->brushes)) + 1;
-           }
+            if (!p->toggle)
+            {
+                p->brush_index = (((p->brush_index + 1) % 2) + (rand() % 6)) % strlen(p->brushes);
+            }
             p->curr_brush = p->brushes[p->brush_index];
             t->buffer[offset] = p->curr_brush; 
         }

@@ -28,12 +28,19 @@ static void handlePlayerKeys(term_t *t, char key) {
             break;
         case 'p' :
             for (int i = 0; i < 4; i++) {
-                t->players[i]->brush_index = (t->players[i]->brush_index + 2) % strlen(t->players[i]->brushes);
+                t->players[i]->brush_index = (t->players[i]->brush_index + 3) % strlen(t->players[i]->brushes);
             }
             break;
         case 'o' :
             for (int i = 1; i < 4; i++) {
-                t->players[i]->toggle = t->players[i]->toggle;
+                t->players[i]->toggle = !t->players[i]->toggle;
+            }
+            break;
+        case 'u':
+            for (int i = 0; i < 4; i++) {
+             t->players[i]->brush_index ? 
+                 t->players[i]->brush_index += 2 % strlen(t->players[i]->brushes) : 0;
+             t->players[i]->curr_brush = t->players[i]->brushes[t->players[i]->brush_index];
             }
             break;
         case 'r':
