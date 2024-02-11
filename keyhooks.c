@@ -18,11 +18,11 @@ static void handlePlayerKeys(term_t *t, char key) {
            break;
         case '0':
             t->delay *= 0.5;
-            t->delay < 1 ? t->delay = 1 : t->delay;
+            t->delay < 2 ? t->delay = 1 : t->delay;
             break;
         case '9':
             t->delay *= 2;
-            t->delay > 3e4 ? t->delay = 3e4 : t->delay;
+            t->delay > 1e4 ? t->delay = 1e4 : t->delay;
             break;
     }
 }

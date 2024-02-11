@@ -55,9 +55,8 @@ void fill_pixels(Pixel* pixels,char* color, char* uni, int i)
     }
 }
 
-void manipulate_pixel(Pixel* pixels, int size, char* color, char* uni)
+void putpix(Pixel* pixels, char* color, char* uni)
 {
-    (void)size;
     pixels->data.color = color;
     pixels->data.uni = uni;
 }

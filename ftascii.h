@@ -88,8 +88,7 @@ void                pixel_set(Pixel* pixels, int size);
 void                pix_set(Pixel* pixels,int size);
 void                fill_pixels(Pixel* pixels, char* color, char* uni, int i);
 
-int str_to_hex(char *str);
-void manipulate_pixel(Pixel* pixels, int size, char* color, char* uni);
-char* uni_to_str(t_uni uni);
+int                 str_to_hex(char *str);
+void                putpix(Pixel* pixels, char* color, char* uni);
 
 char* hex_to_unicode(int hex);
