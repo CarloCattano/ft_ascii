@@ -24,12 +24,12 @@ int main(int ac, char *av[])
                              NULL, NULL, NULL, 1, 1, 0, {0}};
     init_term(&term);
 
+    assign_pix_buff(term.buffer, term.pixels, term.size);
     while(1) 
     {
         ft_keyhook(&term);
         draw(&term);
         usleep(term.delay);
-        /* memset(term.buffer, ' ', term.size); */  
     }
     
     /* free_all(&term); */

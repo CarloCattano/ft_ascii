@@ -26,14 +26,14 @@
 
 typedef struct s_unicode
 {
-    char*       unicode;
+    char*       uni;
     char*       color;
     
-} Unicode;
+} t_uni;
 
 typedef struct s_pixel
 {
-    Unicode  data;
+    t_uni    data;
 }            Pixel;
 
 typedef struct player_s
@@ -81,10 +81,11 @@ void                free_all(term_t *t);
 void                systemExit();
 void                save_last_frame_to_file(char * filename, char * buffer, int size);
 
-void                change_pixel(Pixel* p, char* c, char* color);
-char*               build_pixel(Pixel pixel);
 void                assign_pix_buff(char* buffer, Pixel* pixels,int size);
 void                pixel_set(Pixel* pixels, int size);
 void                pix_set(Pixel* pixels,int size);
-void                flip_pixel(Pixel* p);
-size_t              ft_strlen(char *s);
+void                fill_pixels(Pixel* pixels, int size, char* color, char* uni);
+
+int str_to_hex(char *str);
+
+char* hex_to_unicode(int hex);

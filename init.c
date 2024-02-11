@@ -5,7 +5,7 @@ void init_term(term_t *t)
     // Initialize frame, clear, delay
     t->frame = 1;
     t->clear = 0;
-    t->delay = 1e4;
+    t->delay = 1e2;
     
     // check term init
     if (t->size < 1){
@@ -13,7 +13,6 @@ void init_term(term_t *t)
         exit(1);
     }
 
-    /* t->pixels = (Pixel*)malloc(sizeof(Pixel) * t->size); */
     t->pixels = (Pixel*)malloc(sizeof(Pixel) * t->size);
     t->buffer = (char*)malloc(sizeof(char) * t->size * 8);
 
@@ -22,4 +21,5 @@ void init_term(term_t *t)
           exit(1);
     }
     pix_set(t->pixels, t->size);
+    fill_pixels(t->pixels, t->size, GREEN, "@");
 }
