@@ -43,7 +43,7 @@ void pix_set(Pixel* p, int size)
    }
 }
 
-void fill_pixels(Pixel* pixels,char* color, char* uni, int i)
+void fill_pixel(Pixel* pixels,char* color, char* uni, int i)
 {
     if (strlen(uni) <= 2 && uni[0] != '\0'){
             pixels[i].data.uni[0] = uni[0];
@@ -63,7 +63,6 @@ void putpix(Pixel* pixels, char* color, char* uni)
 
 void assign_pix_buff(char* buffer, Pixel* pixels, int size)
 {
-    memset(buffer, 0, size * 8);
     for (int i = 0; i < size; i++)
     {
         int col_l = strlen(pixels->data.color);

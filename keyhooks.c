@@ -3,12 +3,16 @@
 static void handlePlayerKeys(term_t *t, char key) {
     switch (key) {
         case 'w':
+            t->players[0]->dy -= 1;
             break;
         case 'a':
+            t->players[0]->dx -= 1;
             break;
         case 's':
+            t->players[0]->dy += 1;
             break;
         case 'd':
+            t->players[0]->dx += 1;
             break;
         case 'p' :
            break;

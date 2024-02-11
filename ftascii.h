@@ -44,10 +44,6 @@ typedef struct player_s
     int             posy;
     int             dx;
     int             dy;
-    char*           brushes;
-    char            curr_brush;
-    int             brush_index;
-    int             toggle;
 }                   player_t;
 
 typedef struct term_s
@@ -73,7 +69,7 @@ void                handlectrl_c(int sig);
 void                ft_keyhook(term_t *t);
 
 void                draw(term_t *t);
-void                move_player(term_t *t, player_t *p);
+void                move_player(term_t *t);
 
 /*     utils       */
 int                 compare_val_in_buffers(term_t *t, int i);
@@ -86,9 +82,9 @@ void                save_last_frame_to_file(char * filename, char * buffer, int 
 void                assign_pix_buff(char* buffer, Pixel* pixels,int size);
 void                pixel_set(Pixel* pixels, int size);
 void                pix_set(Pixel* pixels,int size);
-void                fill_pixels(Pixel* pixels, char* color, char* uni, int i);
+void                fill_pixel(Pixel* pixels, char* color, char* uni, int i);
 
 int                 str_to_hex(char *str);
 void                putpix(Pixel* pixels, char* color, char* uni);
 
-char* hex_to_unicode(int hex);
+char*               hex_to_unicode(int hex);

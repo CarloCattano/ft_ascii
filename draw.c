@@ -14,6 +14,7 @@ static int check_border(int i, int MAX_COL, int MAX_ROW)
 static void img2win(term_t *t)
 {
     int len = 0;
+    
     assign_pix_buff(t->buffer, t->pixels, t->size);
     len = write(1, t->buffer, t->size * 8);
     memset(t->buffer, 0, t->size * 8);
@@ -28,9 +29,16 @@ void background(term_t *t, int y)
     t->pixels[y].data.uni = "."; // TODO bug here wide unicodes break it 
 }
 
+void map_pix(term_t *t, int x, int y, char *color, char *uni)
+{
+    int i = (y * t->MAX_COL) + x;
+    fill_pixel(t->pixels, color, uni, i);
+}
+
 void draw(term_t *t)
 {
-     for(int y = 0; y < t->size; y++) {
+     for(int y = 0; y < t->size; y++)
+     {
         if (check_border(y, t->MAX_COL, t->MAX_ROW)) {
             t->pixels[y].data.color = colors[rand() % 8];
             t->pixels[y].data.uni = "🟕";
@@ -38,7 +46,8 @@ void draw(term_t *t)
             background(t, y);
         }
     }
-    putpix(&t->pixels[rand() % t->size], RED, "🟕");
+    move_player(t);
+    map_pix(t, t->players[0]->posx, t->players[0]->posy, RED, "🟕");
+    assign_pix_buff(t->buffer, t->pixels, t->size); 
     img2win(t);
 }
-
