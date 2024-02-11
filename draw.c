@@ -1,18 +1,30 @@
 #include "ftascii.h"
 
-/* static int check_border(term_t *t, int i) */
-/* { */
-/*     return (i < t->MAX_COL || i > (t->size - t->MAX_COL) || i % t->MAX_COL == 0 */ 
-/*             || i % t->MAX_COL == t->MAX_COL - 1); */
-/* } */
+char *colors[] = {RED, GREEN, YELLOW, CYAN, MAGENTA, BLUE, WHITE};
 
+/* static int check_border(int i, int MAX_COL, int MAX_ROW) */
+/* { */
+/*     if (i < MAX_COL || i > ((MAX_COL * MAX_ROW) - MAX_COL) || i % MAX_COL == 0 */ 
+/*             || i % MAX_COL == MAX_COL - 1){ */ 
+/*             return 1; */
+/*     } */
+/*     return 0; */
+/* } */
 void draw(term_t *t)
 {
-    if(!t->pixels || !t->buffer) {
-        printf("Memory allocation failed\n");
-        exit(1);
+    for(int y = 0; y < t->size; y++) {
+        if (y % t->MAX_COL / 4 == 0)
+            manipulate_pixel(&t->pixels[y], t->size, colors[1], "𐇺") ;
+        else
+            manipulate_pixel(&t->pixels[y], t->size, colors[1], ".") ;
     }
-    write(1, t->buffer, t->size * 8);
+
+    int len = 0;
+
+    assign_pix_buff(t->buffer, t->pixels, t->size);
+    len = write(1, t->buffer, t->size * 8);
+
+    (void)len;
+    memset(t->buffer, 0, t->size * 7);
     t->frame > 2048 ? t->frame = 1 : t->frame++;
 }
-

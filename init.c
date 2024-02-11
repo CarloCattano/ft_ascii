@@ -5,7 +5,7 @@ void init_term(term_t *t)
     // Initialize frame, clear, delay
     t->frame = 1;
     t->clear = 0;
-    t->delay = 1e2;
+    t->delay = 1e6;
     
     // check term init
     if (t->size < 1){
@@ -21,5 +21,5 @@ void init_term(term_t *t)
           exit(1);
     }
     pix_set(t->pixels, t->size);
-    fill_pixels(t->pixels, t->size, GREEN, "😀");
+    memset(t->buffer, '.', t->size * 8);
 }

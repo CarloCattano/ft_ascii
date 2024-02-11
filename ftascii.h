@@ -16,6 +16,8 @@
 #define   GREEN     "\033[32m"
 #define   YELLOW    "\033[33m"
 #define   BLUE      "\033[34m"
+#define   MAGENTA   "\033[35m"
+#define   CYAN      "\033[36m"
 #define   WHITE     "\033[37m"
 #define   BLACK     "\033[30m"
 #define   RST       "\033[0m"
@@ -84,8 +86,10 @@ void                save_last_frame_to_file(char * filename, char * buffer, int 
 void                assign_pix_buff(char* buffer, Pixel* pixels,int size);
 void                pixel_set(Pixel* pixels, int size);
 void                pix_set(Pixel* pixels,int size);
-void                fill_pixels(Pixel* pixels, int size, char* color, char* uni);
+void                fill_pixels(Pixel* pixels, char* color, char* uni, int i);
 
 int str_to_hex(char *str);
+void manipulate_pixel(Pixel* pixels, int size, char* color, char* uni);
+char* uni_to_str(t_uni uni);
 
 char* hex_to_unicode(int hex);
