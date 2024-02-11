@@ -6,8 +6,6 @@ static int check_border(term_t *t, int i)
             || i % t->MAX_COL == t->MAX_COL - 1);
 }
 
-/* char unis[] = "◝◞◟◠◡"; */
-
 static void draw_player(term_t *t, int i, player_t *p)
 {
     if (!check_border(t, i) && (i % t->MAX_COL) != 0 && (i % t->MAX_COL) != t->MAX_COL - 1)
@@ -25,10 +23,6 @@ static void draw_player(term_t *t, int i, player_t *p)
             {
                 p->brush_index = (p->brush_index + 1) % strlen(p->brushes);
             }
-            /* if (!p->toggle) */
-            /* { */
-            /*     /1* p->brush_index = (((p->brush_index + 1) % 2) + (rand() % 6)) % strlen(p->brushes); *1/ */
-            /* } */
             p->curr_brush = p->brushes[p->brush_index];
             t->buffer[offset] = p->curr_brush; 
         }
@@ -69,7 +63,6 @@ void draw(term_t *t, float amplitude, float *fft_values, float* sens)
 
     t->delay < 1 ? t->delay = 1 : 0;
     t->delay > 10000 ? t->delay = 10000 : 0;
-
 
     write(1, t->buffer, t->size);       // draw the whole buffer in one call  
 }

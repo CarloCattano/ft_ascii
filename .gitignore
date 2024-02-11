@@ -1,6 +1,6 @@
 .cache
 compile_commands.json
-portaudio
+portaudio/
 .idea
 .vscode
 .DS_Store

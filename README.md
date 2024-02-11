@@ -1,5 +1,5 @@
 ### Audio version
-Portaudio implementation scketch - Amplitude mapped
+Portaudio implementation scketch - Amplitude mapped, fft ferquency analisis with portaudio
 
 ### Preface
 
