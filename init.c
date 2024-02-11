@@ -8,7 +8,7 @@ void init_term(term_t *t)
     t->delay = 1e4;
 
     // Allocate memory for buffer and buffer_copy
-    t->buffer = (char *)calloc(t->size * sizeof(Pixel) , sizeof(char*));
+    t->buffer = (char *)calloc(t->size * sizeof(Pixel*) , sizeof(char*));
     t->buffer_copy = (char *)calloc(t->size * sizeof(Pixel), sizeof(char*));
     t->pixels = (Pixel *)calloc(t->size, sizeof(Pixel));
 
@@ -16,6 +16,6 @@ void init_term(term_t *t)
         perror("Terminal allocation failed");
         exit(1);
     }
-    
+
     pix_set(t->pixels, t->size);
 }

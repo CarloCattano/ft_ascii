@@ -1,40 +1,32 @@
 #include "ftascii.h"
 
-static int check_border(term_t *t, int i)
-{
-    return (i < t->MAX_COL || i > (t->size - t->MAX_COL) || i % t->MAX_COL == 0 
-            || i % t->MAX_COL == t->MAX_COL - 1);
-}
-char unis[] = "◝◞◟◠◡";
+/* static int check_border(term_t *t, int i) */
+/* { */
+/*     return (i < t->MAX_COL || i > (t->size - t->MAX_COL) || i % t->MAX_COL == 0 */ 
+/*             || i % t->MAX_COL == t->MAX_COL - 1); */
+/* } */
 
-// draw the buffer
-
-static int ft_strlen(char *s)
-{
-    int i = 0;
-    while (s[i] && s[i + 1] != '\0')
-        i++;
-    s[i] = '\0';
-    return i;
-}
 
 void draw(term_t *t)
 {
-    for (int i = 0; i < t->size; i++)
-    {
-        if (check_border(t, i)){
-            change_pixel(&t->pixels[i], "|",GREEN);
-        } else {
-            if (t->buffer[i] != t->buffer_copy[i] && t->frame % 256 == 0)
-            {
-                flip_pixel(&t->pixels[i]);
-            }
-        }
-    }
-    assign_pix_buff(t->buffer, t->pixels, t->size);
+    /* for (int i = 0; i < t->size; i++) */
+    /* { */
 
-    write(1, t->buffer, ft_strlen(t->buffer));
-    
+    /*     /1* if (i < t->MAX_COL || i > (t->size - t->MAX_COL) || i % t->MAX_COL == 0 *1/ */ 
+    /*     /1*         || i % t->MAX_COL == t->MAX_COL - 1) *1/ */
+    /*     /1* { *1/ */
+    /*     /1*     change_pixel(&t->pixels[i], "▅", RED); *1/ */
+    /*     /1* } *1/ */
+    /*     /1* else *1/ */
+    /*     /1* { *1/ */
+    /*     /1*     change_pixel(&t->pixels[i], "█", GREEN); *1/ */
+    /*     /1* } *1/ */
+    /*     //change pixel information */
+        
+    /* } */
+
+    assign_pix_buff(t->buffer, t->pixels, strlen(t->buffer));
+    write(1, t->buffer, strlen(t->buffer));
     t->frame > 2048 ? t->frame = 1 : t->frame++;
 }
 

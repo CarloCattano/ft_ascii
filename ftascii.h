@@ -22,21 +22,20 @@
 
 #define unicodechars "▁▂▃▄▅▆▇█"
 
+// enum for colors
+
 typedef struct s_unicode
 {
-    char     byte1;
-    char     byte2;
-    char     byte3;
-    char     byte4;
-
-}            Unicode;
+    char      unicode[4];
+    char*     color;
+    
+} Unicode;
 
 typedef struct s_pixel
 {
-    char    *c;
-    char    *color;
-    size_t  len;
-}           Pixel;
+    Unicode  data;
+    size_t   len;
+}            Pixel;
 
 typedef struct player_s
 {
@@ -89,3 +88,4 @@ void                assign_pix_buff(char* buffer, Pixel* pixels,int size);
 void                pixel_set(Pixel* pixels, int size);
 void                pix_set(Pixel* pixels,int size);
 void                flip_pixel(Pixel* p);
+size_t              ft_strlen(char *s);

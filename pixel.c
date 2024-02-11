@@ -2,66 +2,40 @@
 
 void change_pixel(Pixel* p, char* c, char* color)
 {
-    p->c = c;
-    p->color = color;
-    p->len = strlen(p->color) + strlen(p->c);
+    /* (void)c; */
+
+    p->data.unicode[0] = c[0];
+    p->data.unicode[1] = c[1];
+    p->data.unicode[2] = c[2];
+    p->data.unicode[3] = c[3];
+
+    p->data.color[0] = color[0];
+    p->data.color[1] = color[1];
+    p->data.color[2] = color[2];
+    p->data.color[3] = color[3];
 }
 
-// TODO make out a reference from the outside
-char* build_pixel(Pixel pixel) 
+void pix_set(Pixel* p,int size)
 {
-    char* out = malloc(pixel.len + 1); 
-    
-    if (!out) perror("Malloc failed"), exit(1);
-
-    strncpy(out, pixel.color, strlen(pixel.color));
-
-    strncat(out, pixel.c, strlen(pixel.c));
-
-    return out;
+    for (int i = 0; i < size; i++)
+    {
+        p->data.unicode[0] = 0xA0;
+        p->data.unicode[1] = 0x90;
+        p->data.unicode[2] = 0xEE;
+        p->data.unicode[3] = 0x00;
+    }   
 }
 
 void assign_pix_buff(char* buffer, Pixel* pixels, int size)
 {
     memset(buffer, 0, size);
-    for (int i = 0; i < size; i++) 
-    {        
-        char* pixel_output = build_pixel(pixels[i]);
-        strncat(buffer, pixel_output, strlen(pixels[i].color) + strlen(pixels[i].c));
-        free(pixel_output); 
-    }
-}
-
-void pix_set(Pixel* pixels,int size)
-{
     for (int i = 0; i < size; i++)
-    {        
-        pixels[i].c = " ";
-        pixels[i].color = GREEN;
-        pixels[i].len = strlen(pixels[i].color) + strlen(pixels[i].c);
+    {
+        buffer[i] = pixels[i].data.unicode[0];
+        buffer[i + 1] = pixels[i].data.unicode[1];
+        buffer[i + 2] = pixels[i].data.unicode[2];
+        buffer[i + 3] = pixels[i].data.unicode[3];
+        i += 3;
     }
 }
-
-void flip_pixel(Pixel* p)
-{
-    if (strcmp(p->c, " ") == 0)
-        p->c = "▃";
-    else if (strcmp(p->c, "▃") == 0)
-        p->c = "◠";
-    else if (strcmp(p->c, "◠") == 0) 
-        p->c = "◡";
-    else
-        p->c = " ";
-
-    if (strcmp(p->color, GREEN) == 0)
-        p->color = RED;
-    else if (strcmp(p->color, RED) == 0)
-        p->color = YELLOW;
-    else if (strcmp(p->color, YELLOW) == 0)
-        p->color = BLUE;
-    else
-        p->color = GREEN;
-}
-
-
 
