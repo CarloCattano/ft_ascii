@@ -1,3 +1,9 @@
+### WIP 
+Branches as of today are:
+    - audio_minimal : fft modulated visuals via audio input
+    - refactor : try to go full unicode and per char color support
+    - main : original simple moving heads ( ascii and fx)
+
 ### Preface
 
 Interested in rendering graphics to terminal using just *ASCII*
