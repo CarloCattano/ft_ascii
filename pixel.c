@@ -70,13 +70,23 @@ void assign_pix_buff(char* buffer, Pixel* pixels, int size)
         int col_l = strlen(pixels->data.color);
         int uni_l = strlen(pixels->data.uni);
 
+        // Copy color data
         memcpy(buffer, pixels->data.color, col_l);
         buffer += col_l;
-        memcpy(buffer, pixels->data.uni, uni_l);
-        buffer += uni_l;
+
+        // Copy Unicode data
+        int j;
+        for (j = 0; j < uni_l; j++) {
+            if (pixels->data.uni[j] == '\0') {
+                break;
+            }
+            *buffer++ = pixels->data.uni[j];
+        }
+
         pixels++;
     }   
 }
+
 
 void free_pixels(Pixel* pixels, int size)
 {
