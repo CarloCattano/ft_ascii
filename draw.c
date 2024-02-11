@@ -2,6 +2,21 @@
 
 char *colors[] = {RED, GREEN, YELLOW, CYAN, MAGENTA, BLUE, WHITE, RST};
 
+int number42[IMG_SIZE][IMG_SIZE] = {
+    {1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0},
+    {1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1},
+    {1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1},
+    {1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1},
+    {1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1},
+    {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1},
+    {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1},
+    {0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0},
+    {0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0},
+    {0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0},
+    {0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1},
+    {0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0},
+};
+
 static int check_border(int i, int MAX_COL, int MAX_ROW)
 {
     if (i < MAX_COL || i > ((MAX_COL * MAX_ROW) - MAX_COL) || i % MAX_COL == 0 
@@ -35,6 +50,20 @@ void map_pix(term_t *t, int x, int y, char *color, char *uni)
     fill_pixel(t->pixels, color, uni, i);
 }
 
+void draw42(term_t *t, int x, int y, char *color, char *uni)
+{
+    for (int i = 0; i < IMG_SIZE; i++)
+    {
+        for (int j = 0; j < IMG_SIZE; j++)
+        {
+            if (number42[i][j] == 1)
+            {
+                map_pix(t, x + j, y + i, color, uni);
+            }
+        }
+    }
+}
+
 void draw(term_t *t)
 {
      for(int y = 0; y < t->size; y++)
@@ -44,7 +73,9 @@ void draw(term_t *t)
             t->pixels[y].data.uni = "🟕";
         } else {
             background(t, y);
-        }
+            draw42(t, t->players[0]->posx - IMG_SIZE / 2 , 
+                    t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "ꡙ");
+        }                                                          
     }
     move_player(t);
     map_pix(t, t->players[0]->posx, t->players[0]->posy, RED, "🟕");

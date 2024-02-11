@@ -26,7 +26,7 @@ static void handlePlayerKeys(term_t *t, char key) {
             break;
         case '9':
             t->delay *= 2;
-            t->delay > 1e4 ? t->delay = 1e4 : t->delay;
+            t->delay > 3e5 ? t->delay = 3e5 : t->delay;
             break;
     }
 }
