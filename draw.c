@@ -24,9 +24,16 @@ void draw(term_t *t)
     /*     //change pixel information */
         
     /* } */
+    
+    if(t->pixels == NULL || t->buffer == NULL)
+    {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
 
-    assign_pix_buff(t->buffer, t->pixels, strlen(t->buffer));
-    write(1, t->buffer, strlen(t->buffer));
+    assign_pix_buff(t->buffer, t->pixels, t->size);
+
+    write(1, t->buffer, t->size * 8);
     t->frame > 2048 ? t->frame = 1 : t->frame++;
 }
 

@@ -26,15 +26,14 @@
 
 typedef struct s_unicode
 {
-    char      unicode[4];
-    char*     color;
+    char*       unicode;
+    char*       color;
     
 } Unicode;
 
 typedef struct s_pixel
 {
     Unicode  data;
-    size_t   len;
 }            Pixel;
 
 typedef struct player_s

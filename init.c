@@ -6,16 +6,20 @@ void init_term(term_t *t)
     t->frame = 1;
     t->clear = 0;
     t->delay = 1e4;
-
-    // Allocate memory for buffer and buffer_copy
-    t->buffer = (char *)calloc(t->size * sizeof(Pixel*) , sizeof(char*));
-    t->buffer_copy = (char *)calloc(t->size * sizeof(Pixel), sizeof(char*));
-    t->pixels = (Pixel *)calloc(t->size, sizeof(Pixel));
-
-    if (!t->buffer || !t->buffer_copy || !t->pixels) {
-        perror("Terminal allocation failed");
+    
+    // check term init
+    if (t->size < 1){
+        printf("Terminal size is invalid\n");
         exit(1);
     }
 
+    /* t->pixels = (Pixel*)malloc(sizeof(Pixel) * t->size); */
+    t->pixels = (Pixel*)malloc(sizeof(Pixel) * t->size);
+    t->buffer = (char*)malloc(sizeof(char) * t->size * 8);
+
+    if (t->pixels == NULL || t->buffer == NULL){
+          printf("Memory allocation failed\n");
+          exit(1);
+    }
     pix_set(t->pixels, t->size);
 }

@@ -1,41 +1,29 @@
 #include "ftascii.h"
 
-void change_pixel(Pixel* p, char* c, char* color)
+void pix_set(Pixel* p, int size)
 {
-    /* (void)c; */
+    // f0 90 85 82
+    char color[5] = RED;
+    char unicode[4] = {0xf0, 0x90, 0x85, 0x82};
 
-    p->data.unicode[0] = c[0];
-    p->data.unicode[1] = c[1];
-    p->data.unicode[2] = c[2];
-    p->data.unicode[3] = c[3];
-
-    p->data.color[0] = color[0];
-    p->data.color[1] = color[1];
-    p->data.color[2] = color[2];
-    p->data.color[3] = color[3];
-}
-
-void pix_set(Pixel* p,int size)
-{
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < size; i++, p++) // Increment p in each iteration
     {
-        p->data.unicode[0] = 0xA0;
-        p->data.unicode[1] = 0x90;
-        p->data.unicode[2] = 0xEE;
-        p->data.unicode[3] = 0x00;
+        p->data.unicode = unicode;
+        p->data.color = color;
     }   
 }
 
 void assign_pix_buff(char* buffer, Pixel* pixels, int size)
 {
-    memset(buffer, 0, size);
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < size; i++, pixels++)
     {
-        buffer[i] = pixels[i].data.unicode[0];
-        buffer[i + 1] = pixels[i].data.unicode[1];
-        buffer[i + 2] = pixels[i].data.unicode[2];
-        buffer[i + 3] = pixels[i].data.unicode[3];
-        i += 3;
-    }
+        buffer[i * 8] = pixels->data.unicode[0];
+        buffer[i * 8 + 1] = pixels->data.unicode[1];
+        buffer[i * 8 + 2] = pixels->data.unicode[2];
+        buffer[i * 8 + 3] = pixels->data.unicode[3];
+        buffer[i * 8 + 4] = pixels->data.color[0];
+        buffer[i * 8 + 5] = pixels->data.color[1];
+        buffer[i * 8 + 6] = pixels->data.color[2];
+        buffer[i * 8 + 7] = pixels->data.color[3];
+    }   
 }
-
