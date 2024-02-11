@@ -21,5 +21,5 @@ void init_term(term_t *t)
           exit(1);
     }
     pix_set(t->pixels, t->size);
-    fill_pixels(t->pixels, t->size, GREEN, "@");
+    fill_pixels(t->pixels, t->size, GREEN, "😀");
 }

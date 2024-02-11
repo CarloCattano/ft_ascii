@@ -47,7 +47,7 @@ void pix_set(Pixel* p, int size)
 
 void fill_pixels(Pixel* pixels, int size, char* color, char* uni)
 {
-    if (strlen(uni) >= 2) {
+    if (strlen(uni) <= 2) {
         for (int i = 0; i < size; i++)
         {
             pixels[i].data.uni[0] = uni[0];
