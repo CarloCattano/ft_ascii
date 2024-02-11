@@ -1,1 +1,0 @@
-/sbin/cc -rdynamic CMakeFiles/paex_read_write_wire.dir/paex_read_write_wire.o -o paex_read_write_wire  -lportaudio_static 

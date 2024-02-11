@@ -1,1 +1,0 @@
-/sbin/cc -rdynamic CMakeFiles/paex_saw.dir/paex_saw.o -o paex_saw  -lportaudio_static 

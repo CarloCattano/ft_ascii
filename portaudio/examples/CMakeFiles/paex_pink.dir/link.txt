@@ -1,1 +1,0 @@
-/sbin/cc -rdynamic CMakeFiles/paex_pink.dir/paex_pink.o -o paex_pink  -lportaudio_static 
