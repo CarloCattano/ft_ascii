@@ -1,1 +1,0 @@
-/sbin/c++ -rdynamic CMakeFiles/paex_sine_c++.dir/paex_sine_c++.o -o paex_sine_c++  -lportaudio_static 

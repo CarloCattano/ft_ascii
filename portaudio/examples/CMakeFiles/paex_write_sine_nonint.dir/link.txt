@@ -1,1 +1,0 @@
-/sbin/cc -rdynamic CMakeFiles/paex_write_sine_nonint.dir/paex_write_sine_nonint.o -o paex_write_sine_nonint  -lportaudio_static 

@@ -1,1 +1,0 @@
-/sbin/cc -rdynamic CMakeFiles/pa_devs.dir/pa_devs.o -o pa_devs  -lportaudio_static 

@@ -1,1 +1,0 @@
-/sbin/cc -rdynamic CMakeFiles/paex_write_sine.dir/paex_write_sine.o -o paex_write_sine  -lportaudio_static 
