@@ -34,13 +34,13 @@ static void handlePlayerKeys(term_t *t, char key) {
             break;
         case '9':
             t->delay *= 2;
-            t->delay > 3e6 ? t->delay = 3e6 : t->delay;
+            t->delay > 2e6 ? t->delay = 2e6 : t->delay;
             break;
         case '1':
-            t->sens *= 2;
+            t->sens += 0.1;
             break;
         case '2':
-            t->sens *= 0.5;
+            t->sens -= 0.1;
             break;
     }
 }
@@ -73,7 +73,3 @@ void systemExit() {
     exit(1);
 }
 
-void handlectrl_c(int sig) {
-    (void)sig;
-    systemExit();
-}

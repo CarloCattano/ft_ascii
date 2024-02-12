@@ -24,11 +24,11 @@
 #define   RST       "\033[0m"
 
 #ifndef FFT_SIZE
-# define  FFT_SIZE 4
+# define  FFT_SIZE 16
 #endif
 
 #define SAMPLE_RATE 44100
-#define FRAMES_PER_BUFFER 128
+#define FRAMES_PER_BUFFER 512
 
 typedef struct player_s
 {
@@ -63,7 +63,7 @@ void                handleKeyPress(char key, term_t *t);
 void                handlectrl_c(int sig);
 void                ft_keyhook(term_t *t);
 
-void                draw(term_t *t, float* fftvals, float* sens);
+void                draw(term_t *t, float* fftvals, float sens);
 void                move_player(player_t *p, int col, int row);
 void                move_player_to(player_t *p, int col, int row, int i, float amp);
 
@@ -77,5 +77,5 @@ void                systemExit();
 void                save_last_frame_to_file(char * filename, char * buffer, int size);
 
 void                ft_ascii(float* fftvals);
-
+void compute_eq_bars(term_t *t, float *fft_values, float sens);
 #endif

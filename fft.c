@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fftw3.h>
-#include "portaudio.h"
 #include <math.h>
+
+#include "portaudio.h"
 #include "ftascii.h"
 
 typedef struct {
@@ -13,8 +14,24 @@ typedef struct {
 fftw_complex *in, *out;
 fftw_plan plan;
 
+
+void handlectrl_c(int sig) {
+    (void)sig;
+    printf("Program finished\n");
+    printf("Exiting...\n");
+    printf("Restoring terminal settings...\n");
+ 
+    fftw_destroy_plan(plan);
+    fftw_free(in);
+    fftw_free(out);
+    Pa_Terminate();
+
+    sleep(1);
+    systemExit();
+}
+
 // array that stores the fft values
-float fft_values[FFT_SIZE / 2 + 1];
+float fft_values[FFT_SIZE / 2 + 1]; // /2 + 1 because we only need the first half of the spectrum
 
 // This callback function will be called by PortAudio when audio is available
 static int audioCallback(const void *inputBuffer, void *outputBuffer,
@@ -26,7 +43,7 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,
     const float *inBuffer = (const float*)inputBuffer;
 
     // Copy input data to FFT input buffer
-    for (int i = 0; i < FFT_SIZE; i++) {
+    for (int i = 0; i < FFT_SIZE ; i++) {
         in[i][0] = inBuffer[i];
         in[i][1] = 0; 
     }
@@ -35,7 +52,7 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,
     // Output the magnitude spectrum
     for (int i = 0; i < FFT_SIZE / 2 + 1; i++) {
         float magnitude = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
-        fft_values[i] = 10 * log10(magnitude + 1e-7);   // Add small value to avoid log(0)
+        fft_values[i] = 20 * log10(magnitude + 1e-7);   // Add small value to avoid log(0)
         
         #ifdef DEBUG
             printf("%.2f\t", fft_values[i]);
@@ -93,6 +110,8 @@ int main() {
         Pa_Terminate();
         return 1;
     }
+ 
+    signal(SIGINT, handlectrl_c);
 
 #ifdef DEBUG
     getchar();
@@ -115,7 +134,7 @@ int main() {
     fftw_free(in);
     fftw_free(out);
     Pa_Terminate();
-
+    printf("Program finished\n");
     return 0;
 }
 

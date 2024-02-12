@@ -26,7 +26,7 @@ void ft_ascii(float* fft_values)
     {
         ft_keyhook(&term);
         term.clear ? memset(term.buffer, ' ', term.size) : 0;
-        draw(&term, fft_values, &term.sens);
+        draw(&term, fft_values, term.sens);
         copy_last_buffer(&term);
         usleep(term.delay);
         // flush the buffer

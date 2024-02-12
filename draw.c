@@ -6,10 +6,25 @@ static int check_border(term_t *t, int i)
             || i % t->MAX_COL == t->MAX_COL - 1);
 }
 
-static void draw_player(term_t *t, int i, player_t *p)
+static void delete_column_if_down(term_t *t, int posy, int posx)
 {
-        (void)i ;
-        int offset = (p->posy * t->MAX_COL) + p->posx;
+    // Iterate over each row in the column at posx
+    for (int i = posy - 1; i >= 1; i--)
+    {
+        t->buffer[i * t->MAX_COL + posx] = ' ';
+    }
+}
+
+static void draw_player(term_t *t, player_t *p)
+{
+    int offset = (p->posy * t->MAX_COL) + p->posx;
+
+    static int prev_posy = 0;
+
+    if (p->posy > prev_posy) {
+        t->buffer[offset] = p->curr_brush;
+        delete_column_if_down(t, p->posy, p->posx);
+    } else if (p->posy < prev_posy) {
 
         if (compare_val_in_buffers(t, offset)) 
         {
@@ -25,32 +40,33 @@ static void draw_player(term_t *t, int i, player_t *p)
             p->curr_brush = p->brushes[p->brush_index];
             t->buffer[offset] = p->curr_brush; 
         }
+    }
+    prev_posy = p->posy;
 }
 
-void draw(term_t *t, float *fft_values, float* sens)
+void draw(term_t *t, float *fft_values, float sens)
 {
-    (void)sens;
     for (int i = 0; i < t->size; i++)
     {
-        if (check_border(t, i)){
+        if (check_border(t, i)) { // draw the border
             t->buffer[i] !=  '|' ? t->buffer[i] = '|' : 0;
         }
-        else {
+        else { // draw the inside
             for (int j = 0; j < FFT_SIZE / 2 + 1; j++) {
-                draw_player(t, i, t->players[j]);
+                draw_player(t, t->players[j]); 
             }
         }
-    }     
+    }
+
+    compute_eq_bars(t, fft_values, sens);
 
     t->frame++;
     if (t->frame > 2048)
         t->frame = 1;
     
-    for (int i = 0; i < FFT_SIZE / 2 + 1; i++)
-       move_player_to(t->players[i], t->MAX_COL, t->MAX_ROW, i, fft_values[i]);
-
-    t->sens > 4.0f ? t->sens = 4.0f : 0;
-    t->sens < 0.25f ? t->sens = 0.25f : 0;
+    
+    t->sens > 8.0f ? t->sens = 8.0f : 0;
+    t->sens < 0.125f ? t->sens = 0.125f : 0;
 
     t->delay < 1 ? t->delay = 1 : 0;
     t->delay > 3e5 ? t->delay = 3e5 : 0;
