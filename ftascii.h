@@ -60,26 +60,27 @@ typedef struct term_s
     int 		    clear;
     unsigned int    delay;
     player_t* 	    players[4];
+	float			sens;
 
 }                   term_t;
 
+int 				ft_ascii(float *fft_values);
 void                init_term(term_t *t);
-
 /*      hooks       */
 void                handleKeyPress(char key, term_t *t);
+void 				handlectrl_c(int sig);
 // void                handlectrl_c(int sig);
 void                ft_keyhook(term_t *t);
 
-void                draw(term_t *t);
+void                draw(term_t *t, float *fft_values, float sens);
+
 void                move_player(term_t *t);
 
 /*     utils       */
 int                 compare_val_in_buffers(term_t *t, int i);
-void                add_randomness_to_movement(player_t *p);
 void                copy_last_buffer(term_t *t);
 void                free_all(term_t *t);
 void                systemExit();
-void                save_last_frame_to_file(char * filename, char * buffer, int size);
 
 void                assign_pix_buff(char* buffer, Pixel* pixels,int size);
 void                pixel_set(Pixel* pixels, int size);
@@ -90,4 +91,6 @@ int                 str_to_hex(char *str);
 void                putpix(Pixel* pixels, char* color, char* uni);
 
 char*               hex_to_unicode(int hex);
-int 				run_app(void);
+
+// audio
+void 				audio_stats(float *fft_values, int size);

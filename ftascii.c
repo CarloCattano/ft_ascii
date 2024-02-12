@@ -14,11 +14,11 @@ void initializeTerm(term_t *term) {
     // Clear screen
     write(1, "\033[2J", 4);
     // Initialize term structure
-    *term = (term_t){w.ws_col, w.ws_row, w.ws_col * w.ws_row, NULL, NULL, NULL, 1, 1, 0, {0}};
-    init_term(term);
+    *term = (term_t){w.ws_col, w.ws_row, w.ws_col * w.ws_row, NULL, NULL, NULL, 1, 1, 0, {0}, 1.0f};
+    init_term(term); 
 }
 
-int ft_ascii(double *fft_values)
+int ft_ascii(float *fft_values)
 {
 	term_t term;
 	initializeTerm(&term);
@@ -26,8 +26,14 @@ int ft_ascii(double *fft_values)
 	while(1) 
 	{
 		ft_keyhook(&term);
-		draw(&term);
+		draw(&term, fft_values, term.sens);
 		usleep(term.delay);
+
+		// clip limits
+		term.sens = term.sens > 4.0f ? 4.0f : term.sens;
+		term.sens = term.sens < 0.1f ? 0.1f : term.sens;
+		term.delay = term.delay > 3e5 ? 3e5 : term.delay;
+		term.delay = term.delay < 1 ? 1 : term.delay;
 	}
 
 	systemExit();

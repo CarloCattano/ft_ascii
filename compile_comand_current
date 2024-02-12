@@ -1,0 +1,1 @@
+cc draw.c main.c ftascii.c init.c keyhooks.c player.c  pixel.c utils.c  libportaudio.a             -lrt -lm -lasound -ljack -lfftw3 -pthread -o test -Wall -Wextra -DFFT_SIZE=128 -ggdb3

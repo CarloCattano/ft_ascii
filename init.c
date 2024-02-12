@@ -5,7 +5,8 @@ void init_term(term_t *t)
     // Initialize frame, clear, delay
     t->frame = 1;
     t->clear = 0;
-    t->delay = 3e5;
+    t->delay = 1e3;
+	t->sens = 1.0f;
     
     // check term init
     if (t->size < 1){

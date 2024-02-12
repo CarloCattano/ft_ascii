@@ -28,6 +28,15 @@ static void handlePlayerKeys(term_t *t, char key) {
             t->delay *= 2;
             t->delay > 3e5 ? t->delay = 3e5 : t->delay;
             break;
+
+		case '1':
+			t->sens =+ 0.1f;
+			break;
+		case '2':
+			t->sens =- 0.1f;
+			break;
+		default:
+			break;
     }
 }
 

@@ -64,8 +64,10 @@ void draw42(term_t *t, int x, int y, char *color, char *uni)
     }
 }
 
-void draw(term_t *t)
+void draw(term_t *t, float *fft_values, float sens)
 {
+	(void)fft_values;
+	(void)sens;
      for(int y = 0; y < t->size; y++)
      {
         if (check_border(y, t->MAX_COL, t->MAX_ROW)) {

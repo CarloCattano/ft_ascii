@@ -7,7 +7,10 @@
 
 #define SAMPLE_RATE 44100
 #define FRAMES_PER_BUFFER 512
-#define FFT_SIZE 16
+
+#ifndef FFT_SIZE
+  #define FFT_SIZE 64
+#endif 
 
 typedef struct {
     float left_phase;
@@ -21,14 +24,16 @@ fftw_plan plan;
 float fft_values[FFT_SIZE];
 
 // This callback function will be called by PortAudio when audio is available
-static int audioCallback(const void *inputBuffer, void *outputBuffer,
-                         unsigned long framesPerBuffer,
-                         const PaStreamCallbackTimeInfo *timeInfo,
-                         PaStreamCallbackFlags statusFlags,
-                         void *userData) {
+static int audioCallback(const void *inputBuffer, void *outputBuffer,unsigned long framesPerBuffer,
+			const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags,void *userData) 
+{
+	(void)framesPerBuffer, 	(void)outputBuffer;
+	(void)timeInfo, 		(void)statusFlags;
+
     paTestData *data = (paTestData*)userData;
     const float *inBuffer = (const float*)inputBuffer;
 
+	(void)data;
     // Copy input data to FFT input buffer
     for (int i = 0; i < FFT_SIZE; i++) {
         in[i][0] = inBuffer[i];
@@ -40,15 +45,16 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,
 
     // Output the magnitude spectrum
     for (int i = 0; i < FFT_SIZE; i++) {
+		fft_values[i] = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
         #ifdef DEBUG
-            printf("%d: %f ", i, sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]));
-        #else
-            fft_values[i] = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
+            printf("[ %d ] : %.2f ", i, fft_values[i]);
+			audio_stats(fft_values, FFT_SIZE);
         #endif
     }
-    #ifdef DEBUG
-        printf("\n");
-    #endif
+	#ifdef DEBUG
+		printf("\n");	
+	#endif
+
     return paContinue; // Continue streaming audio
 }
 
@@ -97,11 +103,12 @@ int main() {
         return 1;
     }
 
-    // MAKE YOUR MAGIC HERE
+	signal(SIGINT, handlectrl_c);
+
 #ifndef DEBUG
     ft_ascii(fft_values);
 #else
-    getchar();
+   while(1) {};
 #endif
     // Stop and close the stream
     err = Pa_StopStream(stream);
@@ -122,12 +129,16 @@ int main() {
     return 0;
 }
 
-void handlectrl_c(int sig) {
-    (void)sig;
-	  // Clean up
-    fftw_destroy_plan(plan);
+void exit_audio(){
+	fftw_destroy_plan(plan);
     fftw_free(in);
     fftw_free(out);
     Pa_Terminate();
+    systemExit();
+}
+
+void handlectrl_c(int sig) {
+    (void)sig;
+	exit_audio();
     systemExit();
 }
