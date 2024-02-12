@@ -1,5 +1,7 @@
 .cache
 compile_commands.json
+debug
+testfft
 .idea
 .vscode
 .DS_Store
