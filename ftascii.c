@@ -15,7 +15,6 @@ void init(term_t *t)
     *t = (term_t){w.ws_col, w.ws_row, w.ws_col * w.ws_row,
                              NULL, NULL, NULL, 1, 1, 0};
     init_term(t);
-
 }
 
 void ft_ascii(float* fft_values) 

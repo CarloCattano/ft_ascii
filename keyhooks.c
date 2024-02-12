@@ -11,17 +11,17 @@ static void handlePlayerKeys(term_t *t, char key) {
         case 'd':
             break;
         case 'p' :
-            for (int i = 0; i < FFT_SIZE; i++) {
+            for (int i = 0; i < FFT_SIZE / 2 + 1; i++) {
                 t->players[i]->brush_index = (t->players[i]->brush_index + 3) % strlen(t->players[i]->brushes);
             }
             break;
         case 'o' :
-            for (int i = 1; i < FFT_SIZE; i++) {
+            for (int i = 1; i < FFT_SIZE / 2 + 1; i++) {
                 t->players[i]->toggle = !t->players[i]->toggle;
             }
             break;
         case 'u':
-            for (int i = 0; i < FFT_SIZE; i++) {
+            for (int i = 0; i < FFT_SIZE / 2 + 1; i++) {
                 t->players[i]->brush_index = rand() % strlen(t->players[i]->brushes);
                 t->players[i]->curr_brush = t->players[i]->brushes[t->players[i]->brush_index];
             }

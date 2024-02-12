@@ -36,7 +36,7 @@ void draw(term_t *t, float *fft_values, float* sens)
             t->buffer[i] !=  '|' ? t->buffer[i] = '|' : 0;
         }
         else {
-            for (int j = 0; j < FFT_SIZE; j++) {
+            for (int j = 0; j < FFT_SIZE / 2 + 1; j++) {
                 draw_player(t, i, t->players[j]);
             }
         }
@@ -46,7 +46,7 @@ void draw(term_t *t, float *fft_values, float* sens)
     if (t->frame > 2048)
         t->frame = 1;
     
-    for (int i = 0; i < FFT_SIZE; i++)
+    for (int i = 0; i < FFT_SIZE / 2 + 1; i++)
        move_player_to(t->players[i], t->MAX_COL, t->MAX_ROW, i, fft_values[i]);
 
     t->sens > 4.0f ? t->sens = 4.0f : 0;

@@ -23,9 +23,12 @@
 #define   BLACK     "\033[30m"
 #define   RST       "\033[0m"
 
-#ifndef   FFT_SIZE
-    #define FFT_SIZE 8
+#ifndef FFT_SIZE
+# define  FFT_SIZE 4
 #endif
+
+#define SAMPLE_RATE 44100
+#define FRAMES_PER_BUFFER 128
 
 typedef struct player_s
 {
@@ -49,7 +52,7 @@ typedef struct term_s
 	unsigned int    frame;
     int 		    clear;
     unsigned int    delay;
-    player_t* 	    players[FFT_SIZE];
+    player_t* 	    players[FFT_SIZE / 2 + 1];
     float           sens;
 }                   term_t;
 

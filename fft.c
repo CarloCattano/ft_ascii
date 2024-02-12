@@ -5,9 +5,6 @@
 #include <math.h>
 #include "ftascii.h"
 
-#define SAMPLE_RATE 44100
-#define FRAMES_PER_BUFFER 512
-
 typedef struct {
     float left_phase;
     float right_phase;
@@ -17,7 +14,7 @@ fftw_complex *in, *out;
 fftw_plan plan;
 
 // array that stores the fft values
-float fft_values[FFT_SIZE];
+float fft_values[FFT_SIZE / 2 + 1];
 
 // This callback function will be called by PortAudio when audio is available
 static int audioCallback(const void *inputBuffer, void *outputBuffer,
@@ -31,23 +28,24 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,
     // Copy input data to FFT input buffer
     for (int i = 0; i < FFT_SIZE; i++) {
         in[i][0] = inBuffer[i];
-        in[i][1] = 0.0;
+        in[i][1] = 0; 
     }
+
     fftw_execute(plan);
     // Output the magnitude spectrum
-    for (int i = 0; i < FFT_SIZE; i++) {
+    for (int i = 0; i < FFT_SIZE / 2 + 1; i++) {
         float magnitude = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
+        fft_values[i] = 10 * log10(magnitude + 1e-7);   // Add small value to avoid log(0)
+        
         #ifdef DEBUG
-            printf("%.2f\t", 10 * log10(magnitude));
+            printf("%.2f\t", fft_values[i]);
         #else
-            fft_values[i] = 10 * log10(magnitude);
+            /* fft_values[i] = 20 * log10(magnitude); */
         #endif
     }
     #ifdef DEBUG
         printf("\n");
     #endif
-
-    /* printf("\n"); */
     return paContinue; // Continue streaming audio
 }
 

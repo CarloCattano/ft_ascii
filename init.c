@@ -7,7 +7,7 @@ static void init_player(term_t *t, char* brushes)
         exit(1);
     }
 
-    for (int i = 0; i < FFT_SIZE; i++) {
+    for (int i = 0; i < FFT_SIZE / 2 + 1; i++) {
         t->players[i] = (player_t *)calloc(1, sizeof(player_t));
         
         if (!t->players[i]) {
