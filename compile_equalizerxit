@@ -1,1 +1,0 @@
-cc draw.c fft.c ftascii.c init.c keyhooks.c player.c  utils.c  libportaudio.a             -lrt -lm -lasound -ljack -lfftw3 -pthread -o testaudio -Wall -Wextra -ggdb3 -O3 -DFFT_SIZE=64 
