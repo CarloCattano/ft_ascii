@@ -33,6 +33,7 @@ void ft_ascii(float* fft_values) {
             move_player(&term, term.players[2]);
             move_player(&term, term.players[3]);
         }
+        fft_values[0] < 0.4f ? write(1, RST, 4) : 0;
         fft_values[3] > 1.7f ? memset(term.buffer, ' ', term.size) : 0;
         fft_values[4] > 0.2f ? write(1, RED, 5) : 0;
         fft_values[0] > 2.5f ? write(1, GREEN, 5) : 0;

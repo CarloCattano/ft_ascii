@@ -98,9 +98,11 @@ int main() {
     }
 
     // MAKE YOUR MAGIC HERE
+#ifndef DEBUG
     ft_ascii(fft_values);
-    /* getchar(); */
-
+#else
+    getchar();
+#endif
     // Stop and close the stream
     err = Pa_StopStream(stream);
     if (err != paNoError) {

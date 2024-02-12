@@ -6,6 +6,8 @@ portaudio/
 .DS_Store
 ft_ascii
 a.out
+debug
+testfft
 *.o
 tags
 *.swp
