@@ -47,6 +47,8 @@ typedef struct term_s
 
 }                   term_t;
 
+
+int                 ft_ascii(void);
 void                init_term(term_t *t);
 
 /*      hooks       */
