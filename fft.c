@@ -7,7 +7,6 @@
 
 #define SAMPLE_RATE 44100
 #define FRAMES_PER_BUFFER 512
-#define FFT_SIZE 4
 
 typedef struct {
     float left_phase;
@@ -34,14 +33,20 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,
         in[i][0] = inBuffer[i];
         in[i][1] = 0.0;
     }
-
     fftw_execute(plan);
-
     // Output the magnitude spectrum
     for (int i = 0; i < FFT_SIZE; i++) {
-        /* printf("%d: %f ", i, sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1])); */
-        fft_values[i] = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
+        float magnitude = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
+        #ifdef DEBUG
+            printf("%.2f\t", 10 * log10(magnitude));
+        #else
+            fft_values[i] = 10 * log10(magnitude);
+        #endif
     }
+    #ifdef DEBUG
+        printf("\n");
+    #endif
+
     /* printf("\n"); */
     return paContinue; // Continue streaming audio
 }
@@ -91,10 +96,11 @@ int main() {
         return 1;
     }
 
+#ifdef DEBUG
+    getchar();
+#else
     ft_ascii(fft_values);
-
-    /* getchar(); */
-
+#endif
 
     // Stop and close the stream
     err = Pa_StopStream(stream);

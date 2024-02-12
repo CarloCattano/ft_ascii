@@ -25,9 +25,9 @@ void free_all(term_t *t)
 {
     free(t->buffer);
     free(t->buffer_copy);
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < FFT_SIZE; i++) {
         free(t->players[i]->brushes);
-        free(t->players[i]);
+        free(t->players);
     }
 }
 

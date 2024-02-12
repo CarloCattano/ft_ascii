@@ -1,1 +1,0 @@
- cc audio.c draw.c init.c keyhooks.c  player.c utils.c  libportaudio.a -lrt -lm -lasound -pthread -o testaudio -Wall -Wextra 

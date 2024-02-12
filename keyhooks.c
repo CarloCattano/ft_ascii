@@ -3,51 +3,30 @@
 static void handlePlayerKeys(term_t *t, char key) {
     switch (key) {
         case 'w':
-            t->players[0]->dy += -(rand() % 2) + 1;
-            t->players[1]->dy +=  (rand() % 2) + 1;
-            t->players[2]->dy +=  -(rand() % 2) + 1;
-            t->players[3]->dy +=  (rand() % 2) + 1;
-            break;
+           break;
         case 'a':
-            t->players[0]->dx += -1;
-            t->players[1]->dx +=  1;
-            t->players[2]->dx +=  1;
-            t->players[3]->dx += -1;
             break;
         case 's':
-            t->players[0]->dy +=  (rand() % 2) + 1;
-            t->players[1]->dy += -1;
-            t->players[2]->dy +=  1;
-            t->players[3]->dy += -1;
             break;
         case 'd':
-            t->players[0]->dx +=  1;
-            t->players[1]->dx += -1;
-            t->players[2]->dx += -1;
-            t->players[3]->dx += (rand() % 2) + 1;
             break;
         case 'p' :
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < FFT_SIZE; i++) {
                 t->players[i]->brush_index = (t->players[i]->brush_index + 3) % strlen(t->players[i]->brushes);
             }
             break;
         case 'o' :
-            for (int i = 1; i < 4; i++) {
+            for (int i = 1; i < FFT_SIZE; i++) {
                 t->players[i]->toggle = !t->players[i]->toggle;
             }
             break;
         case 'u':
-            for (int i = 0; i < 4; i++) {
-             t->players[i]->brush_index ? 
-                 t->players[i]->brush_index += 2 % strlen(t->players[i]->brushes) : 0;
-             t->players[i]->curr_brush = t->players[i]->brushes[t->players[i]->brush_index];
+            for (int i = 0; i < FFT_SIZE; i++) {
+                t->players[i]->brush_index = rand() % strlen(t->players[i]->brushes);
+                t->players[i]->curr_brush = t->players[i]->brushes[t->players[i]->brush_index];
             }
             break;
         case 'r':
-            for (int i = 0; i < 4; i++) {
-                t->players[i]->posx = t->MAX_COL / 2;
-                t->players[i]->posy = t->MAX_ROW / 2;
-            }
             break;
         case '0':
             t->delay *= 0.5;
@@ -55,7 +34,7 @@ static void handlePlayerKeys(term_t *t, char key) {
             break;
         case '9':
             t->delay *= 2;
-            t->delay > 2e5 ? t->delay = 2e5 : t->delay;
+            t->delay > 3e6 ? t->delay = 3e6 : t->delay;
             break;
         case '1':
             t->sens *= 2;

@@ -1,3 +1,6 @@
+#ifndef FTASCII_H
+#define FTASCII_H
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,6 +22,10 @@
 #define   WHITE     "\033[37m"
 #define   BLACK     "\033[30m"
 #define   RST       "\033[0m"
+
+#ifndef   FFT_SIZE
+    #define FFT_SIZE 8
+#endif
 
 typedef struct player_s
 {
@@ -42,7 +49,7 @@ typedef struct term_s
 	unsigned int    frame;
     int 		    clear;
     unsigned int    delay;
-    player_t* 	    players[4];
+    player_t* 	    players[FFT_SIZE];
     float           sens;
 }                   term_t;
 
@@ -53,7 +60,7 @@ void                handleKeyPress(char key, term_t *t);
 void                handlectrl_c(int sig);
 void                ft_keyhook(term_t *t);
 
-void                draw(term_t *t, float amp, float* fftvals, float* sens);
+void                draw(term_t *t, float* fftvals, float* sens);
 void                move_player(player_t *p, int col, int row);
 void                move_player_to(player_t *p, int col, int row, int i, float amp);
 
@@ -67,3 +74,5 @@ void                systemExit();
 void                save_last_frame_to_file(char * filename, char * buffer, int size);
 
 void                ft_ascii(float* fftvals);
+
+#endif
