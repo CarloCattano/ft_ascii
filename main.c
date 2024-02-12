@@ -1,4 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <fftw3.h>
+#include "portaudio.h"
+#include <math.h>
 #include "ftascii.h"
+
+#define SAMPLE_RATE 44100
+#define FRAMES_PER_BUFFER 512
+#define FFT_SIZE 16
 
 typedef struct {
     float left_phase;
@@ -8,24 +17,8 @@ typedef struct {
 fftw_complex *in, *out;
 fftw_plan plan;
 
-
-void handlectrl_c(int sig) {
-    (void)sig;
-    printf("Program finished\n");
-    printf("Exiting...\n");
-    printf("Restoring terminal settings...\n");
- 
-    fftw_destroy_plan(plan);
-    fftw_free(in);
-    fftw_free(out);
-    Pa_Terminate();
-
-    sleep(1);
-    systemExit();
-}
-
 // array that stores the fft values
-float fft_values[FFT_SIZE / 2 + 1]; // /2 + 1 because we only need the first half of the spectrum
+float fft_values[FFT_SIZE];
 
 // This callback function will be called by PortAudio when audio is available
 static int audioCallback(const void *inputBuffer, void *outputBuffer,
@@ -37,18 +30,20 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,
     const float *inBuffer = (const float*)inputBuffer;
 
     // Copy input data to FFT input buffer
-    for (int i = 0; i < FFT_SIZE ; i++) {
+    for (int i = 0; i < FFT_SIZE; i++) {
         in[i][0] = inBuffer[i];
-        in[i][1] = 0; 
+        in[i][1] = 0.0;
     }
 
+    // Execute the FFT
     fftw_execute(plan);
+
     // Output the magnitude spectrum
-    for (int i = 0; i < FFT_SIZE / 2 + 1; i++) {
-        float magnitude = out[i][0] * out[i][0] + out[i][1] * out[i][1];
-        fft_values[i] = 20 * log10(magnitude + 1e-7);   // Add small value to avoid log(0)
+    for (int i = 0; i < FFT_SIZE; i++) {
         #ifdef DEBUG
-            printf("%.2f\t", fft_values[i]);
+            printf("%d: %f ", i, sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]));
+        #else
+            fft_values[i] = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
         #endif
     }
     #ifdef DEBUG
@@ -57,7 +52,7 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,
     return paContinue; // Continue streaming audio
 }
 
-int main(void) {
+int main() {
     PaError err;
     paTestData data;
     PaStream *stream;
@@ -101,15 +96,13 @@ int main(void) {
         Pa_Terminate();
         return 1;
     }
- 
-    signal(SIGINT, handlectrl_c);
 
-#ifdef DEBUG
-    getchar();
-#else
+    // MAKE YOUR MAGIC HERE
+#ifndef DEBUG
     ft_ascii(fft_values);
+#else
+    getchar();
 #endif
-
     // Stop and close the stream
     err = Pa_StopStream(stream);
     if (err != paNoError) {
@@ -125,6 +118,16 @@ int main(void) {
     fftw_free(in);
     fftw_free(out);
     Pa_Terminate();
-    printf("Program finished\n");
+
     return 0;
+}
+
+void handlectrl_c(int sig) {
+    (void)sig;
+	  // Clean up
+    fftw_destroy_plan(plan);
+    fftw_free(in);
+    fftw_free(out);
+    Pa_Terminate();
+    systemExit();
 }

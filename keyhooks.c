@@ -59,10 +59,7 @@ void ft_keyhook(term_t *term) {
 
 void systemExit() {
     system("reset");
+	printf("Exited gracefully\n");
     exit(1);
 }
 
-// void handlectrl_c(int sig) {
-//     (void)sig;
-//     systemExit();
-// }

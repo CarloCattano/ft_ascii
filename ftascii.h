@@ -11,12 +11,6 @@
 #include <locale.h>
 #include <time.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <fftw3.h>
-#include <math.h>
-#include "portaudio.h"
-
 #define   CLEAR     "\033[H"
 #define   NOMOUSE   "\033[?25l"
 
@@ -33,14 +27,6 @@
 #define unicodechars "▁▂▃▄▅▆▇█"
 
 #define IMG_SIZE 12
-
-#ifndef FFT_SIZE
-# define  FFT_SIZE 16
-#endif
-#define SAMPLE_RATE 44100
-#define FRAMES_PER_BUFFER 512
-
-// enum for colors
 
 typedef struct s_unicode
 {
