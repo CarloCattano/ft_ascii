@@ -24,8 +24,6 @@
 #define   BLACK     "\033[30m"
 #define   RST       "\033[0m"
 
-#define unicodechars "▁▂▃▄▅▆▇█"
-
 #define IMG_SIZE 12
 
 typedef struct s_unicode
@@ -74,7 +72,7 @@ void                ft_keyhook(term_t *t);
 
 void                draw(term_t *t, float *fft_values, float sens);
 
-void                move_player(term_t *t);
+void                move_player(term_t *t, float speedx, float speedy);
 
 /*     utils       */
 int                 compare_val_in_buffers(term_t *t, int i);
@@ -93,4 +91,4 @@ void                putpix(Pixel* pixels, char* color, char* uni);
 char*               hex_to_unicode(int hex);
 
 // audio
-void 				audio_stats(float *fft_values, int size);
+/* void 				audio_stats(float *fft_values, int size); */

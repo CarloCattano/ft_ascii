@@ -45,12 +45,16 @@ void pix_set(Pixel* p, int size)
 
 void fill_pixel(Pixel* pixels,char* color, char* uni, int i)
 {
-    if (strlen(uni) <= 2 && uni[0] != '\0'){
-            pixels[i].data.uni[0] = uni[0];
+    if (strlen(uni) == 1 && uni[0] != '\0'){
+        pixels[i].data.uni[0] = uni[0];
+        pixels[i].data.uni[1] = 0x00;
+        pixels[i].data.uni[2] = 0x00;
+        pixels[i].data.uni[3] = 0x00;
 
-            pixels[i].data.color = color;
+        pixels[i].data.color = color;
+      exit(1);
     } else { 
-         pixels[i].data.color = color;
+        pixels[i].data.color = color;
          pixels[i].data.uni = uni;
     }
 }

@@ -30,10 +30,10 @@ static void handlePlayerKeys(term_t *t, char key) {
             break;
 
 		case '1':
-			t->sens =+ 0.1f;
+			t->sens += 0.1f;
 			break;
 		case '2':
-			t->sens =- 0.1f;
+			t->sens -= 0.1f;
 			break;
 		default:
 			break;

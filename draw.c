@@ -64,6 +64,9 @@ void draw42(term_t *t, int x, int y, char *color, char *uni)
     }
 }
 
+// many test unicodes 
+#define TESTUNI "🟡🟢🟣🟤🟥🟦🟧🟨🟩🟪🟫"
+
 void draw(term_t *t, float *fft_values, float sens)
 {
 	(void)fft_values;
@@ -71,16 +74,19 @@ void draw(term_t *t, float *fft_values, float sens)
      for(int y = 0; y < t->size; y++)
      {
         if (check_border(y, t->MAX_COL, t->MAX_ROW)) {
-            t->pixels[y].data.color = colors[rand() % 8];
+            // sine scroll through colors
+            int col = (int)(t->frame + y) % 8;
+            t->pixels[y].data.color = colors[col];
             t->pixels[y].data.uni = "🟕";
         } else {
             background(t, y);
             draw42(t, t->players[0]->posx - IMG_SIZE / 2 , 
-                    t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "ꡙ");
+                    t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "*");
         }                                                          
     }
-    move_player(t);
-    map_pix(t, t->players[0]->posx, t->players[0]->posy, RED, "🟕");
+    // map fft_value 1 (bass) to player speed with a sensibility factor
+    move_player(t, 2 * fft_values[0] * sens, 2 * fft_values[2] * sens);
+    /* map_pix(t, t->players[0]->posx, t->players[0]->posy, RED, "🟕"); */
     assign_pix_buff(t->buffer, t->pixels, t->size); 
     img2win(t);
 }

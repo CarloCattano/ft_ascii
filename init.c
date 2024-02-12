@@ -21,8 +21,8 @@ void init_term(term_t *t)
 
     t->players[0]->posx = IMG_SIZE;
     t->players[0]->posy = IMG_SIZE;
-    t->players[0]->dx = 0;
-    t->players[0]->dy = 0;
+    t->players[0]->dx = 1;
+    t->players[0]->dy = 1;
 
     if (t->pixels == NULL || t->buffer == NULL || t->players[0] == NULL){
           printf("Memory allocation failed\n");

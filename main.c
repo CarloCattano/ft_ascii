@@ -21,7 +21,7 @@ fftw_complex *in, *out;
 fftw_plan plan;
 
 // array that stores the fft values
-float fft_values[FFT_SIZE];
+float fft_values[FFT_SIZE / 2 + 1];
 
 // This callback function will be called by PortAudio when audio is available
 static int audioCallback(const void *inputBuffer, void *outputBuffer,unsigned long framesPerBuffer,
@@ -44,13 +44,16 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,unsigned lo
     fftw_execute(plan);
 
     // Output the magnitude spectrum
-    for (int i = 0; i < FFT_SIZE; i++) {
+    for (int i = 0; i < FFT_SIZE / 2 + 1; i++) {
 		fft_values[i] = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
         #ifdef DEBUG
             printf("[ %d ] : %.2f ", i, fft_values[i]);
-			audio_stats(fft_values, FFT_SIZE);
+			/* audio_stats(fft_values, FFT_SIZE / 2 + 1); */
+            printf("\n");
         #endif
     }
+
+
 	#ifdef DEBUG
 		printf("\n");	
 	#endif
@@ -139,6 +142,6 @@ void exit_audio(){
 
 void handlectrl_c(int sig) {
     (void)sig;
-	exit_audio();
+    exit_audio();
     systemExit();
 }

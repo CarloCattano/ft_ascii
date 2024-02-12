@@ -3,15 +3,9 @@
 set -xe 
 
 if [ $# -eq 0 ]; then
-    cc -Wall -Wextra -Werror -lm main.c utils.c init.c draw.c keyhooks.c player.c pixel.c -o ft_ascii
-    echo "Built ft_ascii"
-
-elif [ $1 == "go" ]; then
-    cc -Wall -Wextra -lm main.c utils.c init.c draw.c keyhooks.c player.c pixel.c -o ft_ascii
-    ./ft_ascii
-elif [ $1 == "run" ]; then
-    cc -Wall -Wextra -Werror -lm main.c utils.c init.c draw.c keyhooks.c player.c pixel.c -o ft_ascii
-    ./ft_ascii
+    cc draw.c main.c ftascii.c init.c keyhooks.c player.c  pixel.c utils.c  libportaudio.a \
+        -lrt -lm -lasound -ljack -lfftw3 -pthread -o debug -Wall -Wextra
+    ./debug
 
 elif [ $1 == "clean" ]; then
     rm ft_ascii -f
