@@ -2,28 +2,34 @@
 
 set -e 
 
+NAME="equalizer"
+
 if [ $# -eq 0 ]; then
-    cc -Wall -Wextra -Werror -lm main.c utils.c init.c draw.c keyhooks.c player.c -o ft_ascii
+    cc draw.c fft.c ftascii.c init.c keyhooks.c player.c  utils.c  libportaudio.a \
+            -lrt -lm -lasound -ljack -lfftw3 -pthread -o $NAME -Wall -Wextra -DFFT_SIZE=128
+ 
     echo "Built ft_ascii"
 
 elif [ $1 == "audio" ]; then
     cc draw.c fft.c ftascii.c init.c keyhooks.c player.c  utils.c  libportaudio.a \
-            -lrt -lm -lasound -ljack -lfftw3 -pthread -o equalizer -Wall -Wextra -O2 -DFFT_SIZE=64 
-    ./equalizer
+            -lrt -lm -lasound -ljack -lfftw3 -pthread -o $NAME -Wall -Wextra -DFFT_SIZE=128
+    ./"$NAME"
 
 elif [ $1 == "run" ]; then
-    cc -Wall -Wextra -Werror -lm main.c utils.c init.c draw.c keyhooks.c player.c -o ft_ascii
-    ./ft_ascii
+    cc draw.c fft.c ftascii.c init.c keyhooks.c player.c  utils.c  libportaudio.a \
+            -lrt -lm -lasound -ljack -lfftw3 -pthread -o $NAME -Wall -Wextra -DFFT_SIZE=128
+    ./"$NAME"
 
 elif [ $1 == "clean" ]; then
-    rm ft_ascii -f
+    rm $NAME -f
     
 elif [ $1 == "debug" ]; then
-    cc -Wall -Wextra -Werror -g -lm main.c utils.c init.c draw.c keyhooks.c player.c -o ft_ascii
+    cc draw.c fft.c ftascii.c init.c keyhooks.c player.c  utils.c  libportaudio.a \
+            -lrt -lm -lasound -ljack -lfftw3 -pthread -o $NAME -Wall -Wextra -DFFT_SIZE=32 -ggdb3 -DDEBUG
     if [ $2 == "run" ]; then
-        gdb ./ft_ascii
+        gdb ./"$NAME"
     else
-        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./ft_ascii
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$NAME
     fi
     
 else
