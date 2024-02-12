@@ -1,45 +1,130 @@
 #include "ftascii.h"
-#include <locale.h>
-#include <time.h>
 
-void initializeTerm(term_t *term) {
-    // Get terminal size
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+typedef struct {
+    float left_phase;
+    float right_phase;
+} paTestData;
 
-    srand(time(NULL));
-    setlocale(LC_ALL, "en_US.UTF-8");
-    system("stty -echo -icanon -icrnl time 0 min 0");
+fftw_complex *in, *out;
+fftw_plan plan;
 
-    // Hide cursor
-    write(1, NOMOUSE, 6);
-    // Clear screen
-    write(1, "\033[2J", 4);
-    // Initialize term structure
-    *term = (term_t){w.ws_col, w.ws_row, w.ws_col * w.ws_row, NULL, NULL, NULL, 1, 1, 0, {0}};
-    init_term(term);
-    signal(SIGINT, handlectrl_c);
+
+void handlectrl_c(int sig) {
+    (void)sig;
+    printf("Program finished\n");
+    printf("Exiting...\n");
+    printf("Restoring terminal settings...\n");
+ 
+    fftw_destroy_plan(plan);
+    fftw_free(in);
+    fftw_free(out);
+    Pa_Terminate();
+
+    sleep(1);
+    systemExit();
 }
 
-int main(int ac, char *av[])
-{
-    (void)av;
-    if (ac > 1) {
-        printf("Usage: %s\n", av[0]);
+// array that stores the fft values
+float fft_values[FFT_SIZE / 2 + 1]; // /2 + 1 because we only need the first half of the spectrum
+
+// This callback function will be called by PortAudio when audio is available
+static int audioCallback(const void *inputBuffer, void *outputBuffer,
+                         unsigned long framesPerBuffer,
+                         const PaStreamCallbackTimeInfo *timeInfo,
+                         PaStreamCallbackFlags statusFlags,
+                         void *userData) {
+    paTestData *data = (paTestData*)userData;
+    const float *inBuffer = (const float*)inputBuffer;
+
+    // Copy input data to FFT input buffer
+    for (int i = 0; i < FFT_SIZE ; i++) {
+        in[i][0] = inBuffer[i];
+        in[i][1] = 0; 
+    }
+
+    fftw_execute(plan);
+    // Output the magnitude spectrum
+    for (int i = 0; i < FFT_SIZE / 2 + 1; i++) {
+        float magnitude = out[i][0] * out[i][0] + out[i][1] * out[i][1];
+        fft_values[i] = 20 * log10(magnitude + 1e-7);   // Add small value to avoid log(0)
+        #ifdef DEBUG
+            printf("%.2f\t", fft_values[i]);
+        #endif
+    }
+    #ifdef DEBUG
+        printf("\n");
+    #endif
+    return paContinue; // Continue streaming audio
+}
+
+int main(void) {
+    PaError err;
+    paTestData data;
+    PaStream *stream;
+    PaStreamParameters inputParameters;
+
+    // Initialize PortAudio
+    err = Pa_Initialize();
+    if (err != paNoError) {
+        fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
+        return 1;
+    }
+
+    // Allocate memory for FFT input and output arrays
+    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * FFT_SIZE);
+    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * FFT_SIZE);
+
+    // Create FFTW plan
+    plan = fftw_plan_dft_1d(FFT_SIZE, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+
+    // Set up PortAudio stream parameters
+    inputParameters.device = Pa_GetDefaultInputDevice();
+    inputParameters.channelCount = 1; // Mono input
+    inputParameters.sampleFormat = paFloat32; // Float32 format
+    inputParameters.suggestedLatency = Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency;
+    inputParameters.hostApiSpecificStreamInfo = NULL;
+
+    // Open PortAudio stream
+    err = Pa_OpenStream(&stream, &inputParameters, NULL, SAMPLE_RATE,
+                        FRAMES_PER_BUFFER, paClipOff, audioCallback, &data);
+    if (err != paNoError) {
+        fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
+        Pa_Terminate();
+        return 1;
+    }
+
+    // Start the stream
+    err = Pa_StartStream(stream);
+    if (err != paNoError) {
+        fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
+        Pa_CloseStream(stream);
+        Pa_Terminate();
         return 1;
     }
  
-    term_t term;
-    initializeTerm(&term);
+    signal(SIGINT, handlectrl_c);
 
-    while(1) 
-    {
-        ft_keyhook(&term);
-        draw(&term);
-        usleep(term.delay);
+#ifdef DEBUG
+    getchar();
+#else
+    ft_ascii(fft_values);
+#endif
+
+    // Stop and close the stream
+    err = Pa_StopStream(stream);
+    if (err != paNoError) {
+        fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
+    }
+    err = Pa_CloseStream(stream);
+    if (err != paNoError) {
+        fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
     }
 
-    /* free_all(&term); */
-    systemExit();
+    // Clean up
+    fftw_destroy_plan(plan);
+    fftw_free(in);
+    fftw_free(out);
+    Pa_Terminate();
+    printf("Program finished\n");
     return 0;
 }

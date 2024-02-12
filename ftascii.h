@@ -8,6 +8,14 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <sys/select.h>
+#include <locale.h>
+#include <time.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fftw3.h>
+#include <math.h>
+#include "portaudio.h"
 
 #define   CLEAR     "\033[H"
 #define   NOMOUSE   "\033[?25l"
@@ -22,9 +30,15 @@
 #define   BLACK     "\033[30m"
 #define   RST       "\033[0m"
 
+#define unicodechars "▁▂▃▄▅▆▇█"
+
 #define IMG_SIZE 12
 
-#define unicodechars "▁▂▃▄▅▆▇█"
+#ifndef FFT_SIZE
+# define  FFT_SIZE 16
+#endif
+#define SAMPLE_RATE 44100
+#define FRAMES_PER_BUFFER 512
 
 // enum for colors
 
@@ -67,7 +81,7 @@ void                init_term(term_t *t);
 
 /*      hooks       */
 void                handleKeyPress(char key, term_t *t);
-void                handlectrl_c(int sig);
+// void                handlectrl_c(int sig);
 void                ft_keyhook(term_t *t);
 
 void                draw(term_t *t);
@@ -90,3 +104,4 @@ int                 str_to_hex(char *str);
 void                putpix(Pixel* pixels, char* color, char* uni);
 
 char*               hex_to_unicode(int hex);
+int 				run_app(void);

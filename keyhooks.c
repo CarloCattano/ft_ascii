@@ -62,7 +62,7 @@ void systemExit() {
     exit(1);
 }
 
-void handlectrl_c(int sig) {
-    (void)sig;
-    systemExit();
-}
+// void handlectrl_c(int sig) {
+//     (void)sig;
+//     systemExit();
+// }
