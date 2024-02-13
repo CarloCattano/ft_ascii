@@ -1,5 +1,22 @@
 #include "ftascii.h"
 
+void init_players(term_t *t)
+{
+    for (int i = 0; i < MAX_PLAYERS; i++) {
+        t->players[i] = (player_t*)malloc(sizeof(player_t));
+    
+        if (t->players[i] == NULL){
+            printf("Memory allocation failed\n");
+            exit(1);
+        }
+
+        t->players[i]->posx = IMG_SIZE;
+        t->players[i]->posy = IMG_SIZE;
+        t->players[i]->dx = 1;
+        t->players[i]->dy = 1;
+    }
+}
+
 void init_term(term_t *t)
 {
     // Initialize frame, clear, delay
@@ -17,18 +34,13 @@ void init_term(term_t *t)
     t->pixels = (Pixel*)malloc(sizeof(Pixel) * t->size);
     t->buffer = (char*)malloc(sizeof(char) * t->size * 8);
 
-    t->players[0] = (player_t*)malloc(sizeof(player_t));
+    init_players(t);
 
-    t->players[0]->posx = IMG_SIZE;
-    t->players[0]->posy = IMG_SIZE;
-    t->players[0]->dx = 1;
-    t->players[0]->dy = 1;
-
-    if (t->pixels == NULL || t->buffer == NULL || t->players[0] == NULL){
+    if (t->pixels == NULL || t->buffer == NULL){
           printf("Memory allocation failed\n");
           exit(1);
     }
 
     pix_set(t->pixels, t->size);
-    memset(t->buffer, '.', t->size * 8);
+    memset(t->buffer, '.', t->size * 8); // fill buffer with dots
 }

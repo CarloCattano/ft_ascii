@@ -8,14 +8,16 @@ if [ $# -eq 0 ]; then
     ./debug
 
 elif [ $1 == "clean" ]; then
-    rm ft_ascii -f
+    rm debug -f
     
 elif [ $1 == "debug" ]; then
-    cc -Wall -Wextra -Werror -g -lm main.c utils.c init.c draw.c keyhooks.c player.c pixel.c -o ft_ascii
+    cc draw.c main.c ftascii.c init.c keyhooks.c player.c  pixel.c utils.c  libportaudio.a \
+        -lrt -lm -lasound -ljack -lfftw3 -pthread -o debug -Wall -Wextra -ggdb3 
+    ./debug
     if [ $2 == "run" ]; then
-        gdb ./ft_ascii
+        gdb ./debug
     else
-        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./ft_ascii
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./debug
     fi
     
 else

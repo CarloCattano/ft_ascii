@@ -17,6 +17,21 @@ int number42[IMG_SIZE][IMG_SIZE] = {
     {0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0},
 };
 
+int ball[IMG_SIZE][IMG_SIZE] = {
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0},
+    {0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0},
+    {0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0},
+    {0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0},
+    {0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0},
+    {0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+};
+
+
 static int check_border(int i, int MAX_COL, int MAX_ROW)
 {
     if (i < MAX_COL || i > ((MAX_COL * MAX_ROW) - MAX_COL) || i % MAX_COL == 0 
@@ -35,13 +50,12 @@ static void img2win(term_t *t)
     memset(t->buffer, 0, t->size * 8);
     write(1, "\033[H", 3);
     (void)len;
-    t->frame > 2048 ? t->frame = 1 : t->frame++;
 }
 
 void background(term_t *t, int y)
 {
     t->pixels[y].data.color = GREEN;
-    t->pixels[y].data.uni = "."; // TODO bug here wide unicodes break it 
+    t->pixels[y].data.uni = ".";    // TODO bug here wide unicodes break it 
 }
 
 void map_pix(term_t *t, int x, int y, char *color, char *uni)
@@ -50,13 +64,13 @@ void map_pix(term_t *t, int x, int y, char *color, char *uni)
     fill_pixel(t->pixels, color, uni, i);
 }
 
-void draw42(term_t *t, int x, int y, char *color, char *uni)
+void draw42(term_t *t, int x, int y, char *color, char *uni, int arr[IMG_SIZE][IMG_SIZE])
 {
     for (int i = 0; i < IMG_SIZE; i++)
     {
         for (int j = 0; j < IMG_SIZE; j++)
         {
-            if (number42[i][j] == 1)
+            if (arr[i][j] == 1)
             {
                 map_pix(t, x + j, y + i, color, uni);
             }
@@ -78,12 +92,14 @@ void draw(term_t *t, float *fft_values, float sens)
         } else {
             background(t, y);
             draw42(t, t->players[0]->posx - IMG_SIZE / 2 , 
-                    t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "🟕");
-        }                                                          
+                    t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "*", number42);  
+            draw42(t, t->players[1]->posx - IMG_SIZE / 2 , 
+                    t->players[1]->posy - IMG_SIZE / 2 , RED, "𑱳",ball);  
+        }                                                               
     }
-    // map fft_value 1 (bass) to player speed with a sensibility factor
-    move_player(t, 2 * fft_values[0] * sens, 2 * fft_values[2] * sens);
-    /* map_pix(t, t->players[0]->posx, t->players[0]->posy, RED, "🟕"); */
+    move_player(t, 2 * fft_values[0] * sens, 2 * fft_values[2] * sens, 0);
+    move_player(t, 2 * fft_values[3] * sens, 2 * fft_values[4] * sens, 1);
+
     assign_pix_buff(t->buffer, t->pixels, t->size); 
     img2win(t);
 }

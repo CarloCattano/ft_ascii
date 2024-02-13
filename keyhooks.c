@@ -57,12 +57,13 @@ void handleKeyPress(char key, term_t *t) {
             break;
     }
 }
-/* start listening for keypresses */
 
 void ft_keyhook(term_t *term) {
     char key;
-    if (read(STDIN_FILENO, &key, 1) == 1) {
-        handleKeyPress(key, term);
+    if (term->frame % 4 == 0) {
+        if (read(STDIN_FILENO, &key, 1) == 1) {
+            handleKeyPress(key, term);
+        }
     }
 }
 

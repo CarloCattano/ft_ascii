@@ -2,9 +2,9 @@
 
 #define accelMAX 4
 
-void move_player(term_t *t, float speedx, float speedy)
+void move_player(term_t *t, float speedx, float speedy, int i)
 {
-    player_t *p = t->players[0];
+    player_t *p = t->players[i];
     p->posx += speedx;
     p->posy += speedy;
 

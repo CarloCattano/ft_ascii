@@ -18,6 +18,13 @@ void initializeTerm(term_t *term) {
     init_term(term); 
 }
 
+static void clip_limits(term_t *term)
+{
+    term->sens = term->sens > 4.0f ? 4.0f : term->sens;
+    term->sens = term->sens < 0.1f ? 0.1f : term->sens;
+    term->frame > 2048 ? term->frame = 1 : term->frame++;
+}
+
 int ft_ascii(float *fft_values)
 {
 	term_t term;
@@ -26,15 +33,11 @@ int ft_ascii(float *fft_values)
 	while(1) 
 	{
 		ft_keyhook(&term);
+        clip_limits(&term);
 		draw(&term, fft_values, term.sens);
 		usleep(term.delay);
-
-		// clip limits
-		term.sens = term.sens > 4.0f ? 4.0f : term.sens;
-		term.sens = term.sens < 0.1f ? 0.1f : term.sens;
-        // flush terminal 
-        fflush(stdout);
-	}
+        write(1, "\033[H", 3);
+    }
 
 	systemExit();
 	return 0;

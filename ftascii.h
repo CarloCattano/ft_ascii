@@ -25,6 +25,7 @@
 #define   RST       "\033[0m"
 
 #define IMG_SIZE 12
+#define MAX_PLAYERS 4
 
 typedef struct s_unicode
 {
@@ -72,7 +73,7 @@ void                ft_keyhook(term_t *t);
 
 void                draw(term_t *t, float *fft_values, float sens);
 
-void                move_player(term_t *t, float speedx, float speedy);
+void                move_player(term_t *t, float speedx, float speedy, int playernum);
 
 /*     utils       */
 int                 compare_val_in_buffers(term_t *t, int i);
