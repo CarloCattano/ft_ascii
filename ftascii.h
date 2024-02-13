@@ -79,7 +79,7 @@ void                move_player(term_t *t, float speedx, float speedy, int playe
 int                 compare_val_in_buffers(term_t *t, int i);
 void                copy_last_buffer(term_t *t);
 void                free_all(term_t *t);
-void                systemExit();
+int                 systemExit();
 
 void                assign_pix_buff(char* buffer, Pixel* pixels,int size);
 void                pixel_set(Pixel* pixels, int size);

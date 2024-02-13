@@ -67,9 +67,9 @@ void ft_keyhook(term_t *term) {
     }
 }
 
-void systemExit() {
+int systemExit() {
     system("reset");
 	printf("Exited gracefully\n");
-    exit(1);
+    return 1;
 }
 

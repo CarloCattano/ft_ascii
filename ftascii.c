@@ -16,6 +16,7 @@ void initializeTerm(term_t *term) {
     // Initialize term structure
     *term = (term_t){w.ws_col, w.ws_row, w.ws_col * w.ws_row, NULL, NULL, NULL, 1, 1, 0, {0}, 1.0f};
     init_term(term); 
+    write(1, "\033[H", 3);
 }
 
 static void clip_limits(term_t *term)
@@ -28,9 +29,10 @@ static void clip_limits(term_t *term)
 int ft_ascii(float *fft_values)
 {
 	term_t term;
-	initializeTerm(&term);
-
-	while(1) 
+	
+    initializeTerm(&term);
+  	
+    while(1) 
 	{
 		ft_keyhook(&term);
         clip_limits(&term);
