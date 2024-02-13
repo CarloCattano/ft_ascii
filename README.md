@@ -1,6 +1,8 @@
 ### WIP 
 Branches as of today are:
 
+- unicode_portaudio : Audio reactive unicode ( bug with wide unicodes ) 
+
 - audio_minimal : fft modulated visuals via audio input
 
 - refactor : try to go full unicode and per char color support
