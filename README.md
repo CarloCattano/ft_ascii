@@ -7,7 +7,7 @@ Branches as of today are:
 
 - refactor : try to go full unicode and per char color support
 
-- main : original simple moving heads ( ascii and fx)
+- main : simple drawing that draws different ascii brushes
 
 ### Preface
 
