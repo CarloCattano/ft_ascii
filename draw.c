@@ -64,9 +64,6 @@ void draw42(term_t *t, int x, int y, char *color, char *uni)
     }
 }
 
-// many test unicodes 
-#define TESTUNI "🟡🟢🟣🟤🟥🟦🟧🟨🟩🟪🟫"
-
 void draw(term_t *t, float *fft_values, float sens)
 {
 	(void)fft_values;
@@ -81,7 +78,7 @@ void draw(term_t *t, float *fft_values, float sens)
         } else {
             background(t, y);
             draw42(t, t->players[0]->posx - IMG_SIZE / 2 , 
-                    t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "*");
+                    t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "🟕");
         }                                                          
     }
     // map fft_value 1 (bass) to player speed with a sensibility factor

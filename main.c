@@ -39,8 +39,6 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,unsigned lo
         in[i][0] = inBuffer[i];
         in[i][1] = 0.0;
     }
-
-    // Execute the FFT
     fftw_execute(plan);
 
     // Output the magnitude spectrum
@@ -49,11 +47,11 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,unsigned lo
         #ifdef DEBUG
             printf("[ %d ] : %.2f ", i, fft_values[i]);
 			/* audio_stats(fft_values, FFT_SIZE / 2 + 1); */
-            printf("\n");
         #endif
+		
     }
 
-
+  	
 	#ifdef DEBUG
 		printf("\n");	
 	#endif
@@ -61,20 +59,22 @@ static int audioCallback(const void *inputBuffer, void *outputBuffer,unsigned lo
     return paContinue; // Continue streaming audio
 }
 
-int main() {
+int main() 
+{
     PaError err;
     paTestData data;
     PaStream *stream;
+	const   PaDeviceInfo *deviceInfo;
     PaStreamParameters inputParameters;
-
+ 	int     i, numDevices, defaultDisplayed;
     // Initialize PortAudio
     err = Pa_Initialize();
     if (err != paNoError) {
         fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
         return 1;
     }
-
     // Allocate memory for FFT input and output arrays
+	// divide by nyquist frequency = 2
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * FFT_SIZE);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * FFT_SIZE);
 
@@ -83,7 +83,7 @@ int main() {
 
     // Set up PortAudio stream parameters
     inputParameters.device = Pa_GetDefaultInputDevice();
-    inputParameters.channelCount = 1; // Mono input
+    inputParameters.channelCount = 1	; // Mono input
     inputParameters.sampleFormat = paFloat32; // Float32 format
     inputParameters.suggestedLatency = Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency;
     inputParameters.hostApiSpecificStreamInfo = NULL;
@@ -94,7 +94,7 @@ int main() {
     if (err != paNoError) {
         fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
         Pa_Terminate();
-        return 1;
+        exit(1);
     }
 
     // Start the stream
@@ -103,16 +103,16 @@ int main() {
         fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
         Pa_CloseStream(stream);
         Pa_Terminate();
-        return 1;
+       exit(1);
     }
 
 	signal(SIGINT, handlectrl_c);
+    // Wait for the stream to finish
 
-#ifndef DEBUG
+    sleep(1); // Sleep for a few seconds to allow the stream to run
+
     ft_ascii(fft_values);
-#else
-   while(1) {};
-#endif
+
     // Stop and close the stream
     err = Pa_StopStream(stream);
     if (err != paNoError) {

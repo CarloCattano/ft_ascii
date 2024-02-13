@@ -32,8 +32,8 @@ int ft_ascii(float *fft_values)
 		// clip limits
 		term.sens = term.sens > 4.0f ? 4.0f : term.sens;
 		term.sens = term.sens < 0.1f ? 0.1f : term.sens;
-		term.delay = term.delay > 3e5 ? 3e5 : term.delay;
-		term.delay = term.delay < 1 ? 1 : term.delay;
+        // flush terminal 
+        fflush(stdout);
 	}
 
 	systemExit();
