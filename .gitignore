@@ -1,5 +1,7 @@
 portaudio/
 .cache
+debug
+test
 compile_commands.json
 .idea
 .vscode
