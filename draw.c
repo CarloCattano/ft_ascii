@@ -74,7 +74,7 @@ void draw(term_t *t)
         } else {
             background(t, y);
             draw42(t, t->players[0]->posx - IMG_SIZE / 2 , 
-                    t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "ꡙ");
+                    t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "*");
         }                                                          
     }
     move_player(t);
