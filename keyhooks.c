@@ -40,8 +40,7 @@ void handleKeyPress(char key, term_t *t) {
             write(1, GREEN, 5);
             break;
         case 'q':
-            free_all(t);
-            systemExit();
+            systemExit(t);
             break;
         default:
             handlePlayerKeys(t, key);
@@ -57,12 +56,9 @@ void ft_keyhook(term_t *term) {
     }
 }
 
-void systemExit() {
+void systemExit(term_t *t) {
+    free_all(t);
     system("reset");
     exit(1);
 }
 
-void handlectrl_c(int sig) {
-    (void)sig;
-    systemExit();
-}

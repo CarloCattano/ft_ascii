@@ -1,3 +1,6 @@
+#ifndef FTASCII_H
+#define FTASCII_H
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -63,6 +66,8 @@ typedef struct term_s
 
 }                   term_t;
 
+
+int                 ft_ascii();
 void                init_term(term_t *t);
 
 /*      hooks       */
@@ -77,8 +82,12 @@ void                move_player(term_t *t);
 int                 compare_val_in_buffers(term_t *t, int i);
 void                add_randomness_to_movement(player_t *p);
 void                copy_last_buffer(term_t *t);
+
+
+void                free_pixels(Pixel* pixels, int size);
 void                free_all(term_t *t);
-void                systemExit();
+void                systemExit(term_t *t);
+
 void                save_last_frame_to_file(char * filename, char * buffer, int size);
 
 void                assign_pix_buff(char* buffer, Pixel* pixels,int size);
@@ -90,3 +99,5 @@ int                 str_to_hex(char *str);
 void                putpix(Pixel* pixels, char* color, char* uni);
 
 char*               hex_to_unicode(int hex);
+
+#endif

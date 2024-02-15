@@ -90,8 +90,13 @@ void free_pixels(Pixel* pixels, int size)
 {
     for (int i = 0; i < size; i++, pixels++)
     {
-        free(pixels->data.color);
-        free(pixels->data.uni);
+        if(pixels == NULL)
+            continue;
+
+        if (pixels->data.color != NULL)
+            free(pixels->data.color);
+        if (pixels->data.uni != NULL)
+            free(pixels->data.uni);
     }
 }
 

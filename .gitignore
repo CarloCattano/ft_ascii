@@ -5,6 +5,8 @@ compile_commands.json
 .vscode
 .DS_Store
 ft_ascii
+test
+debug
 a.out
 *.o
 tags
