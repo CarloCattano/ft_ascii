@@ -5,7 +5,7 @@ void init_term(term_t *t)
     // Initialize frame, clear, delay
     t->frame = 1;
     t->clear = 0;
-    t->delay = 3e5;
+    t->delay = 2e4;
     
     // check term init
     if (t->size < 1){
@@ -14,7 +14,7 @@ void init_term(term_t *t)
     }
 
     t->pixels = (Pixel*)malloc(sizeof(Pixel) * t->size);
-    t->buffer = (char*)malloc(sizeof(char) * t->size * 8);
+    t->buffer = (char*)malloc(sizeof(char) * t->size * 9);
 
     t->players[0] = (player_t*)malloc(sizeof(player_t));
 
@@ -29,5 +29,5 @@ void init_term(term_t *t)
     }
 
     pix_set(t->pixels, t->size);
-    memset(t->buffer, '.', t->size * 8);
+    memset(t->buffer, '.', t->size * 9);
 }

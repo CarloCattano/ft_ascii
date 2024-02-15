@@ -36,12 +36,12 @@ typedef struct s_unicode
     char*       uni;
     char*       color;
     
-} t_uni;
+} Pixel;
 
-typedef struct s_pixel
-{
-    t_uni    data;
-}            Pixel;
+/* typedef struct s_pixel */
+/* { */
+/*     t_uni    data; */
+/* }            Pixel; */
 
 typedef struct player_s
 {

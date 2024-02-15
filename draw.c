@@ -40,8 +40,8 @@ static void img2win(term_t *t)
 
 void background(term_t *t, int y)
 {
-    t->pixels[y].data.color = GREEN;
-    t->pixels[y].data.uni = "."; // TODO bug here wide unicodes break it 
+    t->pixels[y].color = GREEN;
+    t->pixels[y].uni = "."; // TODO bug here wide unicodes break it 
 }
 
 void map_pix(term_t *t, int x, int y, char *color, char *uni)
@@ -69,8 +69,8 @@ void draw(term_t *t)
      for(int y = 0; y < t->size; y++)
      {
         if (check_border(y, t->MAX_COL, t->MAX_ROW)) {
-            t->pixels[y].data.color = colors[rand() % 8];
-            t->pixels[y].data.uni = "🟕";
+            t->pixels[y].color = colors[rand() % 8];
+            t->pixels[y].uni = "🟕";
         } else {
             background(t, y);
             draw42(t, t->players[0]->posx - IMG_SIZE / 2 , 

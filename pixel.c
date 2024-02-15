@@ -17,7 +17,7 @@ int str_to_hex(char *str)
     return hex;
 }
 
-char* uni_to_str(t_uni uni)
+char* uni_to_str(Pixel uni)
 {
     char *str = malloc(10);
  
@@ -38,8 +38,8 @@ void pix_set(Pixel* p, int size)
 {
    for (int i = 0; i < size; i++, p++)
    {
-       p->data.color = calloc(5, sizeof(char));
-       p->data.uni = calloc(4, sizeof(char));
+       p->color = calloc(5, sizeof(char));
+       p->uni = calloc(4, sizeof(char));
    }
 }
 
@@ -47,38 +47,38 @@ void fill_pixel(Pixel* pixels,char* color, char* uni, int i)
 {
     if (strlen(uni) == 1 )
     {
-        pixels[i].data.uni = &uni[0];
-        pixels[i].data.color = color;
+        pixels[i].uni = &uni[0];
+        pixels[i].color = color;
     } else { 
-        pixels[i].data.color = color;
-        pixels[i].data.uni = uni;
+        pixels[i].color = color;
+        pixels[i].uni = uni;
     }
 }
 
 void putpix(Pixel* pixels, char* color, char* uni)
 {
-    pixels->data.color = color;
-    pixels->data.uni = uni;
+    pixels->color = color;
+    pixels->uni = uni;
 }
 
 void assign_pix_buff(char* buffer, Pixel* pixels, int size)
 {
     for (int i = 0; i < size; i++)
     {
-        int col_l = strlen(pixels->data.color);
-        int uni_l = strlen(pixels->data.uni);
+        int col_l = strlen(pixels->color);
+        int uni_l = strlen(pixels->uni);
 
         // Copy color data
-        memcpy(buffer, pixels->data.color, col_l);
+        memcpy(buffer, pixels->color, col_l);
         buffer += col_l;
 
         // Copy Unicode data
         int j;
         for (j = 0; j < uni_l; j++) {
-            if (pixels->data.uni[j] == '\0') {
+            if (pixels->uni[j] == '\0') {
                 break;
             }
-            *buffer++ = pixels->data.uni[j];
+            *buffer++ = pixels->uni[j];
         }
 
         pixels++;
@@ -93,10 +93,10 @@ void free_pixels(Pixel* pixels, int size)
         if(pixels == NULL)
             continue;
 
-        if (pixels->data.color != NULL)
-            free(pixels->data.color);
-        if (pixels->data.uni != NULL)
-            free(pixels->data.uni);
+        if (pixels->color != NULL)
+            free(pixels->color);
+        if (pixels->uni != NULL)
+            free(pixels->uni);
     }
 }
 
