@@ -19,16 +19,24 @@ void free_all(term_t *t)
 {   
     if (t == NULL)
         return;
-    if (t->buffer != NULL)
-        free(t->buffer);
-    /* free(t->buffer_copy); */
-    
-    free_pixels(t->pixels, t->size); // segfault
-    
-    if (t->pixels != NULL)
-        free(t->pixels);
 
-    free(t->players[0]); 
+    // Free player
+    if (t->players[0] != NULL) {
+        free(t->players[0]);
+        t->players[0] = NULL; // Set pointer to NULL after freeing to prevent double free
+    }
+
+	if (t->pixels != NULL)
+	{
+		// free_pixels(t->pixels, t->size);
+		free(t->pixels);
+		t->pixels = NULL; // Set pointer to NULL after freeing to prevent double free
+	}
+    // Free buffer
+    if (t->buffer != NULL) {
+        free(t->buffer);
+        t->buffer = NULL; // Set pointer to NULL after freeing to prevent double free
+    }
     free(t);
 }
 

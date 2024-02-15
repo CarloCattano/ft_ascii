@@ -29,7 +29,6 @@
 
 #define unicodechars "▁▂▃▄▅▆▇█"
 
-// enum for colors
 
 typedef struct s_unicode
 {
@@ -37,11 +36,6 @@ typedef struct s_unicode
     char*       color;
     
 } Pixel;
-
-/* typedef struct s_pixel */
-/* { */
-/*     t_uni    data; */
-/* }            Pixel; */
 
 typedef struct player_s
 {

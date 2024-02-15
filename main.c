@@ -11,6 +11,5 @@ int main(int ac, char *av[])
     }
 
     ft_ascii();
-
     return 0;
 }
