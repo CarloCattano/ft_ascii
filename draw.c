@@ -17,6 +17,18 @@ int number42[IMG_SIZE][IMG_SIZE] = {
     {0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0},
 };
 
+void flip_arr(int arr[12][12])
+{
+	for (int i = 0; i < 12; i++)
+	{
+		for (int j = 0; j < 12; j++)
+		{
+			arr[i][j] = !arr[i][j];
+		}
+	}
+}
+
+
 static int check_border(int i, int MAX_COL, int MAX_ROW)
 {
     if (i < MAX_COL || i > ((MAX_COL * MAX_ROW) - MAX_COL) || i % MAX_COL == 0 
@@ -38,19 +50,19 @@ static void img2win(term_t *t)
     t->frame > 2048 ? t->frame = 1 : t->frame++;
 }
 
-void background(term_t *t, int y)
+static void background(term_t *t, int y)
 {
     t->pixels[y].color = GREEN;
     t->pixels[y].uni = "."; // TODO bug here wide unicodes break it 
 }
 
-void map_pix(term_t *t, int x, int y, char *color, char *uni)
+static void map_pix(term_t *t, int x, int y, char *color, char *uni)
 {
     int i = (y * t->MAX_COL) + x;
     fill_pixel(t->pixels, color, uni, i);
 }
 
-void draw42(term_t *t, int x, int y, char *color, char *uni)
+static void draw42(term_t *t, int x, int y, char *color, char *uni)
 {
     for (int i = 0; i < IMG_SIZE; i++)
     {
@@ -66,17 +78,20 @@ void draw42(term_t *t, int x, int y, char *color, char *uni)
 
 void draw(term_t *t)
 {
-     for(int y = 0; y < t->size; y++)
-     {
-        if (check_border(y, t->MAX_COL, t->MAX_ROW)) {
-            t->pixels[y].color = colors[rand() % 8];
-            t->pixels[y].uni = "🟕";
-        } else {
-            background(t, y);
-            draw42(t, t->players[0]->posx - IMG_SIZE / 2 , 
-                    t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "*");
-        }                                                          
-    }
+	for(int y = 0; y < t->size; y++)
+	{
+		if (check_border(y, t->MAX_COL, t->MAX_ROW)) {
+			t->pixels[y].color = colors[rand() % 8];
+			t->pixels[y].uni = "🟕";
+		} else {
+			background(t, y);
+			draw42(t, t->players[0]->posx - IMG_SIZE / 2 , 
+					t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "*");
+		}                                                          
+	}
+	if(t->frame % 32 == 0 )
+		flip_arr(number42);
+		
     move_player(t);
     map_pix(t, t->players[0]->posx, t->players[0]->posy, RED, "🟕");
     assign_pix_buff(t->buffer, t->pixels, t->size); 

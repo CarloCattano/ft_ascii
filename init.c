@@ -12,7 +12,6 @@ void init_term(term_t *t)
         exit(1);
     }
 
-
     t->pixels = (Pixel*)malloc(sizeof(Pixel) * t->size);
     if (t->pixels == NULL) {
         printf("Memory allocation failed for pixels\n");
@@ -26,6 +25,7 @@ void init_term(term_t *t)
         free(t->pixels); 
         exit(1);
     }
+
     // Player aka Brushes / test drawing headsa
     t->players[0] = (player_t*)malloc(sizeof(player_t));
     if (t->players[0] == NULL) {
@@ -42,4 +42,5 @@ void init_term(term_t *t)
 
     // Initialize buffer
     memset(t->buffer, '.', t->size);
+	t->draw = true;
 }

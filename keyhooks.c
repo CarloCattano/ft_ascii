@@ -49,9 +49,10 @@ void handleKeyPress(char key, term_t *t) {
 }
 
 /* listening for keypresses */
-void ft_keyhook(term_t *term) {
+void ft_keyhook(term_t *term) 
+{
     char key;
-	if (term->frame % 8 == 0)
+	if (term->frame % 4 == 0)
 	{ 
 		if (read(STDIN_FILENO, &key, 1) == 1) {
 			handleKeyPress(key, term);

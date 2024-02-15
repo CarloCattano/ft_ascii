@@ -19,19 +19,17 @@ static void initializeTerm(term_t *term)
     setlocale(LC_ALL, "en_US.UTF-8");
     system("stty -echo -icanon -icrnl time 0 min 0");
 
-    // Hide cursor
-    write(1, NOMOUSE, 6);
-    // Clear screen
-    write(1, "\033[2J", 4);
-    // Initialize term structure
-    *term = (term_t){w.ws_col, w.ws_row, w.ws_col * w.ws_row, NULL, NULL, NULL, 1, 1, 0, {0}};
+    write(1, NOMOUSE, 6);  // Hide cursor
+    write(1, "\033[2J", 4); // Clear screen
+   
+    *term = (term_t){w.ws_col, w.ws_row, w.ws_col * w.ws_row, NULL, NULL, NULL, 1, 1, 0,0,{0}};
     term_pointer = term;
  
     init_term(term);
     signal(SIGINT, handlectrl_c);
 }
 
-int ft_ascii()
+void ft_ascii()
 {
     term_t *term = malloc(sizeof(term_t));
 
@@ -42,7 +40,7 @@ int ft_ascii()
 
     initializeTerm(term);
 
-    while(1) 
+    while(term->draw) 
     {
         ft_keyhook(term);
         draw(term);

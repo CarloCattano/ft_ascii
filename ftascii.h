@@ -11,6 +11,7 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <sys/select.h>
+#include <stdbool.h>
 
 #define   CLEAR     "\033[H"
 #define   NOMOUSE   "\033[?25l"
@@ -56,12 +57,13 @@ typedef struct term_s
 	unsigned int    frame;
     int 		    clear;
     unsigned int    delay;
+	bool            draw;
     player_t* 	    players[4];
 
 }                   term_t;
 
 
-int                 ft_ascii();
+void                ft_ascii();
 void                init_term(term_t *t);
 
 /*      hooks       */
@@ -74,19 +76,12 @@ void                move_player(term_t *t);
 
 /*     utils       */
 int                 compare_val_in_buffers(term_t *t, int i);
-void                add_randomness_to_movement(player_t *p);
 void                copy_last_buffer(term_t *t);
 
-
-void                free_pixels(Pixel* pixels, int size);
 void                free_all(term_t *t);
 void                systemExit(term_t *t);
 
-void                save_last_frame_to_file(char * filename, char * buffer, int size);
-
 void                assign_pix_buff(char* buffer, Pixel* pixels,int size);
-void                pixel_set(Pixel* pixels, int size);
-void                pix_set(Pixel* pixels,int size);
 void                fill_pixel(Pixel* pixels, char* color, char* uni, int i);
 
 int                 str_to_hex(char *str);
