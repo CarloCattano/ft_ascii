@@ -1,5 +1,6 @@
 ### Preface
 
+
 Interested in rendering graphics to terminal using just *ASCII*
 The original idea was to replace mlx library with this, in order to run cub3d on the terminal ( 42 )
 
