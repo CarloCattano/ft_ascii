@@ -2,9 +2,9 @@
 #include <locale.h>
 #include <time.h>
 
-term_t *term_pointer;
+static term_t *term_pointer;
 
-void handlectrl_c(int sig) {
+static void handlectrl_c(int sig) {
     (void)sig;
     systemExit(term_pointer);
 }
@@ -19,9 +19,11 @@ static void initializeTerm(term_t *term)
     setlocale(LC_ALL, "en_US.UTF-8");
     system("stty -echo -icanon -icrnl time 0 min 0");
 
+
     write(1, NOMOUSE, 6);  // Hide cursor
-    write(1, "\033[2J", 4); // Clear screen
-   
+    write(1, CLEAR, 4); // Clear screen
+    write(1, CURSOR, 6); 
+
     *term = (term_t){w.ws_col, w.ws_row, w.ws_col * w.ws_row, NULL, NULL, NULL, 1, 1, 0,0,{0}};
     term_pointer = term;
  

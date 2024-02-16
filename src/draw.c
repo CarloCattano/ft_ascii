@@ -1,8 +1,9 @@
 #include "ftascii.h"
 
-char *colors[] = {RED, GREEN, YELLOW, CYAN, MAGENTA, BLUE, WHITE, RST};
+static char *colors[] = {RED, GREEN, YELLOW, CYAN, MAGENTA, BLUE, WHITE, RST};
 
-int number42[IMG_SIZE][IMG_SIZE] = {
+static bool number42[IMG_SIZE][IMG_SIZE] = 
+{
     {1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0},
     {1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1},
     {1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1},
@@ -17,7 +18,7 @@ int number42[IMG_SIZE][IMG_SIZE] = {
     {0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0},
 };
 
-void flip_arr(int arr[12][12])
+static void flip_arr(bool arr[12][12])
 {
 	for (int i = 0; i < 12; i++)
 	{
@@ -40,13 +41,12 @@ static int check_border(int i, int MAX_COL, int MAX_ROW)
 
 static void img2win(term_t *t)
 {
-    int len = 0;
-    
+    size_t size = t->size * 8;
+
     assign_pix_buff(t->buffer, t->pixels, t->size);
-    len = write(1, t->buffer, t->size * 8);
-    memset(t->buffer, 0, t->size * 8);
+    write(1, t->buffer, size);
+    memset(t->buffer, 0, size);
     write(1, "\033[H", 3);
-    (void)len;
     t->frame > 2048 ? t->frame = 1 : t->frame++;
 }
 
@@ -68,7 +68,7 @@ static void draw42(term_t *t, int x, int y, char *color, char *uni)
     {
         for (int j = 0; j < IMG_SIZE; j++)
         {
-            if (number42[i][j] == 1)
+            if (number42[i][j] == true)
             {
                 map_pix(t, x + j, y + i, color, uni);
             }
@@ -89,7 +89,7 @@ void draw(term_t *t)
 					t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "*");
 		}                                                          
 	}
-	if(t->frame % 32 == 0 )
+	if(t->frame % 64 == 0 )
 		flip_arr(number42);
 		
     move_player(t);

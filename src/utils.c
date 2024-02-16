@@ -12,7 +12,7 @@ int compare_val_in_buffers(term_t *t, int i)
 
 void copy_last_buffer(term_t *t)
 {
-	t->buffer_copy = memcpy(t->buffer_copy, t->buffer, t->size);
+	t->buffer_copy = memcpy(t->buffer_copy, t->buffer, (size_t)t->size);
 }
 
 void free_all(term_t *t)

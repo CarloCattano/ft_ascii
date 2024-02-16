@@ -13,38 +13,22 @@
 #include <sys/select.h>
 #include <stdbool.h>
 
-#define   CLEAR     "\033[H"
-#define   NOMOUSE   "\033[?25l"
-
-#define   RED       "\033[31m"
-#define   GREEN     "\033[32m"
-#define   YELLOW    "\033[33m"
-#define   BLUE      "\033[34m"
-#define   MAGENTA   "\033[35m"
-#define   CYAN      "\033[36m"
-#define   WHITE     "\033[37m"
-#define   BLACK     "\033[30m"
-#define   RST       "\033[0m"
-
-#define IMG_SIZE 12
-
-#define unicodechars "▁▂▃▄▅▆▇█"
-
+#include "const.h"
 
 typedef struct s_unicode
 {
     char*       uni;
     char*       color;
     
-} Pixel;
+}               Pixel;
 
 typedef struct player_s
 {
-    int             posx;
-    int             posy;
-    int             dx;
-    int             dy;
-}                   player_t;
+    int         posx;
+    int         posy;
+    int         dx;
+    int         dy;
+}               player_t;
 
 typedef struct term_s
 {
@@ -68,7 +52,6 @@ void                init_term(term_t *t);
 
 /*      hooks       */
 void                handleKeyPress(char key, term_t *t);
-void                handlectrl_c(int sig);
 void                ft_keyhook(term_t *t);
 
 void                draw(term_t *t);
