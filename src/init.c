@@ -11,13 +11,11 @@ void init_term(term_t *t)
         printf("Terminal size is invalid\n");
         exit(1);
     }
-
     t->pixels = (Pixel*)malloc(sizeof(Pixel) * t->size);
     if (t->pixels == NULL) {
         printf("Memory allocation failed for pixels\n");
         exit(1);
     }
-
     // Allocate buffer - final char output to the terminal 
     t->buffer = (char*)malloc(sizeof(char) * t->size * 8); // 8 or 9 ?? color (5) + uni(3)
     if (t->buffer == NULL) {
@@ -25,7 +23,6 @@ void init_term(term_t *t)
         free(t->pixels); 
         exit(1);
     }
-
     // Player aka Brushes / test drawing headsa
     t->players[0] = (player_t*)malloc(sizeof(player_t));
     if (t->players[0] == NULL) {

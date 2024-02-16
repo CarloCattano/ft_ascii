@@ -1,14 +1,24 @@
 #include "ftascii.h"
+#include <wchar.h>
+
+int wcwidth(const wchar_t wc);
 
 void fill_pixel(Pixel* pixels,char* color, char* uni, int i)
 {
-    if (strlen(uni) == 1 )
-    {
+    wchar_t wide_char;
+    
+    mbtowc(&wide_char, uni, 4);
+    
+    int width = wcwidth(wide_char);
+
+    if (width == -1) return;
+
+    if (width == 1) {
         pixels[i].uni = &uni[0];
         pixels[i].color = color;
-    } else { 
+    } else if(width >= 2) {
+        pixels[i].uni = &uni[0];
         pixels[i].color = color;
-        pixels[i].uni = uni;
     }
 }
 

@@ -1,6 +1,7 @@
 #include "ftascii.h"
 
-static void handlePlayerKeys(term_t *t, char key) {
+static void handlePlayerKeys(term_t *t, char key)
+{
     switch (key) {
         case 'w':
             t->players[0]->dy -= 1;
@@ -14,12 +15,6 @@ static void handlePlayerKeys(term_t *t, char key) {
         case 'd':
             t->players[0]->dx += 1;
             break;
-        case 'p' :
-           break;
-        case 'o' :
-           break;
-        case 'r':
-           break;
         case '0':
             t->delay *= 0.5;
             t->delay < 2 ? t->delay = 1 : t->delay;
@@ -52,7 +47,7 @@ void handleKeyPress(char key, term_t *t) {
 void ft_keyhook(term_t *term) 
 {
     char key;
-	if (term->frame % 4 == 0)
+	if (term->frame % 2 == 0)
 	{ 
 		if (read(STDIN_FILENO, &key, 1) == 1) {
 			handleKeyPress(key, term);
@@ -60,7 +55,8 @@ void ft_keyhook(term_t *term)
 	}
 }
 
-void systemExit(term_t *t) {
+void systemExit(term_t *t)
+{
     free_all(t);
     system("reset");
     exit(0);

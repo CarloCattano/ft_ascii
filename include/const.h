@@ -1,6 +1,8 @@
 #ifndef CONST_H
 #define CONST_H
 
+#include <stdbool.h>
+
 #define   CLEAR     "\033[H"
 #define   NOMOUSE   "\033[?25l"
 #define   CURSOR    "\033[1;1H"
@@ -16,5 +18,4 @@
 #define   RST       "\033[0m"
 
 #define IMG_SIZE 12
-
 #endif
