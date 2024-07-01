@@ -1,49 +1,6 @@
 #include "ftascii.h"
 
-static char *colors[] = {RED, GREEN, YELLOW, CYAN, MAGENTA, BLUE, WHITE, RST};
-
-static bool number42[IMG_SIZE][IMG_SIZE] = 
-{
-    {1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0},
-    {1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1},
-    {1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1},
-    {1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1},
-    {1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1},
-    {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1},
-    {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1},
-    {0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0},
-    {0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0},
-    {0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0},
-    {0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1},
-    {0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0},
-};
-
-static bool number24[IMG_SIZE][IMG_SIZE] = 
-{
-    {1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0},
-    {1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1},
-    {1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1},
-    {1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1},
-    {1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1},
-    {0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1},
-    {0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1},
-    {0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1},
-    {0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1},
-    {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-    {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-    {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-};
-
-static void flip_arr(bool arr[12][12])
-{
-	for (int i = 0; i < 12; i++)
-	{
-		for (int j = 0; j < 12; j++)
-		{
-			arr[i][j] = !arr[i][j];
-		}
-	}
-}
+char *all_colors[8] = {RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, BLACK};
 
 
 static int check_border(int i, int MAX_COL, int MAX_ROW)
@@ -72,59 +29,49 @@ static void background(term_t *t, int y)
     t->pixels[y].uni = "."; // TODO bug here wide unicodes break it 
 }
 
-static void map_pix(term_t *t, int x, int y, char *color, char *uni)
+void map_pix(term_t *t, int x, int y, char *color, char *uni)
 {
     int i = (y * t->MAX_COL) + x;
     fill_pixel(t->pixels, color, uni, i);
 }
 
-static void draw42(term_t *t, int x, int y, char *color, char *uni)
-{
-    for (int i = 0; i < IMG_SIZE; i++)
-    {
-        for (int j = 0; j < IMG_SIZE; j++)
-        {
-            if(t->clear)
-            {
-                if ( number42[i][j] == true)
-                {
-                    map_pix(t, x + j, y + i, color, uni);
-                }
-            } else if(!t->clear)
-            {
-                if ( number24[i][j] == true)
-                {
-                    map_pix(t, x + j, y + i, color, "آ");
-                }
-            }
-        }
-    }
-}
+/*static void draw42(term_t *t, int x, int y, char *color, char *uni)*/
+/*{*/
+/*    for (int i = 0; i < IMG_SIZE; i++)*/
+/*    {*/
+/*        for (int j = 0; j < IMG_SIZE; j++)*/
+/*        {*/
+/*            if(t->clear)*/
+/*            {*/
+/*                if ( number42[i][j] == true)*/
+/*                {*/
+/*                    map_pix(t, x + j, y + i, color, uni);*/
+/*                }*/
+/*            } else if(!t->clear)*/
+/*            {*/
+/*                if ( number24[i][j] == true)*/
+/*                {*/
+/*                    map_pix(t, x + j, y + i, color, "آ");*/
+/*                }*/
+/*            }*/
+/*        }*/
+/*    }*/
+/*}*/
 
-void draw(term_t *t)
+void draw(term_t *t, void (*draw_callback)(term_t *))
 {
-	for(int y = 0; y < t->size; y++)
-	{
-		if (check_border(y, t->MAX_COL, t->MAX_ROW)) {
-			t->pixels[y].color = colors[rand() % 8];
-			t->pixels[y].uni = "ش";
-		} else {
-			background(t, y);
-			draw42(t, t->players[0]->posx - IMG_SIZE / 2 , 
-					t->players[0]->posy - IMG_SIZE / 2 , YELLOW, "*");
-		}                                                          
-	}
-	if(t->frame % 64 == 0 )
+    for(int y = 0; y < t->size; y++)
     {
-        if (!t->clear){
-            flip_arr(number24);
-        } else if (t->clear) {
-		    flip_arr(number42);
-        }
+        // Border drawing
+        if (check_border(y, t->MAX_COL, t->MAX_ROW)) { 
+            t->pixels[y].color = all_colors[rand() % 8];
+            t->pixels[y].uni = "ش";
+        } else {
+            background(t, y);
+            draw_callback(t);
+        }                                                          
     }
 
-    move_player(t);
-    map_pix(t, t->players[0]->posx, t->players[0]->posy, RED, "ش");
     assign_pix_buff(t->buffer, t->pixels, t->size); 
     img2win(t);
 }
