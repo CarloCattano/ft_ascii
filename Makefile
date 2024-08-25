@@ -17,23 +17,23 @@ OBJS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 # Target library
 LIB = libftascii.a
 
-# Example program
-EXAMPLE = example
-EXAMPLE_SRC = example.c
-EXAMPLE_OBJ = $(OBJ_DIR)/example.o
+
+PONG = pong_cli
+PONG_SRC = main.c
+PONG_OBJ= $(OBJ_DIR)/main.o
 
 # Create object directory if it doesn't exist
 $(shell mkdir -p $(OBJ_DIR))
 
 # Default target
-all: $(LIB) $(EXAMPLE)
+all: $(LIB) $(PONG)
 
 # Compile each source file into an object file
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Compile the example program object file
-$(OBJ_DIR)/example.o: $(EXAMPLE_SRC)
+$(OBJ_DIR)/main.o: $(PONG_SRC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Archive the object files into a static library
@@ -41,10 +41,10 @@ $(LIB): $(OBJS)
 	ar rcs $(LIB) $(OBJS)
 
 # Link the example program
-$(EXAMPLE): $(EXAMPLE_OBJ) $(LIB)
-	$(CC) $(CFLAGS) $(EXAMPLE_OBJ) -L. -lftascii -o $(EXAMPLE)
+$(PONG): $(PONG_OBJ) $(LIB)
+	$(CC) $(CFLAGS) $(PONG_OBJ) -L. -lftascii -o $(PONG)
 
 # Clean up the build files
 clean:
-	rm -f $(OBJ_DIR)/*.o $(LIB) $(EXAMPLE)
+	rm -f $(OBJ_DIR)/*.o $(LIB) $(PONG)
 
