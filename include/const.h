@@ -19,4 +19,15 @@
 
 #define IMG_SIZE 12
 
+extern char zero[6][8];
+extern char one[6][8];
+extern char two[6][8];
+extern char three[6][8];
+extern char four[6][8];
+extern char five[6][8];
+extern char six[6][8];
+extern char seven[6][8];
+extern char eight[6][8];
+extern char nine[6][8];
+
 #endif

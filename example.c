@@ -5,117 +5,8 @@
 
 #define PADDING 2
 
-char zero[8][12] = {
-"00000000",
-"00    00",
-"00    00",
-"00    00",
-"00    00",
-"00    00",
-"00    00",
-"00000000",
-};
-
-char one[8][12] = {
-"    0000",
-"   0  00",
-"  0   00",
-" 0    00",
-"      00",
-"      00",
-"      00",
-"      00",
-};
-
-char two[8][12] = {
-"00000000",
-"00    00",
-"00    00",
-"      00",
-"    0000",
-"  0000",
-" 00",
-"00000000",
-};
-
-char three[8][12] = {
-"00000000",
-"00    00",
-"00    00",
-"      00",
-"    0000",
-"      00",
-"00    00",
-"00000000",
-};
-
-char four[8][12] = {
-"00    00",
-"00    00",
-"00    00",
-"00000000",
-"      00",
-"      00",
-"      00",
-"      00",
-};
-
-char five[8][12] = {
-"00000000",
-"00",
-"00",
-"00000000",
-"      00",
-"      00",
-"00    00",
-"00000000",
-};
-
-char six[8][12] = {
-"00000000",
-"00",
-"00",
-"00000000",
-"00    00",
-"00    00",
-"00    00",
-"00000000",
-};
-
-char seven[8][12] = {
-"00000000",
-"00    00",
-"00    00",
-"      00",
-"    0000",
-"  0000",
-" 00",
-" 00",
-};
-
-char eight[8][12] = {
-"00000000",
-"00    00",
-"00    00",
-"00    00",
-"00000000",
-"00    00",
-"00    00",
-"00000000",
-};
-
-char nine[8][12] = {
-"00000000",
-"00    00",
-"00    00",
-"00    00",
-"00000000",
-"      00",
-"      00",
-"      00",
-};
-
-
+#define SCORE_Y 8
+#define SCORE_X 6
 
 static term_t *term_pointer;
 
@@ -248,17 +139,60 @@ void moveBall(struct ball *ball) {
 }
 
 void drawScore(term_t *term) {
-    for(int i = 0; i < 8; i++) {
-        for(int j = 0; j < 12; j++) {
-            if (zero[i][j] == '0') {
-                map_pix(term, term->MAX_COL / 6 + j, 2 + i, GREEN, "▓");
+    char (*digits[10])[SCORE_Y] = {zero, one, two, three, four, five, six, seven, eight, nine};
+
+    // Extract tens and units digits for each player's score
+    int player1_tens = player1.score / 10;
+    int player1_units = player1.score % 10;
+    int player2_tens = player2.score / 10;
+    int player2_units = player2.score % 10;
+
+    char (*player1_tens_digit)[SCORE_Y] = digits[player1_tens];
+    char (*player1_units_digit)[SCORE_Y] = digits[player1_units];
+
+    char (*player2_tens_digit)[SCORE_Y] = digits[player2_tens];
+    char (*player2_units_digit)[SCORE_Y] = digits[player2_units];
+
+    if (player1.score < 10) {
+        // Draw only the units digit
+        for (int i = 0; i < SCORE_X; i++) {
+            for (int j = 0; j < SCORE_Y; j++) {
+                if (player1_units_digit[i][j] == '0') {
+                    map_pix(term, term->MAX_COL / 6 + j, 2 + i, GREEN, "▓");
+                }
+            }
+        }
+    } else {
+        // Draw both tens and units digits
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < SCORE_Y; j++) {
+                if (player1_tens_digit[i][j] == '0') {
+                    map_pix(term, term->MAX_COL / 6 + j, 2 + i, GREEN, "▓");
+                }
+                if (player1_units_digit[i][j] == '0') {
+                    map_pix(term, term->MAX_COL / 6 + j + 12, 2 + i, GREEN, "▓"); // Offset by 12 to draw the next digit
+                }
             }
         }
     }
-    for(int i = 0; i < 8; i++) {
-        for(int j = 0; j < 12; j++) {
-            if (zero[i][j] == '0') {
-                map_pix(term, term->MAX_COL - term->MAX_COL / 3 + j, 2 + i, GREEN, "▓");
+
+    if (player2.score < 10) {
+        for (int i = 0; i < SCORE_X; i++) {
+            for (int j = 0; j < SCORE_Y; j++) {
+                if (player2_units_digit[i][j] == '0') {
+                    map_pix(term, term->MAX_COL - term->MAX_COL / 3 + j, 2 + i, GREEN, "▓");
+                }
+            }
+        }
+    } else {
+        for (int i = 0; i < SCORE_X; i++) {
+            for (int j = 0; j < SCORE_Y; j++) {
+                if (player2_tens_digit[i][j] == '0') {
+                    map_pix(term, term->MAX_COL - term->MAX_COL / 3 + j, 2 + i, GREEN, "▓");
+                }
+                if (player2_units_digit[i][j] == '0') {
+                    map_pix(term, term->MAX_COL - term->MAX_COL / 3 + j + 12, 2 + i, GREEN, "▓"); // Offset by 12 to draw the next digit
+                }
             }
         }
     }
