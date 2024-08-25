@@ -14,5 +14,5 @@ tags
 *.swp
 ctags
 tags*
-example
+pong_cli
 libftascii.a

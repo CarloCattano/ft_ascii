@@ -1,5 +1,5 @@
 # Compiler and flags
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Iinclude 
 
 # Directories
@@ -17,9 +17,9 @@ OBJS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 # Target library
 LIB = libftascii.a
 
-
 PONG = pong_cli
 PONG_SRC = main.c
+
 PONG_OBJ= $(OBJ_DIR)/main.o
 
 # Create object directory if it doesn't exist
@@ -48,3 +48,7 @@ $(PONG): $(PONG_OBJ) $(LIB)
 clean:
 	rm -f $(OBJ_DIR)/*.o $(LIB) $(PONG)
 
+re: clean all
+
+run: all
+	./$(PONG)

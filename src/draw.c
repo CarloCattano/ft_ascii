@@ -1,6 +1,6 @@
 #include "ftascii.h"
 
-char *all_colors[8] = {RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, BLACK};
+char *all_colors[8] = {GREEN, BLUE, BLACK, MAGENTA, CYAN, WHITE, YELLOW, RED};
 
 
 static int check_border(int i, int MAX_COL, int MAX_ROW)
