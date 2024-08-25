@@ -18,4 +18,5 @@
 #define   RST       "\033[0m"
 
 #define IMG_SIZE 12
+
 #endif

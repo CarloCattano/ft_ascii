@@ -69,6 +69,7 @@ void                handleKeyPress(char key, term_t *t);
 void                ft_keyhook(term_t *t);
 
 void                draw(term_t *t, void (*f)(term_t*));
+void		    drawNum(term_t *t, int x, int y, char *color, char *uni, char num[8][12]);
 void                move_player(term_t *t);
 
 /*     utils       */

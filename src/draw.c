@@ -35,28 +35,6 @@ void map_pix(term_t *t, int x, int y, char *color, char *uni)
     fill_pixel(t->pixels, color, uni, i);
 }
 
-/*static void draw42(term_t *t, int x, int y, char *color, char *uni)*/
-/*{*/
-/*    for (int i = 0; i < IMG_SIZE; i++)*/
-/*    {*/
-/*        for (int j = 0; j < IMG_SIZE; j++)*/
-/*        {*/
-/*            if(t->clear)*/
-/*            {*/
-/*                if ( number42[i][j] == true)*/
-/*                {*/
-/*                    map_pix(t, x + j, y + i, color, uni);*/
-/*                }*/
-/*            } else if(!t->clear)*/
-/*            {*/
-/*                if ( number24[i][j] == true)*/
-/*                {*/
-/*                    map_pix(t, x + j, y + i, color, "آ");*/
-/*                }*/
-/*            }*/
-/*        }*/
-/*    }*/
-/*}*/
 
 void draw(term_t *t, void (*draw_callback)(term_t *))
 {
@@ -75,3 +53,4 @@ void draw(term_t *t, void (*draw_callback)(term_t *))
     assign_pix_buff(t->buffer, t->pixels, t->size); 
     img2win(t);
 }
+
