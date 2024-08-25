@@ -26,7 +26,7 @@ static void img2win(term_t *t)
 static void background(term_t *t, int y)
 {
     t->pixels[y].color = GREEN;
-    t->pixels[y].uni = "."; // TODO bug here wide unicodes break it 
+    t->pixels[y].uni = " "; // TODO bug here wide unicodes break it 
 }
 
 void map_pix(term_t *t, int x, int y, char *color, char *uni)
@@ -42,8 +42,8 @@ void draw(term_t *t, void (*draw_callback)(term_t *))
     {
         // Border drawing
         if (check_border(y, t->MAX_COL, t->MAX_ROW)) { 
-            t->pixels[y].color = all_colors[rand() % 8];
-            t->pixels[y].uni = "ش";
+            t->pixels[y].color = all_colors[rand() % 4];
+            t->pixels[y].uni = "█";
         } else {
             background(t, y);
             draw_callback(t);

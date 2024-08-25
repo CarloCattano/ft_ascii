@@ -1,7 +1,10 @@
+#include "pong.h"
 #include "ftascii.h"
+
 #include <signal.h>
 #include <locale.h>
 #include <time.h>
+#include <sys/epoll.h>
 
 #define PADDING 2
 
@@ -35,33 +38,6 @@ static void initializeTerm(term_t *term)
     signal(SIGINT, handlectrl_c);
 }
 
-// pong Game objects
-struct ball {
-    int x;
-    int y;
-
-    int dx;
-    int dy;
-
-    int vel;
-};
-
-struct paddle {
-    int x;
-    int y;
-    int dy;
-};
-
-struct player {
-    int score;
-    struct paddle paddle;
-};
-
-
-struct ball ball;
-struct player player1;
-struct player player2;
-
 static void initGame(struct ball *ball, struct player *player1, struct player *player2) {
     ball->y = term_pointer->MAX_ROW / 2;
     ball->x = term_pointer->MAX_COL / 2;
@@ -80,21 +56,23 @@ static void initGame(struct ball *ball, struct player *player1, struct player *p
 }
 
 void drawPlayer(term_t *term, struct player *player) {
-    
+
+    char* paddle = "█";
+
     if (player->paddle.y < PADDING) {
         player->paddle.y = PADDING;
     } else if (player->paddle.y > term->MAX_ROW - PADDING - 2) {
         player->paddle.y = term->MAX_ROW - PADDING - 2;
     }
 
-    map_pix(term, player->paddle.x, player->paddle.y, GREEN, "▓");
-    map_pix(term, player->paddle.x, player->paddle.y + 1, GREEN, "▓");
-    map_pix(term, player->paddle.x, player->paddle.y + 2, GREEN, "▓");
-    map_pix(term, player->paddle.x, player->paddle.y + 3, GREEN, "▓");
+    map_pix(term, player->paddle.x, player->paddle.y, GREEN, paddle);
+    map_pix(term, player->paddle.x, player->paddle.y + 1, GREEN, paddle);
+    map_pix(term, player->paddle.x, player->paddle.y + 2, GREEN, paddle);
+    map_pix(term, player->paddle.x, player->paddle.y + 3, GREEN, paddle);
 }
 
 void drawBall(term_t *term, struct ball *ball) {
-    map_pix(term, ball->x, ball->y, RED, "▓");
+    map_pix(term, ball->x, ball->y, RED, "⬤");
 }
 
 void moveBall(struct ball *ball) {
@@ -200,6 +178,7 @@ void drawScore(term_t *term) {
 
 void draw_callback(term_t *term)
 {
+    // doted line in the middle
     for (int i = 0; i < term->MAX_ROW; i++) {
         if ((i + 1) % 2 == 0)
             map_pix(term, term->MAX_COL / 2, i, GREEN, "▓");
@@ -234,7 +213,7 @@ void keyhooks(term_t *term)
 {
     char key;
     if (read(STDIN_FILENO, &key, 1) == 1) {
-	    KeyPress(key, term);
+        KeyPress(key, term);
     } 
 }
 
