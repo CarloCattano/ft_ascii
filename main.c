@@ -259,7 +259,8 @@ int main()
 
     while (term->draw) {
         draw(term, &draw_callback);
-        snprintf(buffer, sizeof(buffer), "%d", player1.paddle.y);
+        
+        snprintf(buffer, sizeof(buffer), "%d\n", player1.paddle.y);
 
         if (write(fd_out, buffer, strlen(buffer)) == -1) {
             perror("Error writing to FIFO_OUT");
