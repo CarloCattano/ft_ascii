@@ -229,7 +229,7 @@ void keyhooks(term_t *term)
 
 int main()
 {
-    char buffer[256]; // Increased buffer size to handle more data
+    char buffer[64]; // Increased buffer size to handle more data
 
     if (mkfifo(FIFO_IN, 0666) == -1 && errno != EEXIST) {
         perror("Error creating FIFO_IN");
@@ -240,7 +240,6 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    // Open the FIFOs
     fd_in = open(FIFO_IN, O_RDONLY | O_NONBLOCK); // Non-blocking mode to avoid blocking on read
     fd_out = open(FIFO_OUT, O_WRONLY);
 
@@ -260,9 +259,8 @@ int main()
 
     while (term->draw) {
         draw(term, &draw_callback);
+        snprintf(buffer, sizeof(buffer), "%d", player1.paddle.y);
 
-        // Send player1's y position
-        snprintf(buffer, sizeof(buffer), "%d\n", player1.paddle.y);
         if (write(fd_out, buffer, strlen(buffer)) == -1) {
             perror("Error writing to FIFO_OUT");
             break;
