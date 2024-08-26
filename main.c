@@ -11,6 +11,11 @@
 #define SCORE_Y 8
 #define SCORE_X 6
 
+#define FIFO_IN "/tmp/pong_in"
+#define FIFO_OUT "/tmp/pong_out"
+
+int fd_in, fd_out;
+
 static term_t *term_pointer;
 
 static void handlectrl_c(int sig) {
@@ -201,6 +206,8 @@ void KeyPress(char key, term_t *term) {
             player1.paddle.y += 2;
             break;
         case 'q':
+            close(fd_in);
+            close(fd_out);
             systemExit(term);
             break;
         default:
@@ -216,10 +223,33 @@ void keyhooks(term_t *term)
     } 
 }
 
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <errno.h>
+
 int main()
 {
-    term_t *term = malloc(sizeof(term_t));
+    char buffer[256]; // Increased buffer size to handle more data
 
+    if (mkfifo(FIFO_IN, 0666) == -1 && errno != EEXIST) {
+        perror("Error creating FIFO_IN");
+        exit(EXIT_FAILURE);
+    }
+    if (mkfifo(FIFO_OUT, 0666) == -1 && errno != EEXIST) {
+        perror("Error creating FIFO_OUT");
+        exit(EXIT_FAILURE);
+    }
+
+    // Open the FIFOs
+    fd_in = open(FIFO_IN, O_RDONLY | O_NONBLOCK); // Non-blocking mode to avoid blocking on read
+    fd_out = open(FIFO_OUT, O_WRONLY);
+
+    if (fd_in < 0 || fd_out < 0) {
+        perror("Error opening FIFOs");
+        exit(EXIT_FAILURE);
+    }
+
+    term_t *term = malloc(sizeof(term_t));
     if (term == NULL) {
         perror("Failed to allocate memory for term");
         exit(EXIT_FAILURE);
@@ -229,13 +259,34 @@ int main()
     initGame(&ball, &player1, &player2);
 
     while (term->draw) {
-        keyhooks(term);
-        if(term->frame % 2 == 0) {
-            moveBall(&ball);
-        }
         draw(term, &draw_callback);
+
+        // Send player1's y position
+        snprintf(buffer, sizeof(buffer), "%d\n", player1.paddle.y);
+        if (write(fd_out, buffer, strlen(buffer)) == -1) {
+            perror("Error writing to FIFO_OUT");
+            break;
+        }
+
+        // Read ball and player2 positions from Python
+        ssize_t bytes_read = read(fd_in, buffer, sizeof(buffer) - 1); // -1 for null terminator
+        if (bytes_read > 0) {
+            buffer[bytes_read] = '\0'; // Null-terminate the buffer
+            if (sscanf(buffer, "%d %d %d %d", &ball.x, &ball.y, &player2.paddle.x, &player2.paddle.y) != 4) {
+                fprintf(stderr, "Error parsing data: %s\n", buffer);
+            }
+        } else if (bytes_read == -1 && errno != EAGAIN) {
+            perror("Error reading from FIFO_IN");
+            break;
+        }
+
+        keyhooks(term);
         usleep(term->delay);
     }
+
+    close(fd_in);
+    close(fd_out);
+
     systemExit(term);
     return 0;
 }

@@ -16,3 +16,8 @@ $> make
 $> ./pong_cli
 ```
 
+
+## TODO add interface:
+ - Websocket ?
+ - libcurl ?
+
