@@ -10,12 +10,10 @@ with open(fifo_in, 'w') as pipe_out, open(fifo_out, 'r') as pipe_in:
     try:
         while True:
             # Simulate sending ball and player2 positions to C program
-            ball_x, ball_y, player2_x, player2_y = 10, 10, 70, 10
+            ball_x, ball_y, player2_y = 10, 10, 10
 
-            ball_x += 1
-            ball_y += 1
 
-            positions = f"{ball_x} {ball_y} {player2_x} {player2_y}\n"
+            positions = f"{ball_x} {ball_y} {player2_y}\n"
             pipe_out.write(positions)
             pipe_out.flush()  # Ensure the data is sent immediately
 

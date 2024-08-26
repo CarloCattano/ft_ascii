@@ -271,7 +271,7 @@ int main()
         ssize_t bytes_read = read(fd_in, buffer, sizeof(buffer) - 1); // -1 for null terminator
         if (bytes_read > 0) {
             buffer[bytes_read] = '\0'; // Null-terminate the buffer
-            if (sscanf(buffer, "%d %d %d %d", &ball.x, &ball.y, &player2.paddle.x, &player2.paddle.y) != 4) {
+            if (sscanf(buffer, "%d %d %d", &ball.x, &ball.y, &player2.paddle.y) != 3) {
                 fprintf(stderr, "Error parsing data: %s\n", buffer);
             }
         } else if (bytes_read == -1 && errno != EAGAIN) {
