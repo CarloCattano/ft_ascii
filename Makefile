@@ -1,6 +1,5 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Iinclude 
-
 SRC_DIR = src
 OBJ_DIR = obj
 INCLUDE_DIR = include
@@ -31,7 +30,7 @@ $(LIB): $(OBJS)
 	ar rcs $(LIB) $(OBJS)
 
 $(PONG): $(PONG_OBJ) $(LIB)
-	$(CC) $(CFLAGS) $(PONG_OBJ) -L. -lftascii -o $(PONG)
+	$(CC) $(CFLAGS) $(PONG_OBJ) -L. -lftascii -o $(PONG) -lpthread -lm -ldl
 
 clean:
 	rm -f $(OBJ_DIR)/*.o $(LIB) $(PONG)

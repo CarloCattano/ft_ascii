@@ -9,6 +9,8 @@ test
 debug
 vgcore.*
 a.out
+*.jpg
+*.png
 *.o
 tags
 *.swp

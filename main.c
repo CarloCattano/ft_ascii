@@ -1,10 +1,17 @@
 #include "pong.h"
 #include "ftascii.h"
 
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio.h"
+
 #include <signal.h>
 #include <locale.h>
 #include <time.h>
 #include <sys/epoll.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <pthread.h>
 
 #define PADDING 1
 
@@ -196,9 +203,6 @@ void draw_callback(term_t *term)
 
 void KeyPress(char key, term_t *term) {
     switch (key) {
-        case 'c':
-            term->clear = !term->clear;
-            break;
         case 'w':
             player1.paddle.y -= 2;
             break;
@@ -210,6 +214,11 @@ void KeyPress(char key, term_t *term) {
             close(fd_out);
             systemExit(term);
             break;
+
+        case 'i':
+            // change charset
+            break;
+
         default:
             break;
     }
@@ -223,13 +232,75 @@ void keyhooks(term_t *term)
     } 
 }
 
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <errno.h>
 
-int main()
-{
-    char buffer[64]; // Increased buffer size to handle more data
+// Background Music setup using miniaudio
+void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
+    ma_decoder* pDecoder = (ma_decoder*)pDevice->pUserData;
+    if (pDecoder == NULL) {
+        return;
+    }
+
+    ma_data_source_read_pcm_frames(pDecoder, pOutput, frameCount, NULL);
+    (void)pInput;
+}
+
+// Audio thread function
+void* play_audio(void* arg) {
+    const char* filename = (const char*)arg;
+
+    ma_result result;
+    ma_decoder decoder;
+    ma_device_config deviceConfig;
+    ma_device device;
+
+    result = ma_decoder_init_file(filename, NULL, &decoder);
+    if (result != MA_SUCCESS) {
+        fprintf(stderr, "Failed to initialize decoder.\n");
+        return NULL;
+    }
+
+    ma_data_source_set_looping(&decoder, MA_TRUE);
+
+    deviceConfig = ma_device_config_init(ma_device_type_playback);
+    deviceConfig.playback.format = decoder.outputFormat;
+    deviceConfig.playback.channels = decoder.outputChannels;
+    deviceConfig.sampleRate = decoder.outputSampleRate;
+    deviceConfig.dataCallback = data_callback;
+    deviceConfig.pUserData = &decoder;
+
+    if (ma_device_init(NULL, &deviceConfig, &device) != MA_SUCCESS) {
+        fprintf(stderr, "Failed to open playback device.\n");
+        ma_decoder_uninit(&decoder);
+        return NULL;
+    }
+
+    if (ma_device_start(&device) != MA_SUCCESS) {
+        fprintf(stderr, "Failed to start playback device.\n");
+        ma_device_uninit(&device);
+        ma_decoder_uninit(&decoder);
+        return NULL;
+    }
+
+    while (1) {
+        usleep(100000);  // Sleep to reduce CPU usage
+    }
+
+    ma_device_uninit(&device);
+    ma_decoder_uninit(&decoder);
+
+    return NULL;
+}
+
+int main() {
+    pthread_t audio_thread;  // Initialize audio playback in a separate thread
+    const char* audio_file = "sounds/music.wav";
+
+    if (pthread_create(&audio_thread, NULL, play_audio, (void*)audio_file) != 0) {
+        perror("Failed to create audio thread");
+        return 1;
+    }
+
+    char buffer[64]; 
 
     if (mkfifo(FIFO_IN, 0666) == -1 && errno != EEXIST) {
         perror("Error creating FIFO_IN");
@@ -253,7 +324,7 @@ int main()
         perror("Failed to allocate memory for term");
         exit(EXIT_FAILURE);
     }
-
+ 
     initializeTerm(term);
     initGame(&ball, &player1, &player2);
 
@@ -285,8 +356,10 @@ int main()
 
     close(fd_in);
     close(fd_out);
+    
+    pthread_cancel(audio_thread);
+    pthread_join(audio_thread, NULL);
 
     systemExit(term);
     return 0;
 }
-
