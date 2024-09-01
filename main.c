@@ -18,8 +18,8 @@
 #define SCORE_Y 8
 #define SCORE_X 6
 
-#define FIFO_IN "/tmp/pong_in"
-#define FIFO_OUT "/tmp/pong_out"
+#define FIFO_IN "/tmp/pong_out"
+#define FIFO_OUT "/tmp/pong_in"
 
 int fd_in, fd_out;
 
@@ -60,7 +60,7 @@ static void initGame(struct ball *ball, struct player *player1, struct player *p
     player1->score = 0;
     player1->paddle.x = 4;
     player1->paddle.y = term_pointer->MAX_ROW / 2;
-
+    player1->paddle.dy = 0;
     player2->score = 0;
     player2->paddle.x = term_pointer->MAX_COL - 4;
     player2->paddle.y = term_pointer->MAX_ROW / 2;
@@ -202,12 +202,14 @@ void draw_callback(term_t *term)
 }
 
 void KeyPress(char key, term_t *term) {
+    player1.paddle.dy = 0;
+
     switch (key) {
         case 'w':
-            player1.paddle.y -= 2;
+            player1.paddle.dy = 1;
             break;
         case 's':
-            player1.paddle.y += 2;
+            player1.paddle.dy = -1;
             break;
         case 'q':
             close(fd_in);
@@ -311,8 +313,8 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    fd_in = open(FIFO_IN, O_RDONLY | O_NONBLOCK); // Non-blocking mode to avoid blocking on read
-    fd_out = open(FIFO_OUT, O_WRONLY);
+    fd_in = open(FIFO_OUT, O_WRONLY); // Non-blocking mode to avoid blocking on read
+    fd_out = open(FIFO_IN, O_RDONLY | O_NONBLOCK); // Non-blocking mode to avoid blocking on write
 
     if (fd_in < 0 || fd_out < 0) {
         perror("Error opening FIFOs");
@@ -331,18 +333,19 @@ int main() {
     while (term->draw) {
         draw(term, &draw_callback);
         
-        snprintf(buffer, sizeof(buffer), "%d\n", player1.paddle.y);
+        keyhooks(term);
+        snprintf(buffer, sizeof(buffer), "%d\n", player1.paddle.dy);
 
-        if (write(fd_out, buffer, strlen(buffer)) == -1) {
+        if (write(fd_in, buffer, strlen(buffer)) == -1) {
             perror("Error writing to FIFO_OUT");
             break;
         }
 
         // Read ball and player2 positions from Python
-        ssize_t bytes_read = read(fd_in, buffer, sizeof(buffer) - 1); // -1 for null terminator
+        ssize_t bytes_read = read(fd_out, buffer, sizeof(buffer) - 1); // -1 for null terminator
         if (bytes_read > 0) {
             buffer[bytes_read] = '\0'; // Null-terminate the buffer
-            if (sscanf(buffer, "%d %d %d", &ball.x, &ball.y, &player2.paddle.y) != 3) {
+            if (sscanf(buffer, "%d %d %d %d", &player1.paddle.y, &player2.paddle.y, &ball.x, &ball.y) != 4) {
                 fprintf(stderr, "Error parsing data: %s\n", buffer);
             }
         } else if (bytes_read == -1 && errno != EAGAIN) {
@@ -350,7 +353,6 @@ int main() {
             break;
         }
 
-        keyhooks(term);
         usleep(term->delay);
     }
 
