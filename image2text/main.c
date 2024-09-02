@@ -74,7 +74,7 @@ int main(int ac, char **av)
 
     char buffer[new_width * new_height];
 
-    const char density[] = "@/\\|1?bc^;:`',._              ";
+    const char density[] = "@/\\|1?bc^-;:*`',.              ";
  
     // TODO colors buffer to store the color escape sequence and the letter
     // char colors_buffer[new_width * new_height * 6];
