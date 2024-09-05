@@ -312,7 +312,8 @@ int main() {
     }
 
     char send_buffer;
-    char recv_buffer[14];
+    char recv_buffer[32];
+    int pipe_data[6];
 
     term_t *term = malloc(sizeof(term_t));
     if (term == NULL) {
@@ -341,27 +342,32 @@ int main() {
             continue;
         }
         
-        ssize_t bytes_read = read(fd_in, recv_buffer, sizeof(recv_buffer) - 1); // -1 for null terminator
- 
+        ssize_t bytes_read = read(fd_in, recv_buffer, sizeof(recv_buffer) - 1); 
         if (bytes_read == -1) {
             continue;  // Continue if there's an error instead of breaking the loop
         } else if (bytes_read == 0) {
             continue;  // Keep the program running if no data is available yet
         } else if (bytes_read > 0) {
-                recv_buffer[bytes_read] = '\0'; 
-                char pipe_data[8];
+                recv_buffer[bytes_read] = '\0';
+
                 int i = 0;
                 char* token = strtok(recv_buffer, " "); // Split the string by spaces
-                while (token != NULL) {
+                while (token != NULL && i < 6)  {
                     pipe_data[i++] = atoi(token);
                     token = strtok(NULL, " ");
                 }
-                player1.score = pipe_data[0];
-                player2.score = pipe_data[1];
-                player1.paddle.y = pipe_data[2];
-                player2.paddle.y = pipe_data[3];
-                ball.x = pipe_data[4];
-                ball.y = pipe_data[5];
+
+                if (i == 6) {
+                    // printf("pipe_data: %d %d %d %d %d %d \n", pipe_data[0], pipe_data[1], pipe_data[2], pipe_data[3], pipe_data[4], pipe_data[5]);
+                    player1.score = pipe_data[0];
+                    player2.score = pipe_data[1];
+
+                    player1.paddle.y = pipe_data[2];
+                    player2.paddle.y = pipe_data[3];
+
+                    ball.x = pipe_data[4] / 3;
+                    ball.y = pipe_data[5] / 3;
+            }
         }
 
         draw(term, &draw_callback);
