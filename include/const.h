@@ -1,6 +1,7 @@
 #ifndef CONST_H
 #define CONST_H
 
+
 #include <stdbool.h>
 
 #define   CLEAR     "\033[H"
@@ -29,5 +30,6 @@ extern char six[6][8];
 extern char seven[6][8];
 extern char eight[6][8];
 extern char nine[6][8];
+
 
 #endif

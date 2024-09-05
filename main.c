@@ -134,13 +134,19 @@ void drawPlayer(term_t *term, struct player *player) {
 }
 
 void drawBall(term_t *term, struct ball *ball) {
+    if(ball->y < PADDING) {
+        ball->y = PADDING;
+        ball->dy = 1;
+    } else if(ball->y > term->MAX_ROW - PADDING - 1) {
+        ball->y = term->MAX_ROW - PADDING - 1;
+        ball->dy = -1;
+    }
     map_pix(term, ball->x, ball->y, RED, "⬤");
 }
 
 void drawScore(term_t *term) {
     char (*digits[10])[SCORE_Y] = {zero, one, two, three, four, five, six, seven, eight, nine};
 
-    // Extract tens and units digits for each player's score
     int player1_tens = player1.score / 10;
     int player1_units = player1.score % 10;
     int player2_tens = player2.score / 10;
@@ -213,10 +219,10 @@ void draw_callback(term_t *term)
 void KeyPress(char key, term_t *term) {
     switch (key) {
         case 'w':
-            player1.paddle.dy = 2;
+            player2.paddle.dy = 2;
             break;
         case 's':
-            player1.paddle.dy = 0;
+            player2.paddle.dy = 0;
             break;
         case 'q':
             close(fd_in);
@@ -233,7 +239,8 @@ void keyhooks(term_t *term)
     char key;
     if (read(STDIN_FILENO, &key, 1) == 1) {
         KeyPress(key, term);
-    } 
+    } else
+        player2.paddle.dy = 1;
 }
 
 // Background Music setup using miniaudio
@@ -302,7 +309,6 @@ int main() {
         return 1;
     }
 
-
     create_pipes(&fd_in, &fd_out);
 
     if(fd_in < 0 || fd_out < 0) {
@@ -353,7 +359,7 @@ int main() {
                 int i = 0;
                 char* token = strtok(recv_buffer, " "); // Split the string by spaces
                 while (token != NULL && i < 6)  {
-                    pipe_data[i++] = atoi(token);
+                    pipe_data[i++] = (int)atoi(token);
                     token = strtok(NULL, " ");
                 }
 
@@ -365,13 +371,14 @@ int main() {
                     player1.paddle.y = pipe_data[2];
                     player2.paddle.y = pipe_data[3];
 
-                    ball.x = pipe_data[4] / 3;
-                    ball.y = pipe_data[5] / 3;
+                    ball.x = pipe_data[4];
+                    ball.y = pipe_data[5];
+                    draw(term, &draw_callback);
             }
-        }
 
-        draw(term, &draw_callback);
-        usleep(term->delay);
+        }
+        // draw(term, &draw_callback);
+        // usleep(term->delay);
     }
 
 
