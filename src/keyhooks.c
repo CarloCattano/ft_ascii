@@ -57,7 +57,9 @@ void ft_keyhook(term_t *term)
 
 void systemExit(term_t *t)
 {
+    t->draw = false;
     free_all(t);
     system("reset");
+    system("echo Exited");
     exit(0);
 }

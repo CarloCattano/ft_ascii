@@ -21,14 +21,63 @@
 #define FIFO_IN "/tmp/pong_out"
 #define FIFO_OUT "/tmp/pong_in"
 
-int fd_in, fd_out;
+
+int fd_out;
+int fd_in;
+
+
+pthread_t audio_thread;  // Initialize audio playback in a separate thread
+
+void create_pipes(int *fd_in, int *fd_out) {
+    if (mkfifo(FIFO_IN, 0666) == -1 && errno != EEXIST) {
+        perror("Error creating FIFO_IN");
+        exit(EXIT_FAILURE);
+    }
+    if (mkfifo(FIFO_OUT, 0666) == -1 && errno != EEXIST) {
+        perror("Error creating FIFO_OUT");
+        exit(EXIT_FAILURE);
+    }
+
+    *fd_in = open(FIFO_IN, O_RDONLY);
+    if (*fd_in == -1) {
+        perror("Error opening FIFO_IN");
+        exit(EXIT_FAILURE);
+    }
+    printf("fd_in: %d\n", *fd_in);
+
+    *fd_out = open(FIFO_OUT, O_WRONLY);
+    if (*fd_out == -1) {
+        perror("Error opening FIFO_OUT");
+        exit(EXIT_FAILURE);
+    }
+    printf("fd_out: %d\n", *fd_out);
+}
+
 
 static term_t *term_pointer;
 
 static void handlectrl_c(int sig) {
     (void)sig;
+    close(fd_in);
+    close(fd_out);
+    pthread_cancel(audio_thread);
+    pthread_join(audio_thread, NULL);
     systemExit(term_pointer);
 }
+
+
+void handle_sigpipe(int signal) {
+    (void)signal;
+}
+
+void setup_signal_handlers() {
+    struct sigaction sa;
+    sa.sa_handler = handle_sigpipe;
+    sa.sa_flags = 0;
+    sigemptyset(&sa.sa_mask);
+    sigaction(SIGPIPE, &sa, NULL);
+}
+
 
 static void initializeTerm(term_t *term)
 {
@@ -47,7 +96,9 @@ static void initializeTerm(term_t *term)
     term_pointer = term;
 
     init_term(term);
+    setup_signal_handlers();
     signal(SIGINT, handlectrl_c);
+    signal(SIGTERM, handlectrl_c);
 }
 
 static void initGame(struct ball *ball, struct player *player1, struct player *player2) {
@@ -84,47 +135,6 @@ void drawPlayer(term_t *term, struct player *player) {
 
 void drawBall(term_t *term, struct ball *ball) {
     map_pix(term, ball->x, ball->y, RED, "⬤");
-}
-
-void moveBall(struct ball *ball) {
-    
-    ball->x += ball->dx * ball->vel;
-    ball->y += ball->dy * ball->vel;
-
-    if (ball->y >= term_pointer->MAX_ROW - PADDING || ball->y <= PADDING) {
-        ball->dy = -ball->dy;
-    }
-
-    if (ball->x >= term_pointer->MAX_COL - PADDING || ball->x <= PADDING) {
-        ball->dx = -ball->dx;
-    }
-
-    if ((ball->x == player1.paddle.x && ball->y == player1.paddle.y) || 
-        (ball->x == player1.paddle.x && ball->y == player1.paddle.y + 1) ||
-        (ball->x == player1.paddle.x && ball->y == player1.paddle.y + 2) ||
-        (ball->x == player1.paddle.x && ball->y == player1.paddle.y + 3)) {
-        ball->dx = -ball->dx;
-    }
-
-    if ((ball->x == player2.paddle.x && ball->y == player2.paddle.y)
-        || (ball->x == player2.paddle.x && ball->y == player2.paddle.y + 1)
-            || (ball->x == player2.paddle.x && ball->y == player2.paddle.y + 2) || 
-        (ball->x == player2.paddle.x && ball->y == player2.paddle.y + 3)){
-
-        ball->dx = -ball->dx;
-    } 
-
-    if (ball->x == PADDING) {
-        player2.score++;
-        usleep(1000000);
-        ball->x = term_pointer->MAX_COL / 2;
-        ball->y = term_pointer->MAX_ROW / 2;
-    } else if (ball->x == term_pointer->MAX_COL - PADDING) {
-        player1.score++;
-        usleep(1000000);
-        ball->x = term_pointer->MAX_COL / 2;
-        ball->y = term_pointer->MAX_ROW / 2;
-    }
 }
 
 void drawScore(term_t *term) {
@@ -194,7 +204,6 @@ void draw_callback(term_t *term)
         if ((i + 1) % 2 == 0)
             map_pix(term, term->MAX_COL / 2, i, GREEN, "▓");
     }
-
     drawPlayer(term, &player1);
     drawPlayer(term, &player2);
     drawScore(term);
@@ -202,25 +211,18 @@ void draw_callback(term_t *term)
 }
 
 void KeyPress(char key, term_t *term) {
-    player1.paddle.dy = 0;
-
     switch (key) {
         case 'w':
-            player1.paddle.dy = 1;
+            player1.paddle.dy = 2;
             break;
         case 's':
-            player1.paddle.dy = -1;
+            player1.paddle.dy = 0;
             break;
         case 'q':
             close(fd_in);
             close(fd_out);
             systemExit(term);
             break;
-
-        case 'i':
-            // change charset
-            break;
-
         default:
             break;
     }
@@ -233,7 +235,6 @@ void keyhooks(term_t *term)
         KeyPress(key, term);
     } 
 }
-
 
 // Background Music setup using miniaudio
 void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
@@ -294,7 +295,6 @@ void* play_audio(void* arg) {
 }
 
 int main() {
-    pthread_t audio_thread;  // Initialize audio playback in a separate thread
     const char* audio_file = "sounds/music.wav";
 
     if (pthread_create(&audio_thread, NULL, play_audio, (void*)audio_file) != 0) {
@@ -302,24 +302,17 @@ int main() {
         return 1;
     }
 
-    char buffer[64]; 
 
-    if (mkfifo(FIFO_IN, 0666) == -1 && errno != EEXIST) {
-        perror("Error creating FIFO_IN");
-        exit(EXIT_FAILURE);
-    }
-    if (mkfifo(FIFO_OUT, 0666) == -1 && errno != EEXIST) {
-        perror("Error creating FIFO_OUT");
-        exit(EXIT_FAILURE);
+    create_pipes(&fd_in, &fd_out);
+
+    if(fd_in < 0 || fd_out < 0) {
+        printf("Error opening FIFOs\n");
+        printf("fd_in: %d, fd_out: %d\n", fd_in, fd_out);
+        return 1;
     }
 
-    fd_in = open(FIFO_OUT, O_WRONLY); // Non-blocking mode to avoid blocking on read
-    fd_out = open(FIFO_IN, O_RDONLY | O_NONBLOCK); // Non-blocking mode to avoid blocking on write
-
-    if (fd_in < 0 || fd_out < 0) {
-        perror("Error opening FIFOs");
-        exit(EXIT_FAILURE);
-    }
+    char send_buffer;
+    char recv_buffer[14];
 
     term_t *term = malloc(sizeof(term_t));
     if (term == NULL) {
@@ -329,32 +322,52 @@ int main() {
  
     initializeTerm(term);
     initGame(&ball, &player1, &player2);
-
     while (term->draw) {
-        draw(term, &draw_callback);
         
         keyhooks(term);
-        snprintf(buffer, sizeof(buffer), "%d\n", player1.paddle.dy);
 
-        if (write(fd_in, buffer, strlen(buffer)) == -1) {
-            perror("Error writing to FIFO_OUT");
-            break;
+        if(fd_in < 0 || fd_out < 0) {
+            perror("Error opening FIFOs");
+            return 1;
         }
 
-        // Read ball and player2 positions from Python
-        ssize_t bytes_read = read(fd_out, buffer, sizeof(buffer) - 1); // -1 for null terminator
-        if (bytes_read > 0) {
-            buffer[bytes_read] = '\0'; // Null-terminate the buffer
-            if (sscanf(buffer, "%d %d %d %d", &player1.paddle.y, &player2.paddle.y, &ball.x, &ball.y) != 4) {
-                fprintf(stderr, "Error parsing data: %s\n", buffer);
+        send_buffer = player1.paddle.dy + '0';
+        if (write(fd_out, &send_buffer, sizeof(send_buffer)) == -1) {
+            if (errno == EPIPE) {
+                continue;
+            } else {
+                continue;
             }
-        } else if (bytes_read == -1 && errno != EAGAIN) {
-            perror("Error reading from FIFO_IN");
-            break;
+            continue;
+        }
+        
+        ssize_t bytes_read = read(fd_in, recv_buffer, sizeof(recv_buffer) - 1); // -1 for null terminator
+ 
+        if (bytes_read == -1) {
+            continue;  // Continue if there's an error instead of breaking the loop
+        } else if (bytes_read == 0) {
+            continue;  // Keep the program running if no data is available yet
+        } else if (bytes_read > 0) {
+                recv_buffer[bytes_read] = '\0'; 
+                char pipe_data[8];
+                int i = 0;
+                char* token = strtok(recv_buffer, " "); // Split the string by spaces
+                while (token != NULL) {
+                    pipe_data[i++] = atoi(token);
+                    token = strtok(NULL, " ");
+                }
+                player1.score = pipe_data[0];
+                player2.score = pipe_data[1];
+                player1.paddle.y = pipe_data[2];
+                player2.paddle.y = pipe_data[3];
+                ball.x = pipe_data[4];
+                ball.y = pipe_data[5];
         }
 
+        draw(term, &draw_callback);
         usleep(term->delay);
     }
+
 
     close(fd_in);
     close(fd_out);

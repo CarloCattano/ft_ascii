@@ -4,7 +4,7 @@ void init_term(term_t *t)
 {
     t->frame = 1;
     t->clear = 0;
-    t->delay = 1e4;
+    t->delay = 2e4;
     
     // Check if terminal size is valid
     if (t->size < 1){
@@ -39,5 +39,5 @@ void init_term(term_t *t)
 
     // Initialize buffer
     memset(t->buffer, '.', t->size);
-	t->draw = true;
+    t->draw = true;
 }
