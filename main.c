@@ -239,8 +239,7 @@ void keyhooks(term_t *term)
     char key;
     if (read(STDIN_FILENO, &key, 1) == 1) {
         KeyPress(key, term);
-    } else
-        player2.paddle.dy = 1;
+    } 
 }
 
 // Background Music setup using miniaudio
@@ -317,7 +316,7 @@ int main() {
         return 1;
     }
 
-    char send_buffer;
+    char send_buffer[2];
     char recv_buffer[32];
     int pipe_data[6];
 
@@ -338,7 +337,9 @@ int main() {
             return 1;
         }
 
-        send_buffer = player1.paddle.dy + '0';
+        send_buffer[0] = player2.paddle.dy + '0';
+        send_buffer[1] = '\n';
+        
         if (write(fd_out, &send_buffer, sizeof(send_buffer)) == -1) {
             if (errno == EPIPE) {
                 continue;
