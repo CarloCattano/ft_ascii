@@ -4,7 +4,7 @@ void init_term(term_t *t)
 {
     t->frame = 1;
     t->clear = 0;
-    t->delay = 2e4;
+    t->delay = 3e4; // delay for 3e4 microseconds (30ms) 
     
     // Check if terminal size is valid
     if (t->size < 1){

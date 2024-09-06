@@ -1,7 +1,6 @@
 #!/bin/env bash
 
-touch /tmp/pong_in
-touch /tmp/pong_out
+make
 
 PONG_CLI_PATH=./pong_cli
 
