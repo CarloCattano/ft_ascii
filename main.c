@@ -13,7 +13,7 @@
 #include <errno.h>
 #include <pthread.h>
 
-#define PADDING 1
+#define PADDING 2
 
 #define SCORE_Y 8
 #define SCORE_X 6
@@ -36,7 +36,7 @@ static void create_pipes(int *fd_in, int *fd_out) {
         exit(EXIT_FAILURE);
     }
 
-    *fd_in = open(FIFO_IN, O_RDONLY);
+    *fd_in = open(FIFO_IN, O_RDONLY );
     if (*fd_in == -1) {
         perror("Error opening FIFO_IN");
         exit(EXIT_FAILURE);
@@ -125,7 +125,6 @@ void drawPlayer(term_t *term, struct player *player) {
     // } else if (player->paddle.y > term->MAX_ROW - PADDING - 4) {
     //     player->paddle.y = term->MAX_ROW - PADDING - 4;
     // }
-
     map_pix(term, player->paddle.x, player->paddle.y, GREEN, paddle);
     map_pix(term, player->paddle.x, player->paddle.y + 1, GREEN, paddle);
     map_pix(term, player->paddle.x, player->paddle.y + 2, GREEN, paddle);
@@ -138,6 +137,13 @@ static void drawBall(term_t *term, struct ball *ball) {
     } else if(ball->y > term->MAX_ROW - PADDING - 1) {
         ball->y = term->MAX_ROW - PADDING - 1;
     }
+
+    if(ball->x < PADDING) {
+        ball->x = PADDING;
+    } else if(ball->x > term->MAX_COL - PADDING - 1) {
+        ball->x = term->MAX_COL - PADDING - 1;
+    }
+
     map_pix(term, ball->x, ball->y, RED, "⬤");
 }
 
@@ -377,6 +383,7 @@ int main() {
 
                     draw(term, &draw_callback);
             }
+
         }
         // draw(term, &draw_callback);
     }
