@@ -38,11 +38,16 @@ void map_pix(term_t *t, int x, int y, char *color, char *uni)
 
 void draw(term_t *t, void (*draw_callback)(term_t *))
 {
-    for(int y = 0; y < t->size; y++)
     {
         // Border drawing
+    for(int y = 0; y < t->size; y++)
         if (check_border(y, t->MAX_COL, t->MAX_ROW)) { 
-            t->pixels[y].color = all_colors[rand() % 4];
+            // t->pixels[y].color = all_colors[rand() % 4];
+            float frequency = 0.1;   
+            float phase_shift = t->frame * 0.1;
+
+            int color_index = (int)((sin(frequency * y + phase_shift) + 1) * 4) % 7;  // Scale from -1 to 1 -> 0 to 4 -> 0 to 5
+            t->pixels[y].color = all_colors[color_index];
             t->pixels[y].uni = "█";
         } else {
             background(t, y);

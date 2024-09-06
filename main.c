@@ -21,10 +21,8 @@
 #define FIFO_IN "/tmp/pong_out"
 #define FIFO_OUT "/tmp/pong_in"
 
-
 int fd_out;
 int fd_in;
-
 
 pthread_t audio_thread;  // Initialize audio playback in a separate thread
 
@@ -43,14 +41,12 @@ void create_pipes(int *fd_in, int *fd_out) {
         perror("Error opening FIFO_IN");
         exit(EXIT_FAILURE);
     }
-    printf("fd_in: %d\n", *fd_in);
 
     *fd_out = open(FIFO_OUT, O_WRONLY);
     if (*fd_out == -1) {
         perror("Error opening FIFO_OUT");
         exit(EXIT_FAILURE);
     }
-    printf("fd_out: %d\n", *fd_out);
 }
 
 
@@ -65,7 +61,6 @@ static void handlectrl_c(int sig) {
     systemExit(term_pointer);
 }
 
-
 void handle_sigpipe(int signal) {
     (void)signal;
 }
@@ -76,6 +71,8 @@ void setup_signal_handlers() {
     sa.sa_flags = 0;
     sigemptyset(&sa.sa_mask);
     sigaction(SIGPIPE, &sa, NULL);
+    signal(SIGINT, handlectrl_c);
+    signal(SIGTERM, handlectrl_c);
 }
 
 
@@ -97,8 +94,6 @@ static void initializeTerm(term_t *term)
 
     init_term(term);
     setup_signal_handlers();
-    signal(SIGINT, handlectrl_c);
-    signal(SIGTERM, handlectrl_c);
 }
 
 static void initGame(struct ball *ball, struct player *player1, struct player *player2) {
