@@ -49,13 +49,16 @@ typedef struct term_s
     int             MAX_COL;
     int             MAX_ROW;
     int             size;
+    
     char*           buffer;
-    char* 		    buffer_copy;
+    char*	    buffer_copy;
     Pixel*          pixels;
+
     unsigned int    frame;
-    int 		    clear;
+    int		    clear;
     unsigned int    delay;
     bool            draw;
+
     player_t* 	    players[4];
 
 }                   term_t;

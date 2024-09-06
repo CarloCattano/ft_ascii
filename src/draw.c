@@ -39,7 +39,7 @@ void map_pix(term_t *t, int x, int y, char *color, char *uni)
 void draw(term_t *t, void (*draw_callback)(term_t *))
 {
     {
-        // Border drawing
+    // Border drawing
     for(int y = 0; y < t->size; y++)
         if (check_border(y, t->MAX_COL, t->MAX_ROW)) { 
             // t->pixels[y].color = all_colors[rand() % 4];

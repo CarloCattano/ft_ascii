@@ -32,10 +32,8 @@ $(LIB): $(OBJS)
 $(PONG): $(PONG_OBJ) $(LIB)
 	$(CC) $(CFLAGS) $(PONG_OBJ) -L. -lftascii -o $(PONG) -lpthread -lm -ldl
 
+
 clean:
 	rm -f $(OBJ_DIR)/*.o $(LIB) $(PONG)
 
 re: clean all
-
-run: all
-	alacritty -e ./$(PONG) & python3 router.py

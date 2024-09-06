@@ -24,9 +24,9 @@
 int fd_out;
 int fd_in;
 
-pthread_t audio_thread;  // Initialize audio playback in a separate thread
+pthread_t audio_thread;
 
-void create_pipes(int *fd_in, int *fd_out) {
+static void create_pipes(int *fd_in, int *fd_out) {
     if (mkfifo(FIFO_IN, 0666) == -1 && errno != EEXIST) {
         perror("Error creating FIFO_IN");
         exit(EXIT_FAILURE);
@@ -61,15 +61,16 @@ static void handlectrl_c(int sig) {
     systemExit(term_pointer);
 }
 
-void handle_sigpipe(int signal) {
+static void handle_sigpipe(int signal) {
     (void)signal;
 }
 
-void setup_signal_handlers() {
+static void setup_signal_handlers() {
     struct sigaction sa;
     sa.sa_handler = handle_sigpipe;
     sa.sa_flags = 0;
     sigemptyset(&sa.sa_mask);
+    
     sigaction(SIGPIPE, &sa, NULL);
     signal(SIGINT, handlectrl_c);
     signal(SIGTERM, handlectrl_c);
@@ -82,6 +83,7 @@ static void initializeTerm(term_t *term)
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 
     srand(time(NULL));
+    
     setlocale(LC_ALL, "en_US.UTF-8");
     system("stty -echo -icanon -icrnl time 0 min 0");
 
@@ -89,7 +91,9 @@ static void initializeTerm(term_t *term)
     write(1, CLEAR, 4); // Clear screen
     write(1, CURSOR, 6); 
 
-    *term = (term_t){w.ws_col, w.ws_row, w.ws_col * w.ws_row, NULL, NULL, NULL, 1, 1, 50,0,{0}};
+    *term = (term_t){   w.ws_col, w.ws_row, w.ws_col * w.ws_row, 
+                        NULL, NULL, NULL, 
+                        1, 1, 50,0,{0}};
     term_pointer = term;
 
     init_term(term);
@@ -104,12 +108,12 @@ static void initGame(struct ball *ball, struct player *player1, struct player *p
     ball->vel = 1;
 
     player1->score = 0;
-    player1->paddle.x = 4;
-    player1->paddle.y = term_pointer->MAX_ROW / 2;
-    player1->paddle.dy = 0;
     player2->score = 0;
+    player1->paddle.x = 4;
     player2->paddle.x = term_pointer->MAX_COL - 4;
+    player1->paddle.y = term_pointer->MAX_ROW / 2;
     player2->paddle.y = term_pointer->MAX_ROW / 2;
+    player1->paddle.dy = 0;
 }
 
 void drawPlayer(term_t *term, struct player *player) {
@@ -128,18 +132,16 @@ void drawPlayer(term_t *term, struct player *player) {
     map_pix(term, player->paddle.x, player->paddle.y + 3, GREEN, paddle);
 }
 
-void drawBall(term_t *term, struct ball *ball) {
+static void drawBall(term_t *term, struct ball *ball) {
     if(ball->y < PADDING) {
         ball->y = PADDING;
-        ball->dy = 1;
     } else if(ball->y > term->MAX_ROW - PADDING - 1) {
         ball->y = term->MAX_ROW - PADDING - 1;
-        ball->dy = -1;
     }
     map_pix(term, ball->x, ball->y, RED, "⬤");
 }
 
-void drawScore(term_t *term) {
+static void drawScore(term_t *term) {
     char (*digits[10])[SCORE_Y] = {zero, one, two, three, four, five, six, seven, eight, nine};
 
     int player1_tens = player1.score / 10;
@@ -198,12 +200,13 @@ void drawScore(term_t *term) {
     }
 }
 
-void draw_callback(term_t *term)
+static void draw_callback(term_t *term)
 {
     // doted line in the middle
     for (int i = 0; i < term->MAX_ROW; i++) {
         if ((i + 1) % 2 == 0)
-            map_pix(term, term->MAX_COL / 2, i, GREEN, "▓");
+            // map_pix(term, term->MAX_COL / 2, i, GREEN, "▓");
+            map_pix(term, term->MAX_COL / 2, i, GREEN, "▏");
     }
     drawPlayer(term, &player1);
     drawPlayer(term, &player2);
@@ -211,7 +214,7 @@ void draw_callback(term_t *term)
     drawBall(term, &ball);
 }
 
-void KeyPress(char key, term_t *term) {
+static void KeyPress(char key, term_t *term) {
     switch (key) {
         case 'w':
             player2.paddle.dy = 2;
@@ -249,7 +252,7 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
 }
 
 // Audio thread function
-void* play_audio(void* arg) {
+static void* play_audio(void* arg) {
     const char* filename = (const char*)arg;
 
     ma_result result;
@@ -323,6 +326,7 @@ int main() {
  
     initializeTerm(term);
     initGame(&ball, &player1, &player2);
+
     while (term->draw) {
         
         keyhooks(term);
@@ -346,14 +350,15 @@ int main() {
         
         ssize_t bytes_read = read(fd_in, recv_buffer, sizeof(recv_buffer) - 1); 
         if (bytes_read == -1) {
-            continue;  // Continue if there's an error instead of breaking the loop
+            continue;  
         } else if (bytes_read == 0) {
-            continue;  // Keep the program running if no data is available yet
+            continue;
         } else if (bytes_read > 0) {
                 recv_buffer[bytes_read] = '\0';
 
                 int i = 0;
-                char* token = strtok(recv_buffer, " "); // Split the string by spaces
+                char* token = strtok(recv_buffer, " "); 
+                
                 while (token != NULL && i < 6)  {
                     pipe_data[i++] = (int)atoi(token);
                     token = strtok(NULL, " ");
@@ -364,11 +369,12 @@ int main() {
                     player1.score = pipe_data[0];
                     player2.score = pipe_data[1];
 
-                    player1.paddle.y = pipe_data[2];
-                    player2.paddle.y = pipe_data[3];
+                    player1.paddle.y = pipe_data[3];
+                    player2.paddle.y = pipe_data[2];
 
                     ball.x = pipe_data[4];
                     ball.y = pipe_data[5];
+
                     draw(term, &draw_callback);
             }
 
@@ -376,7 +382,6 @@ int main() {
         // draw(term, &draw_callback);
         // usleep(term->delay);
     }
-
 
     close(fd_in);
     close(fd_out);
