@@ -92,7 +92,7 @@ void                map_pix(term_t *t, int x, int y, char *color, char *uni);
 char*               hex_to_unicode(int hex);
 
 // define a list of colors
-extern char*               all_colors[8];
+extern char*               all_colors[10];
 
 
 #endif
