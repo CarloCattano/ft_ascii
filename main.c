@@ -13,7 +13,7 @@
 #include <errno.h>
 #include <pthread.h>
 
-#define PADDING 2
+#define PADDING 1
 
 #define SCORE_Y 8
 #define SCORE_X 6
@@ -122,8 +122,8 @@ void drawPlayer(term_t *term, struct player *player) {
 
     if (player->paddle.y < PADDING) {
         player->paddle.y = PADDING;
-    } else if (player->paddle.y > term->MAX_ROW - PADDING - 4) {
-        player->paddle.y = term->MAX_ROW - PADDING - 4;
+    } else if (player->paddle.y > term->MAX_ROW - PADDING) {
+        player->paddle.y = term->MAX_ROW - PADDING;
     }
     map_pix(term, player->paddle.x, player->paddle.y, GREEN, paddle);
     map_pix(term, player->paddle.x, player->paddle.y + 1, GREEN, paddle);
@@ -304,13 +304,25 @@ static void* play_audio(void* arg) {
     return NULL;
 }
 
+void end_game(term_t *term) {
+    usleep(3000000);
+    write(1, CLEAR, 4);
+    write(1, CURSOR, 6);
+    system("stty echo icanon icrnl");
+    system("clear");
+    systemExit(term);
+    exit(0);
+}
+
 int main() {
-    const char* audio_file = "sounds/music.wav";
+    const char* audio_file = "../ft_ascii/sounds/music.wav";
 
     if (pthread_create(&audio_thread, NULL, play_audio, (void*)audio_file) != 0) {
         perror("Failed to create audio thread");
         return 1;
     }
+
+    usleep(100000);  // Sleep to allow audio thread to start
 
     create_pipes(&fd_in, &fd_out);
 
@@ -331,8 +343,9 @@ int main() {
     }
  
     initializeTerm(term);
+    usleep(100000);
     initGame(&ball, &player1, &player2);
-
+    usleep(100000);
     while (term->draw) {
         
         keyhooks(term);
@@ -376,7 +389,8 @@ int main() {
                     // printf("pipe_data: %d %d %d %d %d %d \n", pipe_data[0], pipe_data[1], pipe_data[2], pipe_data[3], pipe_data[4], pipe_data[5]);
                     player1.score = pipe_data[0];
                     player2.score = pipe_data[1];
-
+                    
+                    
                     player1.paddle.y = pipe_data[3];
                     player2.paddle.y = pipe_data[2];
 
@@ -384,6 +398,9 @@ int main() {
                     ball.y = pipe_data[5];
 
                     draw(term, &draw_callback);
+                    if (player1.score == 11 || player2.score == 11) {
+                        end_game(term);
+                    }
             }
         }
     }
