@@ -1,8 +1,8 @@
 #!/bin/env bash
 
-make
+set -e
 
-PONG_CLI_PATH=./pong_cli
+PONG_CLI_PATH=../ft_ascii/./pong_cli
 
-alacritty --config-file ~/.config/alacritty/custom.toml -e "$PONG_CLI_PATH" &
+alacritty --config-file ~/.config/alacritty/custom.toml -e "$PONG_CLI_PATH"
 

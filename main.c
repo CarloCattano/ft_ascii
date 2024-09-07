@@ -223,10 +223,10 @@ static void draw_callback(term_t *term)
 static void KeyPress(char key, term_t *term) {
     switch (key) {
         case 'w':
-            player2.paddle.dy = 2;
+            player2.paddle.dy = 0;
             break;
         case 's':
-            player2.paddle.dy = 0;
+            player2.paddle.dy = 2;
             break;
         case 'q':
             close(fd_in);
@@ -353,6 +353,8 @@ int main() {
             }
             continue;
         }
+
+        player2.paddle.dy = 1;
         
         ssize_t bytes_read = read(fd_in, recv_buffer, sizeof(recv_buffer) - 1); 
         if (bytes_read == -1) {
@@ -383,9 +385,7 @@ int main() {
 
                     draw(term, &draw_callback);
             }
-
         }
-        // draw(term, &draw_callback);
     }
 
     close(fd_in);
