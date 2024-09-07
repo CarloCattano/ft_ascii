@@ -120,11 +120,11 @@ void drawPlayer(term_t *term, struct player *player) {
 
     char* paddle = "█";
 
-    // if (player->paddle.y < PADDING) {
-    //     player->paddle.y = PADDING;
-    // } else if (player->paddle.y > term->MAX_ROW - PADDING - 4) {
-    //     player->paddle.y = term->MAX_ROW - PADDING - 4;
-    // }
+    if (player->paddle.y < PADDING) {
+        player->paddle.y = PADDING;
+    } else if (player->paddle.y > term->MAX_ROW - PADDING - 4) {
+        player->paddle.y = term->MAX_ROW - PADDING - 4;
+    }
     map_pix(term, player->paddle.x, player->paddle.y, GREEN, paddle);
     map_pix(term, player->paddle.x, player->paddle.y + 1, GREEN, paddle);
     map_pix(term, player->paddle.x, player->paddle.y + 2, GREEN, paddle);
