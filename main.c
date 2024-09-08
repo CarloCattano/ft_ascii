@@ -241,7 +241,7 @@ static void KeyPress(char key, term_t *term) {
         case 's':
             player2.paddle.dy = 2;
             break;
-        case 'q':
+        case 'p':
             close(fd_in);
             close(fd_out);
             systemExit(term);
