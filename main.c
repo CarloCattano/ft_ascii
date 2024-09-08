@@ -109,8 +109,8 @@ static void initGame(struct ball *ball, struct player *player1, struct player *p
 
     player1->score = 0;
     player2->score = 0;
-    player1->paddle.x = 2;
-    player2->paddle.x = term_pointer->MAX_COL - 4;
+    player1->paddle.x = 6;
+    player2->paddle.x = term_pointer->MAX_COL - 8;
     player1->paddle.y = term_pointer->MAX_ROW / 2;
     player2->paddle.y = term_pointer->MAX_ROW / 2;
     player1->paddle.dy = 0;
@@ -132,6 +132,16 @@ void drawPlayer(term_t *term, struct player *player) {
     map_pix(term, player->paddle.x, player->paddle.y + 3, GREEN, paddle);
     map_pix(term, player->paddle.x, player->paddle.y + 4, GREEN, paddle);
     map_pix(term, player->paddle.x, player->paddle.y + 5, GREEN, paddle);
+    map_pix(term, player->paddle.x, player->paddle.y + 6, GREEN, paddle);
+
+
+    map_pix(term, player->paddle.x + 1, player->paddle.y, GREEN, paddle);
+    map_pix(term, player->paddle.x + 1, player->paddle.y + 1, GREEN, paddle);
+    map_pix(term, player->paddle.x + 1, player->paddle.y + 2, GREEN, paddle);
+    map_pix(term, player->paddle.x + 1, player->paddle.y + 3, GREEN, paddle);
+    map_pix(term, player->paddle.x + 1, player->paddle.y + 4, GREEN, paddle);
+    map_pix(term, player->paddle.x + 1, player->paddle.y + 5, GREEN, paddle);
+    map_pix(term, player->paddle.x + 1, player->paddle.y + 6, GREEN, paddle);
 }
 
 static void drawBall(term_t *term, struct ball *ball) {
