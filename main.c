@@ -118,43 +118,35 @@ static void initGame(struct ball *ball, struct player *player1, struct player *p
 
 void drawPlayer(term_t *term, struct player *player) {
 
-    // char* paddle = "█";
-    char* paddle = "▦";
+    char* paddle = "█";
+    // char* paddle = "▦";
 
-    if (player->paddle.y < PADDING) {
-        player->paddle.y = PADDING;
-    } else if (player->paddle.y > term->MAX_ROW - PADDING  - 6) {
-        player->paddle.y = term->MAX_ROW - PADDING - 6;
+    if (player->paddle.y <= PADDING + 4) {
+        player->paddle.y = PADDING + 4;
+    } else if (player->paddle.y >= term->MAX_ROW - PADDING - 4) {
+        player->paddle.y = term->MAX_ROW - PADDING - 4;
     }
-    map_pix(term, player->paddle.x, player->paddle.y, GREEN, paddle);
-    map_pix(term, player->paddle.x, player->paddle.y + 1, GREEN, paddle);
-    map_pix(term, player->paddle.x, player->paddle.y + 2, GREEN, paddle);
-    map_pix(term, player->paddle.x, player->paddle.y + 3, GREEN, paddle);
-    map_pix(term, player->paddle.x, player->paddle.y + 4, GREEN, paddle);
-    map_pix(term, player->paddle.x, player->paddle.y + 5, GREEN, paddle);
-    map_pix(term, player->paddle.x, player->paddle.y + 6, GREEN, paddle);
+ 
+    for (int i = -3; i < 5; i++) {
+        map_pix(term, player->paddle.x, player->paddle.y + i, GREEN, paddle);
+    }
 
-
-    map_pix(term, player->paddle.x + 1, player->paddle.y, GREEN, paddle);
-    map_pix(term, player->paddle.x + 1, player->paddle.y + 1, GREEN, paddle);
-    map_pix(term, player->paddle.x + 1, player->paddle.y + 2, GREEN, paddle);
-    map_pix(term, player->paddle.x + 1, player->paddle.y + 3, GREEN, paddle);
-    map_pix(term, player->paddle.x + 1, player->paddle.y + 4, GREEN, paddle);
-    map_pix(term, player->paddle.x + 1, player->paddle.y + 5, GREEN, paddle);
-    map_pix(term, player->paddle.x + 1, player->paddle.y + 6, GREEN, paddle);
+    for (int i = -3; i < 5; i++) {
+        map_pix(term, player->paddle.x + 1, player->paddle.y + i, GREEN, paddle);
+    }
 }
 
 static void drawBall(term_t *term, struct ball *ball) {
-    if(ball->y < PADDING) {
-        ball->y = PADDING;
-    } else if(ball->y > term->MAX_ROW - PADDING - 1) {
-        ball->y = term->MAX_ROW - PADDING - 1;
+    if(ball->y <= PADDING + 1) {
+        ball->y = PADDING + 1;
+    } else if(ball->y >= term->MAX_ROW - PADDING - 2) {
+        ball->y = term->MAX_ROW - PADDING - 2;
     }
 
-    if(ball->x < PADDING) {
+    if(ball->x <= PADDING + 1) {
         ball->x = PADDING;
-    } else if(ball->x > term->MAX_COL - PADDING - 1) {
-        ball->x = term->MAX_COL - PADDING - 1;
+    } else if(ball->x >= term->MAX_COL - PADDING - 2) {
+        ball->x = term->MAX_COL - PADDING - 2;
     }
 
     map_pix(term, ball->x, ball->y, RED, "⬤");
@@ -356,11 +348,8 @@ int main() {
     }
  
     initializeTerm(term);
-    usleep(100000);
     initGame(&ball, &player1, &player2);
-    usleep(100000);
     while (term->draw) {
-        
         keyhooks(term);
 
         if(fd_in < 0 || fd_out < 0) {
@@ -399,11 +388,14 @@ int main() {
                 }
 
                 if (i == 6) {
-                    // printf("pipe_data: %d %d %d %d %d %d \n", pipe_data[0], pipe_data[1], pipe_data[2], pipe_data[3], pipe_data[4], pipe_data[5]);
+            
                     player1.score = pipe_data[0];
                     player2.score = pipe_data[1];
                     
-                    
+                    if (player1.score == 11 || player2.score == 11) {
+                        end_game(term);
+                    }
+
                     player1.paddle.y = pipe_data[3];
                     player2.paddle.y = pipe_data[2];
 
@@ -411,9 +403,6 @@ int main() {
                     ball.y = pipe_data[5];
 
                     draw(term, &draw_callback);
-                    if (player1.score == 11 || player2.score == 11) {
-                        end_game(term);
-                    }
             }
         }
     }
