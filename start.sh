@@ -11,5 +11,5 @@ if pgrep -f "$PONG_CLI_PATH" > /dev/null; then
 		exit 1
 fi
 
-alacritty --config-file ~/.config/alacritty/custom.toml -e "$PONG_CLI_PATH" &
+alacritty --config-file ../transcendCLI/custom.toml -e "$PONG_CLI_PATH" &
 
