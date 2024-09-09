@@ -47,12 +47,11 @@ void handleKeyPress(char key, term_t *t) {
 void ft_keyhook(term_t *term) 
 {
     char key;
-	if (term->frame % 2 == 0)
-	{ 
-		if (read(STDIN_FILENO, &key, 1) == 1) {
-			handleKeyPress(key, term);
-		}
-	}
+    // if (term->frame % 2 == 0) { 
+    if (read(STDIN_FILENO, &key, 1) == 1) {
+	    handleKeyPress(key, term);
+    }
+    // }
 }
 
 void systemExit(term_t *t)

@@ -116,6 +116,17 @@ static void initGame(struct ball *ball, struct player *player1, struct player *p
     player1->paddle.dy = 0;
 }
 
+
+void end_game(term_t *term) {
+    usleep(3000000);
+    write(1, CLEAR, 4);
+    write(1, CURSOR, 6);
+    system("stty echo icanon icrnl");
+    system("clear");
+    systemExit(term);
+    exit(0);
+}
+
 void drawPlayer(term_t *term, struct player *player) {
 
     char* paddle = "█";
@@ -223,6 +234,10 @@ static void draw_callback(term_t *term)
     drawPlayer(term, &player2);
     drawScore(term);
     drawBall(term, &ball);
+    
+    if (player1.score == 11 || player2.score == 11) {
+        end_game(term);
+    }
 }
 
 static void KeyPress(char key, term_t *term) {
@@ -309,15 +324,6 @@ static void* play_audio(void* arg) {
     return NULL;
 }
 
-void end_game(term_t *term) {
-    usleep(3000000);
-    write(1, CLEAR, 4);
-    write(1, CURSOR, 6);
-    system("stty echo icanon icrnl");
-    system("clear");
-    systemExit(term);
-    exit(0);
-}
 
 int main() {
     const char* audio_file = "../ft_ascii/sounds/music.wav";
@@ -391,10 +397,6 @@ int main() {
             
                     player1.score = pipe_data[0];
                     player2.score = pipe_data[1];
-                    
-                    if (player1.score == 11 || player2.score == 11) {
-                        end_game(term);
-                    }
 
                     player1.paddle.y = pipe_data[3];
                     player2.paddle.y = pipe_data[2];

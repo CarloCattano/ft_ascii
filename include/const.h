@@ -34,5 +34,6 @@ extern char seven[6][8];
 extern char eight[6][8];
 extern char nine[6][8];
 
+extern char p1wins[7][48];
 
 #endif
