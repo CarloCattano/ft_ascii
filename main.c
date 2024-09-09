@@ -121,8 +121,8 @@ void drawPlayer(term_t *term, struct player *player) {
     char* paddle = "█";
     // char* paddle = "▦";
 
-    if (player->paddle.y <= PADDING + 4) {
-        player->paddle.y = PADDING + 4;
+    if (player->paddle.y <= PADDING + 3) {
+        player->paddle.y = PADDING + 3;
     } else if (player->paddle.y >= term->MAX_ROW - PADDING - 4) {
         player->paddle.y = term->MAX_ROW - PADDING - 4;
     }
@@ -228,10 +228,10 @@ static void draw_callback(term_t *term)
 static void KeyPress(char key, term_t *term) {
     switch (key) {
         case 'w':
-            player2.paddle.dy = 0;
+            player2.paddle.dy = 2;
             break;
         case 's':
-            player2.paddle.dy = 2;
+            player2.paddle.dy = 0;
             break;
         case 'p':
             close(fd_in);
