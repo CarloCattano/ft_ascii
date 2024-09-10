@@ -87,9 +87,9 @@ static void initializeTerm(term_t *term)
     setlocale(LC_ALL, "en_US.UTF-8");
     system("stty -echo -icanon -icrnl time 0 min 0");
 
-    write(1, NOMOUSE, 6);  // Hide cursor
-    write(1, CLEAR, 4); // Clear screen
-    write(1, CURSOR, 6); 
+    // write(1, NOMOUSE, 6);  // Hide cursor
+    // write(1, CLEAR, 4); // Clear screen
+    // write(1, CURSOR, 6); 
 
     *term = (term_t){   w.ws_col, w.ws_row, w.ws_col * w.ws_row, 
                         NULL, NULL, NULL, 
@@ -118,11 +118,11 @@ static void initGame(struct ball *ball, struct player *player1, struct player *p
 
 
 void end_game(term_t *term) {
-    usleep(3000000);
-    write(1, CLEAR, 4);
-    write(1, CURSOR, 6);
-    system("stty echo icanon icrnl");
-    system("clear");
+    usleep(3e6);
+    // write(1, CLEAR, 4);
+    // write(1, CURSOR, 6);
+    // system("stty echo icanon icrnl");
+    // system("clear");
     systemExit(term);
     exit(0);
 }
@@ -188,7 +188,7 @@ static void drawScore(term_t *term) {
         }
     } else {
         // Draw both tens and units digits
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < SCORE_X; i++) {
             for (int j = 0; j < SCORE_Y; j++) {
                 if (player1_tens_digit[i][j] == '0') {
                     map_pix(term, term->MAX_COL / 6 + j, 2 + i, GREEN, "▓");
@@ -403,7 +403,6 @@ int main() {
 
                     ball.x = pipe_data[4];
                     ball.y = pipe_data[5];
-
                     draw(term, &draw_callback);
             }
         }
