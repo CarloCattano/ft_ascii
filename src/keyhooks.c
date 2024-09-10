@@ -58,7 +58,7 @@ void systemExit(term_t *t)
 {
     t->draw = false;
     free_all(t);
-    // system("reset");
+    system("reset");
     system("echo Exited");
     exit(0);
 }

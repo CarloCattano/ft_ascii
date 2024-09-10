@@ -15,7 +15,7 @@
 
 #define PADDING 1
 
-#define SCORE_Y 8
+#define SCORE_Y 6
 #define SCORE_X 6
 
 #define FIFO_IN "/tmp/pong_out"
@@ -25,6 +25,8 @@ int fd_out;
 int fd_in;
 
 pthread_t audio_thread;
+
+static term_t *term_pointer;
 
 static void create_pipes(int *fd_in, int *fd_out) {
     if (mkfifo(FIFO_IN, 0666) == -1 && errno != EEXIST) {
@@ -36,7 +38,7 @@ static void create_pipes(int *fd_in, int *fd_out) {
         exit(EXIT_FAILURE);
     }
 
-    *fd_in = open(FIFO_IN, O_RDONLY );
+    *fd_in = open(FIFO_IN, O_RDONLY);
     if (*fd_in == -1) {
         perror("Error opening FIFO_IN");
         exit(EXIT_FAILURE);
@@ -48,9 +50,6 @@ static void create_pipes(int *fd_in, int *fd_out) {
         exit(EXIT_FAILURE);
     }
 }
-
-
-static term_t *term_pointer;
 
 static void handlectrl_c(int sig) {
     (void)sig;
@@ -76,7 +75,6 @@ static void setup_signal_handlers() {
     signal(SIGTERM, handlectrl_c);
 }
 
-
 static void initializeTerm(term_t *term)
 {
     struct winsize w;
@@ -87,9 +85,9 @@ static void initializeTerm(term_t *term)
     setlocale(LC_ALL, "en_US.UTF-8");
     system("stty -echo -icanon -icrnl time 0 min 0");
 
-    // write(1, NOMOUSE, 6);  // Hide cursor
-    // write(1, CLEAR, 4); // Clear screen
-    // write(1, CURSOR, 6); 
+    write(1, NOMOUSE, 6);  // Hide cursor
+    write(1, CLEAR, 4); // Clear screen
+    write(1, CURSOR, 6); 
 
     *term = (term_t){   w.ws_col, w.ws_row, w.ws_col * w.ws_row, 
                         NULL, NULL, NULL, 
@@ -118,13 +116,22 @@ static void initGame(struct ball *ball, struct player *player1, struct player *p
 
 
 void end_game(term_t *term) {
+ 
+    close(fd_in);
+    close(fd_out);
+    
+    pthread_cancel(audio_thread);
+    pthread_join(audio_thread, NULL);
+    
     usleep(3e6);
-    // write(1, CLEAR, 4);
-    // write(1, CURSOR, 6);
-    // system("stty echo icanon icrnl");
-    // system("clear");
+    
+    write(1, CLEAR, 4);
+    write(1, CURSOR, 6);
+    
+    system("stty echo icanon icrnl");
+    system("clear");
+    
     systemExit(term);
-    exit(0);
 }
 
 void drawPlayer(term_t *term, struct player *player) {
@@ -179,8 +186,8 @@ static void drawScore(term_t *term) {
 
     if (player1.score < 10) {
         // Draw only the units digit
-        for (int i = 0; i < SCORE_X; i++) {
-            for (int j = 0; j < SCORE_Y; j++) {
+        for (int i = 0; i < SCORE_Y; i++) {
+            for (int j = 0; j < SCORE_X; j++) {
                 if (player1_units_digit[i][j] == '0') {
                     map_pix(term, term->MAX_COL / 6 + j, 2 + i, GREEN, "▓");
                 }
@@ -188,8 +195,8 @@ static void drawScore(term_t *term) {
         }
     } else {
         // Draw both tens and units digits
-        for (int i = 0; i < SCORE_X; i++) {
-            for (int j = 0; j < SCORE_Y; j++) {
+        for (int i = 0; i < SCORE_Y; i++) {
+            for (int j = 0; j < SCORE_X; j++) {
                 if (player1_tens_digit[i][j] == '0') {
                     map_pix(term, term->MAX_COL / 6 + j, 2 + i, GREEN, "▓");
                 }
@@ -201,16 +208,16 @@ static void drawScore(term_t *term) {
     }
 
     if (player2.score < 10) {
-        for (int i = 0; i < SCORE_X; i++) {
-            for (int j = 0; j < SCORE_Y; j++) {
+        for (int i = 0; i < SCORE_Y; i++) {
+            for (int j = 0; j < SCORE_X; j++) {
                 if (player2_units_digit[i][j] == '0') {
                     map_pix(term, term->MAX_COL - term->MAX_COL / 4 + j, 2 + i, GREEN, "▓");
                 }
             }
         }
     } else {
-        for (int i = 0; i < SCORE_X; i++) {
-            for (int j = 0; j < SCORE_Y; j++) {
+        for (int i = 0; i < SCORE_Y; i++) {
+            for (int j = 0; j < SCORE_X; j++) {
                 if (player2_tens_digit[i][j] == '0') {
                     map_pix(term, term->MAX_COL - term->MAX_COL / 4 + j, 2 + i, GREEN, "▓");
                 }
@@ -234,34 +241,48 @@ static void draw_callback(term_t *term)
     drawPlayer(term, &player2);
     drawScore(term);
     drawBall(term, &ball);
-    
-    if (player1.score == 11 || player2.score == 11) {
-        end_game(term);
-    }
 }
 
-static void KeyPress(char key, term_t *term) {
-    switch (key) {
-        case 'w':
-            player2.paddle.dy = 2;
-            break;
-        case 's':
-            player2.paddle.dy = 0;
-            break;
-        case 'p':
-            close(fd_in);
-            close(fd_out);
-            systemExit(term);
-            break;
-        default:
-            break;
+static void KeyPress(char *key, term_t *term) {
+
+    if (key[0] == '\033' && key[1] == '[') {
+        switch (key[2]) {
+            case ARROW_UP:
+                player2.paddle.dy = 2;
+                break;
+            case ARROW_DOWN:
+                player2.paddle.dy = 0;
+                break;
+            case ARROW_RIGHT:
+                player2.paddle.dy = 2;
+                break;
+            case ARROW_LEFT:
+                player2.paddle.dy = 0;
+                break;
+        }
+    } else {
+        switch (key[0]) {
+            case 'w':
+                player2.paddle.dy = 2;
+                break;
+            case 's':
+                player2.paddle.dy = 0;
+                break;
+            case 'p':
+                close(fd_in);
+                close(fd_out);
+                systemExit(term);
+                break;
+            default:
+                break;
+        }
     }
 }
 
 void keyhooks(term_t *term) 
 {
-    char key;
-    if (read(STDIN_FILENO, &key, 1) == 1) {
+    char key[4];
+    if (read(STDIN_FILENO, &key, 4) > 0) {
         KeyPress(key, term);
     } 
 }
@@ -355,6 +376,7 @@ int main() {
  
     initializeTerm(term);
     initGame(&ball, &player1, &player2);
+ 
     while (term->draw) {
         keyhooks(term);
 
@@ -389,7 +411,7 @@ int main() {
                 char* token = strtok(recv_buffer, " "); 
                 
                 while (token != NULL && i < 6)  {
-                    pipe_data[i++] = (int)atoi(token);
+                    pipe_data[i++] = (unsigned int)atoi(token);
                     token = strtok(NULL, " ");
                 }
 
@@ -403,7 +425,12 @@ int main() {
 
                     ball.x = pipe_data[4];
                     ball.y = pipe_data[5];
+                        
                     draw(term, &draw_callback);
+
+                    if (player1.score == 11 || player2.score == 11) {
+                        end_game(term);
+                    }
             }
         }
     }
