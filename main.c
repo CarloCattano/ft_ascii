@@ -246,19 +246,10 @@ static void draw_callback(term_t *term)
 static void KeyPress(char *key, term_t *term) {
 
     if (key[0] == '\033' && key[1] == '[') {
-        switch (key[2]) {
-            case ARROW_UP:
-                player2.paddle.dy = 2;
-                break;
-            case ARROW_DOWN:
-                player2.paddle.dy = 0;
-                break;
-            case ARROW_RIGHT:
-                player2.paddle.dy = 2;
-                break;
-            case ARROW_LEFT:
-                player2.paddle.dy = 0;
-                break;
+        if (key[2] == ARROW_UP || key[2] == ARROW_RIGHT) {
+            player2.paddle.dy = 2;
+        } else if (key[2] == ARROW_DOWN || key[2] == ARROW_LEFT) {
+            player2.paddle.dy = 0;
         }
     } else {
         switch (key[0]) {
