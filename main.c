@@ -262,6 +262,8 @@ static void KeyPress(char *key, term_t *term) {
             case 'p':
                 close(fd_in);
                 close(fd_out);
+                pthread_cancel(audio_thread);
+                pthread_join(audio_thread, NULL);
                 systemExit(term);
                 break;
             default:
