@@ -43,5 +43,7 @@ extern char six[6][6];
 extern char seven[6][6];
 extern char eight[6][6];
 extern char nine[6][6];
+extern char a[6][6];
+extern char b[6][6];
 
 #endif

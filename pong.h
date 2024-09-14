@@ -2,9 +2,9 @@
 #define PONG_H
 
 
-# define ARROW_UP		  0x41
+# define ARROW_UP		0x41
 # define ARROW_DOWN		0x42
-# define ARROW_RIGHT	0x43
+# define ARROW_RIGHT		0x43
 # define ARROW_LEFT		0x44
 
 // pong Game objects

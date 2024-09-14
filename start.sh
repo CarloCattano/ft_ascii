@@ -9,5 +9,5 @@ if pgrep -f "pong_cli" > /dev/null; then
 		exit 1
 fi
 
-alacritty --config-file ../transcendCLI/custom.toml -e "$PONG_CLI_PATH" &
+alacritty --config-file ../transcendCLI/custom.toml -e "$PONG_CLI_PATH" &2>1 > /dev/null
 

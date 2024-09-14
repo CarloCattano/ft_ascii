@@ -1,5 +1,6 @@
 #include "pong.h"
 #include "ftascii.h"
+#include <stdint.h>
 
 #define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h"
@@ -171,59 +172,15 @@ static void drawBall(term_t *term, struct ball *ball) {
 }
 
 static void drawScore(term_t *term) {
-    char (*digits[10])[SCORE_Y] = {zero, one, two, three, four, five, six, seven, eight, nine};
+    char (*digits[12])[SCORE_Y] = {zero, one, two, three, four, five, six, seven, eight, nine, a, b};
 
-    int player1_tens = player1.score / 10;
-    int player1_units = player1.score % 10;
-    int player2_tens = player2.score / 10;
-    int player2_units = player2.score % 10;
-
-    char (*player1_tens_digit)[SCORE_Y] = digits[player1_tens];
-    char (*player1_units_digit)[SCORE_Y] = digits[player1_units];
-
-    char (*player2_tens_digit)[SCORE_Y] = digits[player2_tens];
-    char (*player2_units_digit)[SCORE_Y] = digits[player2_units];
-
-    if (player1.score < 10) {
-        // Draw only the units digit
-        for (int i = 0; i < SCORE_Y; i++) {
-            for (int j = 0; j < SCORE_X; j++) {
-                if (player1_units_digit[i][j] == '0') {
-                    map_pix(term, term->MAX_COL / 6 + j, 2 + i, GREEN, "▓");
-                }
+    for (int i = 0; i < SCORE_Y; i++) {
+        for (int j = 0; j < SCORE_X; j++) {
+            if (digits[player1.score][i][j] == '0') {
+                map_pix(term, term->MAX_COL / 6 + j, 2 + i, GREEN, "▓");
             }
-        }
-    } else {
-        // Draw both tens and units digits
-        for (int i = 0; i < SCORE_Y; i++) {
-            for (int j = 0; j < SCORE_X; j++) {
-                if (player1_tens_digit[i][j] == '0') {
-                    map_pix(term, term->MAX_COL / 6 + j, 2 + i, GREEN, "▓");
-                }
-                if (player1_units_digit[i][j] == '0') {
-                    map_pix(term, term->MAX_COL / 6 + j + 12, 2 + i, GREEN, "▓"); // Offset by 12 to draw the next digit
-                }
-            }
-        }
-    }
-
-    if (player2.score < 10) {
-        for (int i = 0; i < SCORE_Y; i++) {
-            for (int j = 0; j < SCORE_X; j++) {
-                if (player2_units_digit[i][j] == '0') {
-                    map_pix(term, term->MAX_COL - term->MAX_COL / 4 + j, 2 + i, GREEN, "▓");
-                }
-            }
-        }
-    } else {
-        for (int i = 0; i < SCORE_Y; i++) {
-            for (int j = 0; j < SCORE_X; j++) {
-                if (player2_tens_digit[i][j] == '0') {
-                    map_pix(term, term->MAX_COL - term->MAX_COL / 4 + j, 2 + i, GREEN, "▓");
-                }
-                if (player2_units_digit[i][j] == '0') {
-                    map_pix(term, term->MAX_COL - term->MAX_COL / 4 + j + 12, 2 + i, GREEN, "▓"); // Offset by 12 to draw the next digit
-                }
+            if (digits[player2.score][i][j] == '0') {
+                map_pix(term, term->MAX_COL - 24 + j, 2 + i, GREEN, "▓");
             }
         }
     }
@@ -338,6 +295,9 @@ static void* play_audio(void* arg) {
     return NULL;
 }
 
+unsigned long hex_to_unsigned_long(const char *hex_str) {
+    return strtoul(hex_str, NULL, 16);  // Base 16 for hexadecimal
+}
 
 int main() {
     const char* audio_file = "../ft_ascii/sounds/music.wav";
@@ -358,8 +318,8 @@ int main() {
     }
 
     char send_buffer[2];
-    char recv_buffer[32];
-    int pipe_data[6];
+    char recv_buffer[17];
+    // int pipe_data[6];
 
     term_t *term = malloc(sizeof(term_t));
     if (term == NULL) {
@@ -398,33 +358,23 @@ int main() {
         } else if (bytes_read == 0) {
             continue;
         } else if (bytes_read > 0) {
+
                 recv_buffer[bytes_read] = '\0';
-
-                int i = 0;
-                char* token = strtok(recv_buffer, " "); 
                 
-                while (token != NULL && i < 6)  {
-                    pipe_data[i++] = (unsigned int)atoi(token);
-                    token = strtok(NULL, " ");
-                }
+                unsigned long data = hex_to_unsigned_long(recv_buffer);
 
-                if (i == 6) {
+                player1.score = (data >> 40) & 0xFF;
+                player2.score = (data >> 32) & 0xFF;
+                player2.paddle.y = (data >> 24) & 0xFF;
+                player1.paddle.y = (data >> 16) & 0xFF;
+                ball.x = (data >> 8) & 0xFF;
+                ball.y = data & 0xFF;
             
-                    player1.score = pipe_data[0];
-                    player2.score = pipe_data[1];
+                draw(term, &draw_callback);
 
-                    player1.paddle.y = pipe_data[3];
-                    player2.paddle.y = pipe_data[2];
-
-                    ball.x = pipe_data[4];
-                    ball.y = pipe_data[5];
-                        
-                    draw(term, &draw_callback);
-
-                    if (player1.score == 11 || player2.score == 11) {
-                        end_game(term);
-                    }
-            }
+                if (player1.score == 11 || player2.score == 11) {
+                    end_game(term);
+                }
         }
     }
 
