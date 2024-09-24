@@ -172,7 +172,7 @@ static void drawBall(term_t *term, struct ball *ball) {
 }
 
 static void drawScore(term_t *term) {
-    char (*digits[12])[SCORE_Y] = {zero, one, two, three, four, five, six, seven, eight, nine, a, b};
+    static const char (*digits[12])[SCORE_Y] = {zero, one, two, three, four, five, six, seven, eight, nine, a, b};
 
     for (int i = 0; i < SCORE_Y; i++) {
         for (int j = 0; j < SCORE_X; j++) {
