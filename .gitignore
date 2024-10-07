@@ -5,6 +5,7 @@ compile_commands.json
 .vscode
 .DS_Store
 ft_ascii
+libftascii.a
 test
 example
 debug
