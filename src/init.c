@@ -1,48 +1,30 @@
 #include "ftascii.h"
 
-/* create a players[0] at a specific position, with a char set to draw */
-
-static void init_player(term_t *t, char* brushes)
-{
-    if (!brushes[0]) {
-        perror("no brushes found");
-        exit(1);
-    }
-    for (int i = 0; i < 4; i++) {
-        t->players[i] = (player_t *)calloc(1, sizeof(player_t));
-        
-        if (!t->players[i]) {
-            perror("player alloc failed");
-            exit(1);
-        }
-        t->players[i]->brushes = calloc(strlen(brushes), sizeof(char));
-    }
- 
-    *t->players[0] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2, -1, -1, brushes, '$',  0, 0};
-    *t->players[1] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2,  1,  1, brushes, '@',  0, 0};
-    *t->players[2] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2,  1, -1, brushes, '*',  0, 0};
-    *t->players[3] = (player_t){t->MAX_COL / 2, t->MAX_ROW / 2, -1,  1, brushes, '#',  0, 0};
-}
-
-/* initialize main term struct */
 void init_term(term_t *t)
 {
     t->frame = 1;
     t->clear = 0;
-    t->delay = 1e1;
+    t->delay = 1e4;
 
-    t->buffer = (char *)calloc(t->size, sizeof(char));
-    t->buffer_copy = (char *)calloc(t->size, sizeof(char));
-
-    if (!t->buffer || !t->buffer_copy) {
-        perror("terminal allocation failed");
+    // Check if terminal size is valid
+    if (t->size < 1){
+        printf("Terminal size is invalid\n");
         exit(1);
     }
-    memset(t->buffer, ' ', t->size);
-    init_player(t, "|\\/|<~.");
+    t->pixels = (Pixel*)malloc(sizeof(Pixel) * t->size);
+    if (t->pixels == NULL) {
+        printf("Memory allocation failed for pixels\n");
+        exit(1);
+    }
+    // Allocate buffer - final char output to the terminal 
+    t->buffer = (char*)malloc(sizeof(char) * t->size * 8); // 8 or 9 ?? color (5) + uni(3)
+    if (t->buffer == NULL) {
+        printf("Memory allocation failed for buffer\n");
+        free(t->pixels); 
+        exit(1);
+    }
+
+    // Initialize buffer
+    memset(t->buffer, '.', t->size);
+	t->draw = true;
 }
-
-//"_-<>^v\"'`,/\\|");
-            //"_-{}~.,:;^'\" ");
-
-

@@ -10,35 +10,27 @@ int compare_val_in_buffers(term_t *t, int i)
     return 0;
 }
 
-void add_randomness_to_movement(player_t *p)
-{
-    p->dx = (rand() % 3) - 1;
-    p->dy = (rand() % 3) - 1;
-}
-
+// TODO : compare buffers
 void copy_last_buffer(term_t *t)
 {
-	t->buffer_copy = memcpy(t->buffer_copy, t->buffer, t->size);
+    t->buffer_copy = memcpy(t->buffer_copy, t->buffer, (size_t)t->size);
 }
 
 void free_all(term_t *t)
-{
-    free(t->buffer);
-    free(t->buffer_copy);
-    for (int i = 0; i < 4; i++) {
-        free(t->players[i]->brushes);
-        free(t->players[i]);
+{   
+    if (t == NULL)
+        return;
+
+    if (t->pixels != NULL)
+    {
+        free(t->pixels);
+        t->pixels = NULL; // Set pointer to NULL after freeing to prevent double free
     }
+
+    if (t->buffer != NULL) {
+        free(t->buffer);
+        t->buffer = NULL; // Set pointer to NULL after freeing to prevent double free
+    }
+    free(t);
 }
 
-void save_last_frame_to_file(char* filename, char* buffer, int size)
-{
-    FILE *f = fopen(filename, "w");
-    if (f == NULL)
-    {
-        printf("Error opening file!\n");
-        exit(1);
-    }
-    fwrite(buffer, 1, size, f);
-    fclose(f);
-}

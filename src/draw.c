@@ -1,53 +1,60 @@
 #include "ftascii.h"
 
-int random_minus_plus()
+char *all_colors[10] = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET, MAGENTA, CYAN, WHITE};
+
+static int check_border(int i, int MAX_COL, int MAX_ROW)
 {
-    int r = rand() % 2;
-    if (r == 0)
-        r = -1;
-    return 1;
+    if (i < MAX_COL || i > ((MAX_COL * MAX_ROW) - MAX_COL) || i % MAX_COL == 0 
+            || i % MAX_COL == MAX_COL - 1){ 
+            return 1;
+    }
+    return 0;
 }
 
-static void draw_player(term_t *t, int i, player_t *p)
+static void img2win(term_t *t)
 {
-    if (i > t->MAX_COL && i < (t->size - t->MAX_COL) && i % t->MAX_COL != 0 
-            && i % t->MAX_COL != t->MAX_COL - 1) 
-    {
-        int offset = (p->posy * t->MAX_COL) + p->posx;
+    size_t size = t->size * 8;
 
-        if (compare_val_in_buffers(t, offset))
-        {
-            p->curr_brush = p->brushes[p->brush_index];
-        }
-        else {          /* replace the old brush with different one (swallow) */
-            if (p->curr_brush == t->buffer[offset])
-                p->brush_index = (p->brush_index + 1) % strlen(p->brushes);
-            
-            p->curr_brush = p->brushes[p->brush_index];
-            p->toggle ? p->curr_brush = p->brushes[(p->brush_index % 2)] : 0;
-            t->buffer[offset] = p->curr_brush;
-        }
-    }
+    assign_pix_buff(t->buffer, t->pixels, t->size);
+    write(1, t->buffer, size);
+    memset(t->buffer, 0, size);
+    write(1, "\033[H", 3);
+    t->frame > 2048 ? t->frame = 1 : t->frame++;
 }
 
-void draw(term_t *t)
+static void background(term_t *t, int y)
 {
-    for (int i = 0; i < t->size; i++)
-    {
-        if (i < t->MAX_COL || i > (t->size - t->MAX_COL) || i % t->MAX_COL == 0 
-                || i % t->MAX_COL == t->MAX_COL - 1) {
-            t->buffer[i] !=  '|' ? t->buffer[i] = '|' : 0;
-        } else {
-            draw_player(t, i, t->players[0]);
-            draw_player(t, i, t->players[1]);
-            draw_player(t, i, t->players[2]);
-            draw_player(t, i, t->players[3]);
-        }
-    }
-    t->frame++;
-    if (t->frame > 2048)
-        t->frame = 1;
+    t->pixels[y].color = GREEN;
+    t->pixels[y].uni = " "; // TODO bug here wide unicodes break it 
+}
 
-    write(1, t->buffer, t->size);       // draw the whole buffer in one call  
+void map_pix(term_t *t, int x, int y, char *color, char *uni)
+{
+    int i = (y * t->MAX_COL) + x;
+    fill_pixel(t->pixels, color, uni, i);
+}
+
+
+void draw(term_t *t, void (*draw_callback)(term_t *))
+{
+    for(int y = 0; y < t->size; y++)
+    {
+        // Border drawing
+        if (check_border(y, t->MAX_COL, t->MAX_ROW)) { 
+            // t->pixels[y].color = all_colors[rand() % 4];
+            float frequency = 0.1;   
+            float phase_shift = t->frame * 0.1;
+            int color_index = (int)((sin(frequency * y + phase_shift) + 1) * 2) % 10;  // Scale from -1 to 1 -> 0 to 4 -> 0 to 5
+            t->pixels[y].color = all_colors[color_index];
+            t->pixels[y].uni = "█";
+        } 
+        else {
+            background(t, y);
+            draw_callback(t);
+        }                                                          
+    }
+
+    assign_pix_buff(t->buffer, t->pixels, t->size); 
+    img2win(t);
 }
 
