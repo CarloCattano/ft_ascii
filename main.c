@@ -54,8 +54,8 @@ struct ball ball;
 
 void init_ball(struct ball *ball)
 {
-    ball->x = 42;
-    ball->y = 42;
+    ball->x = 4;
+    ball->y = 4;
 
     ball->dx = 1;
     ball->dy = 1;
