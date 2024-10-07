@@ -22,14 +22,6 @@ typedef struct s_unicode
     
 }               Pixel;
 
-typedef struct player_s
-{
-    int         posx;
-    int         posy;
-    int         dx;
-    int         dy;
-}               player_t;
-
 /** @brief  Structure to store the terminal data
  *  @param  MAX_COL     Maximum number of columns in the terminal
  *  @param  MAX_ROW     Maximum number of rows in the terminal
@@ -41,7 +33,6 @@ typedef struct player_s
  *  @param  clear       Clear the terminal
  *  @param  delay       Delay between frames
  *  @param  draw        Draw the terminal
- *  @param  players     Array of players
  */
 
 typedef struct term_s
@@ -50,13 +41,12 @@ typedef struct term_s
     int             MAX_ROW;
     int             size;
     char*           buffer;
-    char* 		    buffer_copy;
+    char*	    buffer_copy;
     Pixel*          pixels;
     unsigned int    frame;
-    int 		    clear;
+    int		    clear;
     unsigned int    delay;
     bool            draw;
-    player_t* 	    players[4];
 
 }                   term_t;
 
@@ -70,7 +60,6 @@ void                ft_keyhook(term_t *t);
 
 void                draw(term_t *t, void (*f)(term_t*));
 void		    drawNum(term_t *t, int x, int y, char *color, char *uni, char num[8][12]);
-void                move_player(term_t *t);
 
 /*     utils       */
 int                 compare_val_in_buffers(term_t *t, int i);
@@ -89,7 +78,7 @@ void                map_pix(term_t *t, int x, int y, char *color, char *uni);
 char*               hex_to_unicode(int hex);
 
 // define a list of colors
-extern char*               all_colors[8];
+extern char*               all_colors[10];
 
 
 #endif

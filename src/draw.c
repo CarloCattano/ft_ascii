@@ -1,7 +1,6 @@
 #include "ftascii.h"
 
-char *all_colors[8] = {GREEN, BLUE, BLACK, MAGENTA, CYAN, WHITE, YELLOW, RED};
-
+char *all_colors[10] = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET, MAGENTA, CYAN, WHITE};
 
 static int check_border(int i, int MAX_COL, int MAX_ROW)
 {
@@ -42,9 +41,14 @@ void draw(term_t *t, void (*draw_callback)(term_t *))
     {
         // Border drawing
         if (check_border(y, t->MAX_COL, t->MAX_ROW)) { 
-            t->pixels[y].color = all_colors[rand() % 4];
+            // t->pixels[y].color = all_colors[rand() % 4];
+            float frequency = 0.1;   
+            float phase_shift = t->frame * 0.1;
+            int color_index = (int)((sin(frequency * y + phase_shift) + 1) * 2) % 10;  // Scale from -1 to 1 -> 0 to 4 -> 0 to 5
+            t->pixels[y].color = all_colors[color_index];
             t->pixels[y].uni = "█";
-        } else {
+        } 
+        else {
             background(t, y);
             draw_callback(t);
         }                                                          

@@ -1,63 +1,42 @@
 #include "ftascii.h"
 
-static void handlePlayerKeys(term_t *t, char key)
-{
-    switch (key) {
-        case 'w':
-            t->players[0]->dy -= 1;
-            break;
-        case 'a':
-            t->players[0]->dx -= 1;
-            break;
-        case 's':
-            t->players[0]->dy += 1;
-            break;
-        case 'd':
-            t->players[0]->dx += 1;
-            break;
-        case '0':
-            t->delay *= 0.5;
-            t->delay < 2 ? t->delay = 1 : t->delay;
-            break;
-        case '9':
-            t->delay *= 2;
-            t->delay > 3e5 ? t->delay = 3e5 : t->delay;
-            break;
+static void KeyPress(char *key, term_t *term) {
+
+    if (key[0] == '\033' && key[1] == '[') {
+        if (key[2] == ARROW_UP || key[2] == ARROW_RIGHT) {
+            // handle arrow up or right
+        } else if (key[2] == ARROW_DOWN || key[2] == ARROW_LEFT) {
+            // handle arrow down or left
+        }
+    } else {
+        switch (key[0]) {
+            case 'w':
+                // handle w
+                break;
+            case 's':
+                // handle s
+                break;
+            case 'p':
+                systemExit(term);
+                break;
+            default:
+                break;
+        }
     }
 }
 
-void handleKeyPress(char key, term_t *t) {
-    switch (key) {
-        case 'c':
-            t->clear = !t->clear;
-            break;
-        case 'l':
-            write(1, GREEN, 5);
-            break;
-        case 'q':
-            systemExit(t);
-            break;
-        default:
-            handlePlayerKeys(t, key);
-            break;
-    }
-}
-
-/* listening for keypresses */
 void ft_keyhook(term_t *term) 
 {
-    char key;
-	if (term->frame % 2 == 0)
-	{ 
-		if (read(STDIN_FILENO, &key, 1) == 1) {
-			handleKeyPress(key, term);
-		}
-	}
+    char key[4];
+    if (read(STDIN_FILENO, &key, 4) > 0) {
+        KeyPress(key, term);
+    } 
 }
 
 void systemExit(term_t *t)
 {
     free_all(t);
+    system("stty echo icanon icrnl");
     system("reset");
     exit(0);
 }

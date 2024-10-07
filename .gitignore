@@ -6,6 +6,7 @@ compile_commands.json
 .DS_Store
 ft_ascii
 test
+example
 debug
 vgcore.*
 a.out
