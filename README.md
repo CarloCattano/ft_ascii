@@ -39,3 +39,12 @@ termios or ncurses. In here however, we are trying to do it the 42 way, without 
 - unicode_portaudio:
     Some examples on creating audio reactive visuals like an equalizer etc using portaudio and fft.
 
+### Running the main example
+```
+$ make
+$ ./example
+```
+You will see a simple unicode red ball bouncing up and down
+
+PR's open !
+#42gether
