@@ -1,5 +1,10 @@
 ## UNICODE TERMINAL GRAPHICS IN C
 
+<img src="https://github.com/user-attachments/assets/9c85a4e7-3dab-41f0-9fbf-c30898034772" data-canonical-src="https://github.com/user-attachments/assets/9c85a4e7-3dab-41f0-9fbf-c30898034772" width="500" height="300" />
+
+<img src="https://github.com/user-attachments/assets/0b35ed72-c354-4cc9-88f7-0ae076e060bb" data-canonical-src="https://github.com/user-attachments/assets/0b35ed72-c354-4cc9-88f7-0ae076e060bb" width="500" height="300" />
+
+
 ### Preface
 
 Interested in rendering graphics to terminal using just *ASCII* + *ANSI* + some *Unicode* characters.
