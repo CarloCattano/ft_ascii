@@ -1,0 +1,7 @@
+.cache
+example
+libftascii.a
+libftascii.so
+compile_commands.json
+tags
+obj
