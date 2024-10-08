@@ -3,9 +3,9 @@
 
 #include <stdbool.h>
 
-#define   CLEAR     "\033[H"
-#define   NOMOUSE   "\033[?25l"
-#define   CURSOR    "\033[1;1H"
+#define     CLEAR           "\033[H"
+#define     NOMOUSE         "\033[?25l"
+#define     CURSOR          "\033[1;1H"
 
 #define     ARROW_UP        0x41
 #define     ARROW_DOWN      0x42
@@ -26,6 +26,6 @@
 #define     BLACK           "\033[30m"
 
 #define     RST             "\033[0m"
-#define     IMG_SIZE 12
+#define     IMG_SIZE        12
 
 #endif

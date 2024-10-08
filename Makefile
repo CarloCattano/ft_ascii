@@ -8,7 +8,7 @@ OBJ_DIR = obj
 INCLUDE_DIR = include
 
 # Source files
-SRC_FILES = draw.c init.c keyhooks.c pixel.c utils.c 
+SRC_FILES = draw.c init.c keyhooks.c pixel.c utils.c
 SRCS = $(patsubst %, $(SRC_DIR)/%, $(SRC_FILES))
 
 # Object files

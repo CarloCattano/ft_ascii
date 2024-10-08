@@ -1,0 +1,92 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/draw.o",
+      "src/draw.c"
+    ],
+    "directory": "/home/carlo/ft_ascii",
+    "file": "/home/carlo/ft_ascii/src/draw.c",
+    "output": "/home/carlo/ft_ascii/obj/draw.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/init.o",
+      "src/init.c"
+    ],
+    "directory": "/home/carlo/ft_ascii",
+    "file": "/home/carlo/ft_ascii/src/init.c",
+    "output": "/home/carlo/ft_ascii/obj/init.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/keyhooks.o",
+      "src/keyhooks.c"
+    ],
+    "directory": "/home/carlo/ft_ascii",
+    "file": "/home/carlo/ft_ascii/src/keyhooks.c",
+    "output": "/home/carlo/ft_ascii/obj/keyhooks.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/pixel.o",
+      "src/pixel.c"
+    ],
+    "directory": "/home/carlo/ft_ascii",
+    "file": "/home/carlo/ft_ascii/src/pixel.c",
+    "output": "/home/carlo/ft_ascii/obj/pixel.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/utils.o",
+      "src/utils.c"
+    ],
+    "directory": "/home/carlo/ft_ascii",
+    "file": "/home/carlo/ft_ascii/src/utils.c",
+    "output": "/home/carlo/ft_ascii/obj/utils.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/main.o",
+      "main.c"
+    ],
+    "directory": "/home/carlo/ft_ascii",
+    "file": "/home/carlo/ft_ascii/main.c",
+    "output": "/home/carlo/ft_ascii/obj/main.o"
+  }
+]
