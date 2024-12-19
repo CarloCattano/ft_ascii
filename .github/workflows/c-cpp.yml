@@ -25,19 +25,19 @@ jobs:
         if [ ! -f ./example ]; then
           echo "Error: './example' binary not found after build!" >&2
           exit 1
-        fi
-
+          
     - name: Get the release ID
-      id: release
+      id: get_release
       run: |
-        RELEASE_ID=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }} | jq -r '.id')
-        echo "Discovered RELEASE_ID: $RELEASE_ID"
-        echo "::set-output name=releaseId::$RELEASE_ID"  # Correct the output name here
+        RELEASE_ID=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.id')
+        echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
 
     - name: Upload the artifacts
-      uses: skx/github-action-publish-binaries@master
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}/assets?name=example
+        asset_path: ./example
+        asset_name: example
+        asset_content_type: application/octet-stream
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        args: 'example'
-        releaseId: ${{ steps.release.outputs.releaseId }}  # Use releaseId here
