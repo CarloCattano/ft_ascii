@@ -33,6 +33,7 @@ jobs:
       run: |
         RELEASE_ID=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.id')
         echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
+        echo RELEASE_ID $RELEASE_ID
 
     - name: Upload the artifacts
       uses: actions/upload-release-asset@v1
