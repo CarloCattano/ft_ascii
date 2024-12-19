@@ -14,8 +14,8 @@ jobs:
 
     steps:
     - name: Checkout the repository
-      uses: actions/checkout@v4  # Fix: added the `uses` key here
-      
+      uses: actions/checkout@v4
+
     - name: Install build tools
       run: sudo apt-get update && sudo apt-get install -y build-essential
 
@@ -26,10 +26,15 @@ jobs:
           echo "Error: './example' binary not found after build!" >&2
           exit 1
         fi
- 
+
+    - name: Get the release ID
+      id: release
+      run: echo "::set-output name=RELEASE_ID::$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }} | jq -r '.id')"
+
     - name: Upload the artifacts
       uses: skx/github-action-publish-binaries@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        args: './example'
+        args: 'example'
+        RELEASE_ID: ${{ steps.release.outputs.RELEASE_ID }}  # Pass the release ID to the action
