@@ -1,5 +1,12 @@
 name: C Build, Test, and Release Example
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  deployments: write
+  actions: write
+
 on:
   push:
     branches: [ "main" ]
