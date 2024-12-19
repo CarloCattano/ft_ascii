@@ -26,12 +26,4 @@ jobs:
           echo "Error: './example' binary not found after build!" >&2
           exit 1
         fi
-
-    - name: Upload Release Asset
-      if: github.event_name == 'release' && github.event.action == 'published'
-      uses: actions/upload-release-asset@v1
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./example
-        asset_name: example
-        asset_content_type: application/octet-stream
+ 
