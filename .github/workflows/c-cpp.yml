@@ -37,4 +37,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         args: 'example'
-        RELEASE_ID: ${{ steps.release.outputs.RELEASE_ID }}  # Pass the release ID to the action
+        RELEASE_ID: ${{ steps.release.outputs.releaseId }}  # Pass the release ID to the action
