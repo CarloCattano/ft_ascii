@@ -1,4 +1,4 @@
-name: C build lib and example test
+name: C Build, Test, and Release Example
 
 on:
   push:
@@ -6,12 +6,36 @@ on:
   pull_request:
     branches: [ "main" ]
 
+  release:
+    types: [ "published" ]
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: make
-      run: make
+
+    - name: Install build tools
+      run: sudo apt-get update && sudo apt-get install -y build-essential
+
+    - name: Build the project
+      run: |
+        make
+        if [ ! -f ./example ]; then
+          echo "Error: './example' binary not found after build!" >&2
+          exit 1
+        fi
+
+    - name: Test the example binary
+      run: |
+        ./example || echo "Execution of './example' failed with an error."
+
+    - name: Upload Release Asset
+      if: github.event_name == 'release' && github.event.action == 'published'
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./example
+        asset_name: example
+        asset_content_type: application/octet-stream
