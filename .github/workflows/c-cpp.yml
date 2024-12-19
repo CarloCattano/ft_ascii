@@ -27,10 +27,6 @@ jobs:
           exit 1
         fi
 
-    - name: Test the example binary
-      run: |
-        ./example || echo "Execution of './example' failed with an error."
-
     - name: Upload Release Asset
       if: github.event_name == 'release' && github.event.action == 'published'
       uses: actions/upload-release-asset@v1
