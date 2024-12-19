@@ -25,6 +25,8 @@ jobs:
         if [ ! -f ./example ]; then
           echo "Error: './example' binary not found after build!" >&2
           exit 1
+        fi
+        exit 0
           
     - name: Get the release ID
       id: get_release
