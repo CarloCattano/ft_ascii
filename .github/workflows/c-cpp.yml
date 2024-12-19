@@ -29,7 +29,10 @@ jobs:
 
     - name: Get the release ID
       id: release
-      run: echo "::set-output name=RELEASE_ID::$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }} | jq -r '.id')"
+      run: |
+        RELEASE_ID=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }} | jq -r '.id')
+        echo "Discovered RELEASE_ID: $RELEASE_ID"
+        echo "::set-output name=releaseId::$RELEASE_ID"  # Correct the output name here
 
     - name: Upload the artifacts
       uses: skx/github-action-publish-binaries@master
@@ -37,4 +40,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         args: 'example'
-        RELEASE_ID: ${{ steps.release.outputs.releaseId }}  # Pass the release ID to the action
+        releaseId: ${{ steps.release.outputs.releaseId }}  # Use releaseId here
