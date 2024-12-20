@@ -9,7 +9,6 @@ permissions:
 
 on:
   push:
-    
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
@@ -35,16 +34,10 @@ jobs:
           exit 1
         fi
           
-    - name: Get the release ID
-      id: get_release
-      run: |
-        echo "RELEASE_ID=${{ github.event.release.id }}" >> $GITHUB_ENV
-        echo "Release ID: ${{ github.event.release.id }}"
-
     - name: Upload the artifacts
       uses: skx/github-action-publish-binaries@release-1.3
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        releaseId: test
-        args: '*.bin'
+        entryPoint: publish-binaries.sh
+        args: './example'
