@@ -39,5 +39,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        entryPoint: publish-binaries.sh
         args: './example'
