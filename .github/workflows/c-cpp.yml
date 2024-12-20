@@ -41,11 +41,9 @@ jobs:
         echo "Release ID: ${{ github.event.release.id }}"
 
     - name: Upload the artifacts
-      uses: actions/upload-release-asset@v1
-      with:
-        upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}/assets?name=example
-        asset_path: ./example
-        asset_name: example
-        asset_content_type: application/octet-stream
+      uses: skx/github-action-publish-binaries@release-1.3
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        releaseId: test
+        args: '*.bin'
