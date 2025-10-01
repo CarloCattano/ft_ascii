@@ -14,4 +14,4 @@ fi
 
 
 printf "\nUsage: \n img2txt <image.[png/jpg]> <size> \n"
-printf "\nexample:\n img2txt zebra.jpg 42 \n"
+printf "\nexample:\n ./img2txt zebra.jpg 42 \n"

@@ -2,13 +2,20 @@
 
 Written in c with stb headers only library.
 
-### How to use
+### Usage:
 
-```bash
-cc main.c -lm -o test
-./test zebra.jpg 80 80
+Build the tool
+
+```
+./build.sh
 ```
 
-### TODO 
-    - [ ] Turn it into a function similar to minilibx load image
-    - [ ] Fix size segmentation fault
+Run
+
+```
+./img2txt <image.[png/jpg]> <size>
+
+### Image:
+    zebra.jpg [Author](https://www.publicdomainpictures.net/en/view-image.php?image=455680&picture=zebra)
+              License: CC0 Public Domain
+```

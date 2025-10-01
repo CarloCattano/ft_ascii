@@ -3,7 +3,7 @@
  *  by Carlo Cattano 2023
  *
  *  uses stb_image.h and stb_image_resize.h
- *  part of ft_ascii
+ *  to be used in ft_ascii
  **/
 
 #include <stdio.h>
