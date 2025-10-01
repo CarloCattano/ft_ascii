@@ -1,5 +1,5 @@
 /**
- * Adapeted from Daniel Shifmann image/video to ascii originally in p5.js
+ * Adapted from Daniel Shifmann image/video to ascii originally in p5.js
  *  by Carlo Cattano 2023
  *
  *  uses stb_image.h and stb_image_resize.h
