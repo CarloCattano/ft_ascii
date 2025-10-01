@@ -5,4 +5,4 @@ libftascii.so
 compile_commands.json
 tags
 obj/*
-image2text/img2txt
+img2txt/img2txt
