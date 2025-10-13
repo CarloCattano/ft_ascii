@@ -5,11 +5,12 @@ char *all_colors[10] = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET, MAGENT
 // checks if the pixel is on the border of the screen to draw a border
 static int check_border(int i, int MAX_COL, int MAX_ROW)
 {
-    if (i < MAX_COL || i > ((MAX_COL * MAX_ROW) - MAX_COL) || i % MAX_COL == 0 
-            || i % MAX_COL == MAX_COL - 1){ 
-            return 1;
-    }
-    return 0;
+    return (i >= 0) && (i < MAX_COL * MAX_ROW) &&
+        ((i % MAX_COL == 0) // LEFT
+        || ((i + 1) % MAX_COL == 0) // RIGHT
+        || (i < MAX_COL) // TOP
+        || (i > (MAX_COL * MAX_ROW - MAX_COL))) // BOTTOM
+        ;
 }
 
 // Image to window - writes the buffer to the terminal
