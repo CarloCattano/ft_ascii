@@ -1,10 +1,5 @@
 #include "ftascii.h"
 
-#include <unistd.h>
-#include <sys/resource.h>
-
-
-
 void init_term(term_t *t)
 {
     t->frame = 1;
@@ -31,7 +26,4 @@ void init_term(term_t *t)
     // Initialize buffer
     memset(t->buffer, '.', t->size);
 	t->draw = true;
-
-    int pid = getpid();
-    setpriority(PRIO_PROCESS, pid, -20);
 }

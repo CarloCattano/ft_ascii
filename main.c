@@ -32,7 +32,7 @@ static void initializeTerm(term_t *term)
 
     *term = (term_t){   w.ws_col, w.ws_row, w.ws_col * w.ws_row, 
                         NULL, NULL, NULL, 
-                        1, 1, 20000,0};
+                        1, 1, 25000,0};
     
     term_pointer = term;
 
