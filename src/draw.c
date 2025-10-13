@@ -48,9 +48,25 @@ static void animated_border(term_t *t, int y)
     t->pixels[y].uni = "█";
 }
 
+static void window_resize(term_t *t) {
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+    if (t->MAX_COL == w.ws_col
+        && t->MAX_ROW == w.ws_row)
+        return;
+
+    t->MAX_COL = w.ws_col;
+    t->MAX_ROW = w.ws_row;
+    t->size = w.ws_col * w.ws_row;
+
+    write(1, CLEAR, 4); // Clear screen
+}
+
 // Draws a border and the content to the terminal with the specified draw_callback
 void draw(term_t *t, void (*draw_callback)(term_t *))
 {
+    window_resize(t);
     for(int y = 0; y < t->size; y++)
     {
         // Border drawing with color changing animation
