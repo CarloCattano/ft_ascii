@@ -1,0 +1,25 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+
+# Use tabs instead of spaces
+UseTab: Always
+
+# Don’t try to align declarations or assignments
+AlignConsecutiveDeclarations: false
+AlignConsecutiveAssignments: false
+AlignTrailingComments: false
+
+# Pointer alignment (less aggressive)
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+# Control brace behavior (so it doesn’t shift your layout too much)
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterFunction: false
+  AfterStruct: false
+  BeforeElse: false
+# You can disable formatting in selected regions
+# clang-format off/on supported by comments
+
