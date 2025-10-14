@@ -42,7 +42,7 @@ void map_pix(term_t *t, int x, int y, char *color, char *uni)
 
 static void animated_border(term_t *t, int y)
 {
-    float frequency = 0.1;   
+    float frequency = 0.1;
     float phase_shift = t->frame * 0.1;
     int color_index = (int)((sin(frequency * y + phase_shift) + 1) * 2) % 10;
     t->pixels[y].color = all_colors[color_index];
@@ -54,12 +54,43 @@ static void window_resize(term_t *t) {
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 
     if (t->MAX_COL == w.ws_col
-        && t->MAX_ROW == w.ws_row)
+        && t->MAX_ROW == w.ws_row )
         return;
 
+    // Realloc if mandatory
+    if (t->buffer_size < w.ws_col * w.ws_row) {
+             if (t->pixels != NULL)
+             {
+                 free(t->pixels);
+                 t->pixels = NULL; // Set pointer to NULL after freeing to prevent double free
+             }
+
+             int size = w.ws_col * w.ws_row;
+
+             t->pixels = (Pixel*)malloc(sizeof(Pixel) * size);
+             if (t->buffer != NULL) {
+                 free(t->buffer);
+                 t->buffer = NULL; // Set pointer to NULL after freeing to prevent double free
+             }
+
+             if (t->pixels == NULL) {
+                 printf("Memory allocation failed for pixels\n");
+                 exit(1);
+             }
+             // Allocate buffer - final char output to the terminal
+             t->buffer = (char*)malloc(sizeof(char) * size * 8); // 8 or 9 ?? color (5) + uni(3)
+             if (t->buffer == NULL) {
+                 printf("Memory allocation failed for buffer\n");
+                 free(t->pixels);
+                 exit(1);
+             }
+
+             t->buffer_size = size;
+    }
     t->MAX_COL = w.ws_col;
     t->MAX_ROW = w.ws_row;
     t->size = w.ws_col * w.ws_row;
+
 
     write(1, CLEAR, 4); // Clear screen
 }

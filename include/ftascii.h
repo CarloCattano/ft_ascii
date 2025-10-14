@@ -42,6 +42,7 @@ typedef struct      term_s
     int             MAX_ROW;
     int             size;
     char*           buffer;
+    int             buffer_size;
     char*           buffer_copy;
     Pixel*          pixels;
     unsigned int    frame;

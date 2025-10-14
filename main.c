@@ -31,8 +31,8 @@ static void initializeTerm(term_t *term)
     write(1, CURSOR, 6); 
 
     *term = (term_t){   w.ws_col, w.ws_row, w.ws_col * w.ws_row, 
-                        NULL, NULL, NULL, 
-                        1, 1, 25000,0};
+                        NULL, w.ws_col * w.ws_row, NULL, NULL,
+                        1, 1, 50000,0};
     
     term_pointer = term;
 

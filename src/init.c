@@ -4,6 +4,7 @@ void init_term(term_t *t)
 {
     t->frame = 1;
     t->clear = 0;
+    t->buffer_size = t->size;
 
     // Check if terminal size is valid
     if (t->size < 1){
