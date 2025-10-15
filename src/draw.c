@@ -1,22 +1,21 @@
 #include "ftascii.h"
 
-char *all_colors[10] = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET, MAGENTA, CYAN, WHITE};
+char *all_colors[10] = {RED,    ORANGE, YELLOW,  GREEN, BLUE,
+                        INDIGO, VIOLET, MAGENTA, CYAN,  WHITE};
 
 // checks if the pixel is on the border of the screen to draw a border
-static int check_border(int i, int MAX_COL, int MAX_ROW)
-{
+static int check_border(int i, int MAX_COL, int MAX_ROW) {
     return (i >= 0) && (i < MAX_COL * MAX_ROW) &&
-        ((i % MAX_COL == 0) // LEFT
-        || ((i + 1) % MAX_COL == 0) // RIGHT
-        || (i < MAX_COL) // TOP
-        || (i > (MAX_COL * MAX_ROW - MAX_COL))) // BOTTOM
+           ((i % MAX_COL == 0)                      // LEFT
+            || ((i + 1) % MAX_COL == 0)             // RIGHT
+            || (i < MAX_COL)                        // TOP
+            || (i > (MAX_COL * MAX_ROW - MAX_COL))) // BOTTOM
         ;
 }
 
 // Image to window - writes the buffer to the terminal
 // in one single write call
-static void img2win(term_t *t)
-{
+static void img2win(term_t *t) {
     size_t size = t->size * 8;
 
     assign_pix_buff(t->buffer, t->pixels, t->size);
@@ -27,91 +26,81 @@ static void img2win(term_t *t)
     t->frame > 2048 ? t->frame = 1 : t->frame++;
 }
 
-static void background(term_t *t, int y)
-{
+static void background(term_t *t, int y) {
     t->pixels[y].color = GREEN;
-    t->pixels[y].uni = " "; 
+    t->pixels[y].uni   = " ";
 }
 
 // Fills the pixel with the specified color and unicode character
-void map_pix(term_t *t, int x, int y, char *color, char *uni)
-{
+void map_pix(term_t *t, int x, int y, char *color, char *uni) {
     int i = (y * t->MAX_COL) + x;
     fill_pixel(t->pixels, color, uni, i);
 }
 
-static void animated_border(term_t *t, int y)
-{
-    float frequency = 0.1;
-    float phase_shift = t->frame * 0.1;
-    int color_index = (int)((sin(frequency * y + phase_shift) + 1) * 2) % 10;
+static void animated_border(term_t *t, int y) {
+    float frequency    = 0.1;
+    float phase_shift  = t->frame * 0.1;
+    int   color_index  = (int)((sin(frequency * y + phase_shift) + 1) * 2) % 10;
     t->pixels[y].color = all_colors[color_index];
-    t->pixels[y].uni = "█";
+    t->pixels[y].uni   = "█";
 }
 
-static void window_resize(term_t *t) {
+void window_resize(term_t *t) {
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 
-    if (t->MAX_COL == w.ws_col
-        && t->MAX_ROW == w.ws_row )
-        return;
-
     // Realloc if mandatory
     if (t->buffer_size < w.ws_col * w.ws_row) {
-             if (t->pixels != NULL)
-             {
-                 free(t->pixels);
-                 t->pixels = NULL; // Set pointer to NULL after freeing to prevent double free
-             }
+        if (t->pixels != NULL) {
+            free(t->pixels);
+            t->pixels = NULL;
+        }
 
-             int size = w.ws_col * w.ws_row;
+        int size = w.ws_col * w.ws_row;
 
-             t->pixels = (Pixel*)malloc(sizeof(Pixel) * size);
-             if (t->buffer != NULL) {
-                 free(t->buffer);
-                 t->buffer = NULL; // Set pointer to NULL after freeing to prevent double free
-             }
+        t->pixels = (Pixel *)malloc(sizeof(Pixel) * size);
+        if (t->buffer != NULL) {
+            free(t->buffer);
+            t->buffer = NULL;
+        }
 
-             if (t->pixels == NULL) {
-                 printf("Memory allocation failed for pixels\n");
-                 exit(1);
-             }
-             // Allocate buffer - final char output to the terminal
-             t->buffer = (char*)malloc(sizeof(char) * size * 8); // 8 or 9 ?? color (5) + uni(3)
-             if (t->buffer == NULL) {
-                 printf("Memory allocation failed for buffer\n");
-                 free(t->pixels);
-                 exit(1);
-             }
+        if (t->pixels == NULL) {
+            printf("Memory allocation failed for pixels\n");
+            exit(1);
+        }
 
-             t->buffer_size = size;
+        // Allocate buffer - final char output to the terminal
+        t->buffer = (char *)malloc(sizeof(char) * size * 8);
+
+        if (t->buffer == NULL) {
+            printf("Memory allocation failed for buffer\n");
+            free(t->pixels);
+            exit(1);
+        }
+
+        t->buffer_size = size;
     }
     t->MAX_COL = w.ws_col;
     t->MAX_ROW = w.ws_row;
-    t->size = w.ws_col * w.ws_row;
-
+    t->size    = w.ws_col * w.ws_row;
 
     write(1, CLEAR, 4); // Clear screen
 }
 
-// Draws a border and the content to the terminal with the specified draw_callback
-void draw(term_t *t, void (*draw_callback)(term_t *))
-{
-    window_resize(t);
-    for(int y = 0; y < t->size; y++)
-    {
+// Draws a border and the content to the terminal with the specified
+// draw_callback
+void draw(term_t *t, void (*draw_callback)(term_t *)) {
+    for (int y = 0; y < t->size; y++) {
         // Border drawing with color changing animation
-        if (check_border(y, t->MAX_COL, t->MAX_ROW)) { 
+        if (check_border(y, t->MAX_COL, t->MAX_ROW)) {
             animated_border(t, y);
-        } 
-        else {
+        } else {
             background(t, y);
             draw_callback(t);
-        }                                                          
+        }
     }
-    
+
     // Write the buffer to the terminal
-    assign_pix_buff(t->buffer, t->pixels, t->size); 
+    assign_pix_buff(t->buffer, t->pixels, t->size);
     img2win(t);
 }

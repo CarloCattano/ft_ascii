@@ -6,14 +6,18 @@
 
 static term_t *term_pointer;
 
-static void handlectrl_c(int sig) {
-    (void)sig;
-    systemExit(term_pointer);
+static void handle_signal(int sig) {
+    if (SIGINT == sig || SIGTERM == sig)
+        systemExit(term_pointer);
+    if (SIGWINCH == sig) {
+        window_resize(term_pointer);
+    }
 }
 
 static void setup_signal_handlers() {
-    signal(SIGINT, handlectrl_c);
-    signal(SIGTERM, handlectrl_c);
+    signal(SIGINT, handle_signal);
+    signal(SIGTERM, handle_signal);
+    signal(SIGWINCH, handle_signal);
 }
 
 static void initializeTerm(term_t *term) {

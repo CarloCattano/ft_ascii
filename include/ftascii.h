@@ -34,18 +34,17 @@ typedef struct s_unicode {
  *  @param  draw        Draw flag to draw keep the drawing loop running
  */
 
-typedef struct      term_s
-{
-    int             MAX_COL;
-    int             MAX_ROW;
-    int             size;
-    char*           buffer;
-    int             buffer_size;
-    Pixel*          pixels;
-    unsigned int    frame;
-    int             clear;
-    unsigned int    delay;
-    bool            draw;
+typedef struct term_s {
+    int          MAX_COL;
+    int          MAX_ROW;
+    int          size;
+    char        *buffer;
+    int          buffer_size;
+    Pixel       *pixels;
+    unsigned int frame;
+    int          clear;
+    unsigned int delay;
+    bool         draw;
 
 } term_t;
 
@@ -64,6 +63,7 @@ void ft_keyhook(term_t *t);
 //	 utils
 void free_all(term_t *t);
 void systemExit(term_t *t);
+void window_resize(term_t *t);
 
 extern char *all_colors[10];
 
