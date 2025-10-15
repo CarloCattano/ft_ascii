@@ -27,8 +27,16 @@ static void initializeTerm(term_t *term) {
     write(1, CLEAR, 4);   // Clear screen
     write(1, CURSOR, 6);
 
-    *term = (term_t){w.ws_col, w.ws_row, w.ws_col * w.ws_row, NULL, NULL, 1, 1,
-                     1e6,      0};
+    *term = (term_t){w.ws_col,
+                     w.ws_row,
+                     w.ws_col * w.ws_row,
+                     NULL,
+                     w.ws_col * w.ws_row,
+                     NULL,
+                     1,
+                     1,
+                     50000,
+                     0};
 
     term_pointer = term;
 
