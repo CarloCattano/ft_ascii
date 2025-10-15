@@ -1,0 +1,15 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+
+# allow variable or functions to have spaces
+# int     var1
+# int     var2
+#
+# void    myfunc()
+
+AlignConsecutiveDeclarations: true
+AlignConsecutiveAssignments: true
+AlignConsecutiveMacros: true
+AlignTrailingComments: true
+AllowAllParametersOfDeclarationOnNextLine: true

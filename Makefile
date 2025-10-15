@@ -7,11 +7,9 @@ SRC_DIR = src
 OBJ_DIR = obj
 INCLUDE_DIR = include
 
-# Source files
 SRC_FILES = draw.c init.c keyhooks.c pixel.c utils.c
-SRCS = $(patsubst %, $(SRC_DIR)/%, $(SRC_FILES))
 
-# Object files
+SRCS = $(patsubst %, $(SRC_DIR)/%, $(SRC_FILES))
 OBJS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
 # Target library
@@ -43,6 +41,9 @@ $(LIB): $(OBJS)
 # Link the example program
 $(EXAMPLE): $(EXAMPLE_OBJ) $(LIB)
 	$(CC) $(CFLAGS) $(EXAMPLE_OBJ) -L. -lftascii -lm -o $(EXAMPLE)
+
+lib: clean
+	$(MAKE) $(LIB)
 
 # Clean up the build files
 clean:

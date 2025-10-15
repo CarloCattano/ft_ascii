@@ -1,7 +1,9 @@
 #ifndef CONST_H
-#define CONST_H
 
+#define CONST_H
 #include <stdbool.h>
+// clang-format off
+
 
 #define     CLEAR           "\033[H"
 #define     NOMOUSE         "\033[?25l"
