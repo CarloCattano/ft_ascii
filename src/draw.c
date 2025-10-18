@@ -1,4 +1,5 @@
 #include "ftascii.h"
+#include <assert.h>
 
 char *all_colors[10] = {RED,    ORANGE, YELLOW,  GREEN, BLUE,
                         INDIGO, VIOLET, MAGENTA, CYAN,  WHITE};
@@ -17,6 +18,11 @@ static int check_border(int i, int MAX_COL, int MAX_ROW) {
 // in one single write call
 static void img2win(term_t *t) {
     size_t size = t->size * 8;
+
+    if (t->buffer == NULL || t->pixels == NULL)
+        return;
+    if (t->size <= 0)
+        return;
 
     assign_pix_buff(t->buffer, t->pixels, t->size);
     write(1, t->buffer, size);
@@ -101,6 +107,5 @@ void draw(term_t *t, void (*draw_callback)(term_t *)) {
     }
 
     // Write the buffer to the terminal
-    assign_pix_buff(t->buffer, t->pixels, t->size);
     img2win(t);
 }
