@@ -1,54 +1,53 @@
 #include "ftascii.h"
-#include <wchar.h>
+#include <string.h>
 
-// wide chars and multibyte characters
+static int ft_cell_index(const t_ascii *ctx, int x, int y, size_t *idx) {
+    if (ctx == NULL || idx == NULL)
+        return FT_ERR;
+    if (x < 0 || y < 0 || x >= ctx->canvas.width || y >= ctx->canvas.height)
+        return FT_ERR;
+    *idx = (size_t)y * (size_t)ctx->canvas.width + (size_t)x;
+    return FT_OK;
+}
 
-int wcwidth(const wchar_t wc);
+static void ft_copy_glyph(char dst[FT_GLYPH_MAX], const char *glyph) {
+    size_t i;
 
-void fill_pixel(Pixel *pixels, char *color, char *uni, int i) {
-    wchar_t wide_char;
-
-    int ret = mbtowc(&wide_char, uni, 4);
-
-    if (ret == -1 || !ret)
+    memset(dst, 0, FT_GLYPH_MAX);
+    if (glyph == NULL || glyph[0] == '\0') {
+        dst[0] = ' ';
         return;
-
-    int width = wcwidth(wide_char);
-
-    if (width == -1)
-        return;
-
-    if (width == 1) {
-        pixels[i].uni   = &uni[0];
-        pixels[i].color = color;
-    } else if (width >= 2) {
-        pixels[i].uni   = &uni[0];
-        pixels[i].color = color;
+    }
+    i = 0;
+    while (i < FT_GLYPH_MAX - 1 && glyph[i] != '\0') {
+        dst[i] = glyph[i];
+        i++;
     }
 }
 
-void putpix(Pixel *pixels, char *color, char *uni) {
-    pixels->color = color;
-    pixels->uni   = uni;
+void ft_put_cell(t_ascii *ctx, int x, int y, t_cell cell) {
+    size_t idx;
+
+    if (ft_cell_index(ctx, x, y, &idx) == FT_ERR)
+        return;
+    ctx->canvas.back[idx] = cell;
+    ctx->dirty            = 1;
 }
 
-void assign_pix_buff(char *buffer, Pixel *pixels, int size) {
-    for (int i = 0; i < size; i++) {
-        int col_l = strlen(pixels->color);
-        int uni_l = strlen(pixels->uni);
+void ft_put_utf8(t_ascii *ctx, int x, int y, t_color color, const char *glyph) {
+    t_cell cell;
 
-        // Copy color data
-        memcpy(buffer, pixels->color, col_l);
-        buffer += col_l;
+    memset(&cell, 0, sizeof(cell));
+    cell.fg = color;
+    cell.bg = FT_BLACK;
+    ft_copy_glyph(cell.glyph, glyph);
+    ft_put_cell(ctx, x, y, cell);
+}
 
-        // Copy Unicode data
-        int j;
-        for (j = 0; j < uni_l; j++) {
-            if (pixels->uni[j] == '\0') {
-                break;
-            }
-            *buffer++ = pixels->uni[j];
-        }
-        pixels++;
-    }
+void ft_put_char(t_ascii *ctx, int x, int y, t_color color, char c) {
+    char glyph[2];
+
+    glyph[0] = c;
+    glyph[1] = '\0';
+    ft_put_utf8(ctx, x, y, color, glyph);
 }

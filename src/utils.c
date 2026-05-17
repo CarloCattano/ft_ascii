@@ -1,19 +1,4 @@
 #include "ftascii.h"
+#include <unistd.h>
 
-void free_all(term_t *t) {
-    if (t == NULL)
-        return;
-
-    if (t->pixels != NULL) {
-        free(t->pixels);
-        t->pixels =
-            NULL; // Set pointer to NULL after freeing to prevent double free
-    }
-
-    if (t->buffer != NULL) {
-        free(t->buffer);
-        t->buffer =
-            NULL; // Set pointer to NULL after freeing to prevent double free
-    }
-    free(t);
-}
+void ft_sleep_ms(unsigned int ms) { usleep(ms * 1000U); }

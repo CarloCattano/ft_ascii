@@ -1,5 +1,7 @@
 .cache/*
 example
+snake
+test_core
 libftascii.a
 libftascii.so
 compile_commands.json

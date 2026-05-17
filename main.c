@@ -1,110 +1,53 @@
 #include "ftascii.h"
-#include <locale.h>
-#include <signal.h>
-#include <sys/stat.h>
-#include <time.h>
+#include <stdio.h>
 
-static term_t *term_pointer;
-
-static void handle_signal(int sig) {
-    if (SIGINT == sig || SIGTERM == sig)
-        systemExit(term_pointer);
-    if (SIGWINCH == sig) {
-        window_resize(term_pointer);
-    }
-}
-
-static void setup_signal_handlers() {
-    signal(SIGINT, handle_signal);
-    signal(SIGTERM, handle_signal);
-    signal(SIGWINCH, handle_signal);
-}
-
-static void initializeTerm(term_t *term) {
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-
-    setlocale(LC_ALL, "en_US.UTF-8");
-    system("stty -echo -icanon -icrnl time 0 min 0");
-
-    write(1, NOMOUSE, 6); // Hide cursor
-    write(1, CLEAR, 4);   // Clear screen
-    write(1, CURSOR, 6);
-
-    *term = (term_t){w.ws_col,
-                     w.ws_row,
-                     w.ws_col * w.ws_row,
-                     NULL,
-                     w.ws_col * w.ws_row,
-                     NULL,
-                     1,
-                     1,
-                     50000,
-                     0};
-
-    term_pointer = term;
-
-    init_term(term);
-    setup_signal_handlers();
-}
-
-struct ball {
+typedef struct s_ball {
     int x;
     int y;
-
     int dx;
     int dy;
+} t_ball;
 
-    int vel;
-};
-
-struct ball ball;
-
-void init_ball(struct ball *ball) {
-    ball->x = 4;
-    ball->y = 4;
-
+static void ball_init(t_ball *ball) {
+    ball->x  = 4;
+    ball->y  = 4;
     ball->dx = 1;
     ball->dy = 1;
-
-    ball->vel = 1;
 }
 
-void move_ball(struct ball *ball) {
+static void ball_move(const t_ascii *ctx, t_ball *ball) {
     ball->x += ball->dx;
     ball->y += ball->dy;
-
-    if (ball->x >= term_pointer->MAX_COL - 1 || ball->x <= 1)
+    if (ball->x <= 2 || ball->x >= ctx->canvas.width - 3)
         ball->dx = -ball->dx;
-
-    if (ball->y >= term_pointer->MAX_ROW - 1 || ball->y <= 1)
+    if (ball->y <= 2 || ball->y >= ctx->canvas.height - 3)
         ball->dy = -ball->dy;
 }
 
-static void draw_ball(term_t *term, struct ball *ball) {
-    map_pix(term, ball->x, ball->y, RED, "⬤");
+static void draw_scene(t_ascii *ctx, const t_ball *ball) {
+    ft_clear(ctx, FT_BLACK);
+    ft_rect(ctx, 0, 0, ctx->canvas.width, ctx->canvas.height, FT_CYAN);
+    ft_text(ctx, 2, 1, FT_WHITE, "libftascii v2 - q/esc exits");
+    ft_circle(ctx, ball->x, ball->y, 1, FT_RED, "⬤");
+    ft_present_diff(ctx);
 }
 
-static void draw_callback(term_t *term) { draw_ball(term, &ball); }
+int main(void) {
+    t_ascii ctx;
+    t_ball  ball;
 
-int main() {
-    term_t *term = malloc(sizeof(term_t));
-
-    if (term == NULL) {
-        perror("Failed to allocate memory for term");
-        exit(EXIT_FAILURE);
+    if (ft_ascii_init(&ctx) != FT_OK) {
+        fprintf(stderr, "ft_ascii_init failed: run inside a real terminal\n");
+        return 1;
     }
-
-    initializeTerm(term);
-    init_ball(&ball);
-
-    while (term->draw) {
-        ft_keyhook(term);
-        move_ball(&ball);
-        draw(term, &draw_callback);
-        usleep(term->delay);
+    ft_set_fps(&ctx, 30);
+    ball_init(&ball);
+    while (ft_ascii_running(&ctx)) {
+        ft_poll_events(&ctx);
+        ball_move(&ctx, &ball);
+        draw_scene(&ctx, &ball);
+        ft_sleep_ms(1000U / (unsigned int)ctx.fps);
     }
-
-    systemExit(term);
+    ft_ascii_shutdown(&ctx);
     return 0;
 }
